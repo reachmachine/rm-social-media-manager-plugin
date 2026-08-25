@@ -1,0 +1,13 @@
+{
+  "name": "rm-social-media-manager-marketplace",
+  "description": "Reach Machine social media manager: content planning agent + skill",
+  "owner": {
+    "name": "Reach Machine"
+  },
+  "plugins": [
+    {
+      "name": "rm-social-media-manager",
+      "source": "."
+    }
+  ]
+}
