@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Content Plan Dashboard</title>
+<!--
+  rm-content-planner — REUSABLE dashboard.
+  HOW TO USE: replace the PLAN object near the bottom of this file with the run's
+  structured plan (the same data submit_content_plan receives, plus the strategy
+  fields), then hand this file to the creator (render it inline, or open in a
+  browser). Everything below renders FROM that object — do not hand-edit the markup.
+  Self-contained: no external fonts, scripts, styles, or network calls.
+-->
+<style>
+  :root{
+    --bg:#f6f7f9; --surface:#ffffff; --surface-2:#f0f2f5; --line:#e2e6ea;
+    --ink:#141922; --ink-2:#3d4653; --muted:#6b7686;
+    --accent:#0f766e;                 /* teal — UI emphasis only */
+    /* data categories — each is ALWAYS shown with its text label, never color alone */
+    --reach:#2563eb; --nurture:#c2760a; --activation:#dc2626;      /* funnel roles */
+    --dd:#0f766e; --di:#c2760a; --jg:#64748b;                       /* provenance / confidence */
+    --shadow:0 1px 2px rgba(20,25,34,.05),0 4px 16px rgba(20,25,34,.05);
+    --radius:14px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#0e1116; --surface:#161b22; --surface-2:#1c232c; --line:#2a323d;
+      --ink:#eef1f5; --ink-2:#c2cad4; --muted:#8b97a6;
+      --accent:#2dd4bf;
+      --reach:#60a5fa; --nurture:#f0b34e; --activation:#f87171;
+      --dd:#2dd4bf; --di:#f0b34e; --jg:#94a3b8;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0e1116; --surface:#161b22; --surface-2:#1c232c; --line:#2a323d;
+    --ink:#eef1f5; --ink-2:#c2cad4; --muted:#8b97a6; --accent:#2dd4bf;
+    --reach:#60a5fa; --nurture:#f0b34e; --activation:#f87171;
+    --dd:#2dd4bf; --di:#f0b34e; --jg:#94a3b8;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35);
+  }
+  :root[data-theme="light"]{
+    --bg:#f6f7f9; --surface:#ffffff; --surface-2:#f0f2f5; --line:#e2e6ea;
+    --ink:#141922; --ink-2:#3d4653; --muted:#6b7686; --accent:#0f766e;
+    --reach:#2563eb; --nurture:#c2760a; --activation:#dc2626;
+    --dd:#0f766e; --di:#c2760a; --jg:#64748b;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5; font-size:15px;
+  }
+  .wrap{max-width:1180px; margin:0 auto; padding:20px 18px 64px}
+  h1,h2,h3{margin:0; line-height:1.2; text-wrap:balance}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-variant-numeric:tabular-nums}
+  .muted{color:var(--muted)}
+  a{color:var(--accent)}
+
+  /* top bar */
+  .topbar{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:20px 22px; margin-bottom:18px;
+    display:flex; flex-wrap:wrap; gap:14px 24px; align-items:flex-start; justify-content:space-between;
+  }
+  .topbar .who{min-width:min(100%,420px); flex:1 1 420px}
+  .eyebrow{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600}
+  .topbar h1{font-size:clamp(20px,2.6vw,28px); margin:4px 0 8px; font-weight:750}
+  .position{color:var(--ink-2); font-size:15px; max-width:64ch}
+  .badges{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+  .badge{
+    display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600;
+    padding:5px 10px; border-radius:999px; border:1px solid var(--line); background:var(--surface-2); color:var(--ink-2);
+    white-space:nowrap;
+  }
+  .badge b{color:var(--ink); font-weight:700}
+  .themebtn{cursor:pointer; user-select:none}
+
+  /* tiles */
+  .tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:18px}
+  .tile{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px 16px}
+  .tile .k{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600}
+  .tile .v{font-size:26px; font-weight:750; margin-top:4px}
+  .tile .s{font-size:12px; color:var(--muted); margin-top:2px}
+
+  /* sections */
+  section{margin:26px 0}
+  .sec-head{display:flex; align-items:baseline; gap:12px; margin:0 2px 12px}
+  .sec-head h2{font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:700}
+  .sec-head .hint{font-size:12px; color:var(--muted)}
+  .grid{display:grid; gap:14px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px 18px}
+  .card h3{font-size:15px; font-weight:700; margin-bottom:8px}
+  .card p{margin:6px 0; color:var(--ink-2)}
+  .card .lbl{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:600}
+
+  /* segmented composition bar (funnel / pillars / provenance) */
+  .bar{display:flex; width:100%; height:30px; border-radius:8px; overflow:hidden; border:1px solid var(--line); background:var(--surface-2)}
+  .bar>span{display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:700; min-width:2px}
+  .bar>span+span{box-shadow:inset 2px 0 0 var(--surface)}
+  .legend{display:flex; flex-wrap:wrap; gap:12px; margin-top:10px}
+  .legend .item{display:inline-flex; align-items:center; gap:7px; font-size:13px; color:var(--ink-2)}
+  .dot{width:11px; height:11px; border-radius:3px; flex:none}
+
+  /* lever table */
+  .tbl{width:100%; border-collapse:collapse; font-size:13.5px}
+  .tbl th,.tbl td{text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+  .tbl th{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600}
+  .tbl tr:last-child td{border-bottom:0}
+  .scroll{overflow-x:auto}
+
+  /* pills */
+  .pill{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; padding:3px 9px; border-radius:999px; white-space:nowrap}
+  .pill .dot{width:8px; height:8px}
+  .pv-dd{background:color-mix(in srgb,var(--dd) 16%,transparent); color:var(--dd)}
+  .pv-di{background:color-mix(in srgb,var(--di) 18%,transparent); color:var(--di)}
+  .pv-jg{background:color-mix(in srgb,var(--jg) 20%,transparent); color:var(--jg)}
+  .fn-reach{background:color-mix(in srgb,var(--reach) 16%,transparent); color:var(--reach)}
+  .fn-nurture{background:color-mix(in srgb,var(--nurture) 18%,transparent); color:var(--nurture)}
+  .fn-activation{background:color-mix(in srgb,var(--activation) 16%,transparent); color:var(--activation)}
+  .tag{display:inline-block; font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:6px; background:var(--surface-2); border:1px solid var(--line); color:var(--ink-2)}
+
+  /* calendar */
+  .filters{display:flex; flex-wrap:wrap; gap:8px; margin:0 2px 12px}
+  .chip{cursor:pointer; font-size:12.5px; font-weight:600; padding:6px 12px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--ink-2)}
+  .chip[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+  .reels{display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:14px}
+  .reel{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px 17px; display:flex; flex-direction:column; gap:10px; border-top:3px solid var(--role,var(--line))}
+  .reel .rtop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+  .reel .rid{font-size:11px; font-weight:700; color:var(--muted); letter-spacing:.08em}
+  .reel h3{font-size:15.5px; font-weight:750; line-height:1.25}
+  .reel .rmeta{display:flex; flex-wrap:wrap; gap:6px}
+  .hooks{background:var(--surface-2); border-radius:10px; padding:10px 12px; font-size:13px}
+  .hooks div{margin:3px 0}
+  .hooks .hk{font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-right:6px}
+  .row{font-size:13px; margin:0}
+  .row .lbl{display:block; margin-bottom:1px}
+  .receipt{font-size:12px; color:var(--muted); border-top:1px dashed var(--line); padding-top:9px; margin-top:auto}
+
+  ul.clean{margin:6px 0 0; padding-left:18px} ul.clean li{margin:4px 0; color:var(--ink-2)}
+  .note{background:color-mix(in srgb,var(--accent) 8%,var(--surface)); border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line)); border-radius:10px; padding:10px 13px; font-size:13px; color:var(--ink-2)}
+  .plan-error-banner{
+    background:color-mix(in srgb,var(--activation) 10%,var(--surface));
+    border:1px solid color-mix(in srgb,var(--activation) 35%,var(--line));
+    border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:18px 20px; margin:20px auto; max-width:640px;
+    font-size:14.5px; font-weight:600; color:var(--ink); text-align:center;
+  }
+  .foot{margin-top:34px; font-size:12px; color:var(--muted); text-align:center}
+  @media (max-width:560px){ .wrap{padding:14px 12px 48px} .reels{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script id="plan" type="application/json">
+{
+  "meta":{
+    "creator":"Your AI-influencer brand","handle":"@yourhandle",
+    "positioning":"A technical founder helping non-technical founders run their business with REUSABLE AI automations — the system, not one-off hacks. Reuse beats reinvention.",
+    "positioning_status":"hypothesis",
+    "goal":"reach","goal_detail":"Get seen first — a non-technical founder taps Follow for the next reusable automation.",
+    "plan_month":"2026-08","cadence":"3 reels / week · 2-week starter","stage":"cold-start · ~0 followers",
+    "benchmark":"Expect hundreds–low-thousands of views early, NOT the competitor medians. Judge on saves/1k + watch-time %."
+  },
+  "audience":{"segment":"Non-technical solopreneurs, coaches & small business owners who want AI without coding","confidence":"medium",
+    "on_ramp":"The literal 'founders' data slice is thin & low-reach (n=10, median ~6.7k). The reach lives in the adjacent builder/creator crowd (Creators & Marketers n=17 median ~93k; Tech/AI & Builders n=47 median ~74k). The plan uses that crowd as a deliberate REACH ON-RAMP — so no reel is DATA-DRIVEN for the exact ICP; proven patterns are DATA-INFERRED for this audience."},
+  "funnel":{"reach":4,"nurture":2,"activation":0,"reasoning":"Cold-start reach goal. TOF-heavy, zero BOF — no audience to convert yet, and comment-keyword CTAs cost 4× reach at this stage. Not mirrored from competitors."},
+  "pillars":[
+    {"name":"Reusable automations (build-with-me)","pct":50,"why":"The ownable angle, and the reach-proven hack×tutorial genre"},
+    {"name":"First-party proof / build-in-public","pct":33,"why":"Trust — receipts a non-founder can't fake"},
+    {"name":"Bold stance / POV","pct":17,"why":"Memorability — the reuse-beats-reinvention belief"}
+  ],
+  "patterns_matched":[
+    {"lever":"Hack angle × Tutorial structure","n":24,"median":"104k–109k","reliability":"high","provenance":"data_inferred","why":"Top reliable reach combo; doable solo"},
+    {"lever":"AI-tools topic","n":28,"median":"77k","reliability":"high","provenance":"data_inferred","why":"Deepest proven topic; the vehicle for the automation angle"},
+    {"lever":"On-screen-text hook","n":80,"median":"76k","reliability":"high","provenance":"data_inferred","why":"4× the reach of spoken-only hooks → every reel needs one"},
+    {"lever":"No-CTA / reply-bait (vs comment-keyword)","n":53,"median":"94k vs 22k","reliability":"high","provenance":"data_inferred","why":"Anti-trap: keyword-DM costs 4× reach at cold-start"},
+    {"lever":"numbered_promise hook","n":10,"median":"92k","reliability":"medium","provenance":"data_inferred","why":"Reliable listicle opener"}
+  ],
+  "patterns_to_test":[
+    {"name":"Build-ONE-automation-live","hypothesis":"Building a real reusable automation on-screen beats generic 'X AI tools' tips for this audience.","kill_scale":"Beats account median on 2 reels → make 3 more; 2 flops → retire."},
+    {"name":"Bold-stance POV","hypothesis":"A contrarian belief reel ('you don't need to build anything') out-shares how-to for cold reach.","kill_scale":"Top shares/1k of the batch → scale the stance into a series."},
+    {"name":"First-party receipts","hypothesis":"Real dashboards/numbers build follows even at low view counts (nurture, not reach).","kill_scale":"Judge on profile-visit→follow, not views."}
+  ],
+  "foundation":{
+    "name_field":"<Name> · AI Automations for Founders   (keyword in the NAME, searchable)",
+    "bio":"Technical founder → reusable AI automations for non-technical founders. Building in public. New automation weekly 👇",
+    "pinned":["R1 — origin / identity","R4 — proof / receipts","R6 — tool-stack"]
+  },
+  "reels":[
+    {"id":"R1","title":"I automated my whole company with AI — what I'd tell a non-technical founder","pillar":"First-party proof","topic_data":"identity (n/a)","topic_idea":"origin story","angle":"origin","audience":"ICP","intent":"inspire","funnel_role":"nurture","emotion":"inspire",
+     "hook":{"spoken":"I automated my whole company with AI. Here's what I'd tell a non-technical founder.","on_screen":"I automated my whole company with AI.","visual":"founder at desk + dashboard b-roll","sound":"calm build"},
+     "retention":"Open loop ('the mistake that cost me months') → 40% re-hook (the shift: stop rebuilding, start reusing) → loop-back to the opening line.",
+     "cta":"Reply-bait: What part of YOUR business would you automate first? 👇","structure":"story (talking-head)","effort":"light","priority":3,
+     "provenance":"judgment","receipt":"JUDGMENT — identity reels convert the profile, not a reach pattern. NOTE: origin script is a placeholder; replace with the real story before publishing."},
+    {"id":"R2","title":"Turn 1 reel into a week of posts in 3 min — steal the automation","pillar":"Reusable automations","topic_data":"AI tools / automation","topic_idea":"content-repurposing bot","angle":"build-with-me / hack","audience":"builder/creator on-ramp","intent":"educate","funnel_role":"reach","emotion":"curiosity",
+     "hook":{"spoken":"One reel in, a week of content out — the automation I reuse every week.","on_screen":"Watch me turn 1 reel into a week of posts in 3 min — then reuse it forever","visual":"screen-capture of the repurposing flow","sound":"upbeat"},
+     "retention":"Open loop ('by the end you'll have a week of content') → 40% re-hook ('the step that makes it reusable') → payoff → loop ('save this, run it weekly').",
+     "cta":"Reply-bait: What would you repurpose first — a reel, a podcast, a blog? 👇","structure":"tutorial / step-by-step","effort":"heavy","priority":1,
+     "provenance":"data_inferred","receipt":"Tutorial structure proven (n=17, median 109k) — but from the on-ramp audience, so DATA-INFERRED for you. Source pattern: @mavgpt, @sferro21 (reframed comment-keyword → reply-bait)."},
+    {"id":"R3","title":"Your DMs can run themselves — the exact bot I reuse","pillar":"Reusable automations","topic_data":"AI marketing tools","topic_idea":"DM automation bot","angle":"you-can-now / first-party","audience":"builder/creator on-ramp","intent":"educate","funnel_role":"reach","emotion":"curiosity",
+     "hook":{"spoken":"Your DMs can run themselves — here's the exact bot I reuse.","on_screen":"Your DMs can run themselves — the exact bot I reuse","visual":"the bot answering a real DM on your account","sound":"upbeat"},
+     "retention":"Hook card → credibility bridge (show it answering a REAL DM) → step-by-step of the bot YOU built → payoff → loop.",
+     "cta":"Reply-bait: Would you trust a bot to answer your DMs? 👇","structure":"tutorial","effort":"heavy","priority":2,
+     "provenance":"data_inferred","receipt":"Tutorial proven (n=17, median 109k); you_can_now hook thin (n=4) + audience-adjacent → DATA-INFERRED. Reframed from @mavgpt, @sferro21 into a first-party build."},
+    {"id":"R4","title":"I let AI run my marketing for 7 days — real numbers","pillar":"First-party proof","topic_data":"AI tools","topic_idea":"experiment / receipts","angle":"experiment / i-tested","audience":"ICP + on-ramp","intent":"educate","funnel_role":"nurture","emotion":"curiosity",
+     "hook":{"spoken":"I let AI run my marketing for a week. Here's the receipt.","on_screen":"I let AI run my marketing for a week. Here's the receipt.","visual":"founder + real dashboard numbers","sound":"calm"},
+     "retention":"Open loop (did it work?) → 40% re-hook (the day-3 failure) → payoff (real numbers) → loop.",
+     "cta":"Reply-bait: Want the full breakdown? 👇","structure":"story → tutorial","effort":"medium","priority":2,
+     "provenance":"data_inferred","receipt":"A BET — i_tested n=5 median 18k, experiment n=4 median 44k. Low on raw reach, high on trust → NURTURE + pinned proof reel, not a reach play."},
+    {"id":"R5","title":"You don't need to build anything to automate your business","pillar":"Bold stance / POV","topic_data":"AI automation","topic_idea":"bold stance","angle":"stance / felt-pain","audience":"ICP","intent":"educate","funnel_role":"reach","emotion":"curiosity",
+     "hook":{"spoken":"Everyone tells non-technical founders to 'just build it'. You don't have to.","on_screen":"You don't need to build anything to automate your business.","visual":"founder + before/after of a task","sound":"calm"},
+     "retention":"Open loop ('a faster way, costs nothing to start') → 40% re-hook ('you copy, you don't build') → resolve → loop.",
+     "cta":"Reply-bait: What's the one task you'd hand off first? 👇","structure":"problem → solution","effort":"light","priority":3,
+     "provenance":"data_inferred","receipt":"Curiosity hook proven (n=19, median 91k, on-ramp audience) but the felt-pain framing + stance is judgment → net DATA-INFERRED."},
+    {"id":"R6","title":"5 AI tools running my entire one-person company","pillar":"Reusable automations","topic_data":"AI tools","topic_idea":"tool-stack","angle":"tool-stack / numbered","audience":"builder/creator on-ramp","intent":"educate","funnel_role":"reach","emotion":"curiosity",
+     "hook":{"spoken":"5 AI tools running my entire company — solo.","on_screen":"5 AI tools running my entire company (solo)","visual":"screen-capture of each tool","sound":"upbeat"},
+     "retention":"Promise 5 → deliver with '#4 is the one nobody talks about' 40% re-hook → loop.",
+     "cta":"Reply-bait: Which one surprised you? 👇","structure":"listicle / tutorial","effort":"medium","priority":1,
+     "provenance":"data_inferred","receipt":"AI-tools topic proven (n=28, median 77k HIGH) + numbered_promise (n=10, median 92k) + listicle (n=8, median 98k) — but on-ramp audience, not exact ICP → DATA-INFERRED. Distinct from R2 (builds ONE automation)."}
+  ],
+  "cadence":{"summary":"3/week, batched · film day → R1+R5 · build day → R2+R3+R6 · R4 films itself. Priority ranks mean a bad week still ships the priority-1s (R2, R6)."},
+  "distribution":{"posting_time":"Soft nudge: ~12:00 UTC on a weekday (hour-12 UTC median 517k, n=6). CAVEAT: UTC ≠ your audience's timezone, weekday gaps are flat — tie-breaker only.","trending_audio":"Pull from Instagram's own trending panel (JUDGMENT — not in the data)."},
+  "community":{"dream100":["@mavgpt","@sferro21","@getintoai","@danmartell","@aiprofitnews","@longliveai","@unfoldedai"],"routine":"15–20 min/day across 5–8 accounts: genuine specific comments, share their best reels to your story. Never drop your link. Rotate weekly."},
+  "kpis":{"per_reel":["saves-per-1k","watch-time %","shares-per-1k","hour-1 view velocity"],"kill_scale":"Beats your rolling median on 2 reels → scale; 2 flops → retire. Bring the numbers to the next planning run."},
+  "captions_seo":"Keyword 'AI automation' in the NAME field + first caption line; 3–5 niche hashtags (#aiautomation #aitools #solopreneur); on-screen text carries silent viewers.",
+  "receipts":{"coverage":"Built from 121 of your 4,773 analysed reels","tools":["get_content_strategy","get_content_breakdown","get_hooks_library","get_content_structures","get_cta_library","get_post_transcript"],"provenance_split":{"data_driven":0,"data_inferred":5,"judgment":1},"competitors":["@mavgpt","@sferro21","@getintoai","@danmartell","@aiprofitnews","@longliveai","@unfoldedai"],"one_action":"Start with R2 or R6 — the priority-1 reach reels."},
+  "critic":{"verdict":"SHIP (after 2 rounds)","rounds":2,"changes":["Owned the builder/creator reach on-ramp; downgraded all receipts to 0 data-driven / 5 inferred / 1 judgment","R2 → a content-repurposing bot (distinct from R3's DM bot and R6's tool-stack)","R3 re-anchored to the founder's OWN bot; removed an unverifiable claim","R4 relabeled REACH → NURTURE","R5 hook reframed to non-technical felt pain + added retention beats"]},
+  "decision_log":["Goal = REACH — at ~0 followers, getting SEEN comes before leads (you can't collect leads with no audience).","Who it's for: non-technical founders who want AI without coding — your saved positioning.","Self-vs-niche gap: the reach in your niche sits with AI builders/creators, not the literal 'founders' slice — so we use that crowd as an on-ramp and speak to your audience through it.","We studied the reels that actually travel for a reach goal, and the hook styles that went viral there — then reasoned which fit you.","Funnel mix 4 reach / 2 nurture / 0 sales — right for a cold start; no 'buy now' reels yet, there's no audience to convert.","Every reel copies a proven pattern but reframes it through YOUR reusable-automation angle, so it's yours, not a clone.","A fresh reviewer checked it twice and we fixed 5 things before finalising."]
+}
+</script>
+
+<script>
+(function(){
+  const app = document.getElementById('app');
+  const esc = s => String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const el = (h)=>{const t=document.createElement('template'); t.innerHTML=h.trim(); return t.content.firstChild;};
+  const showError = (msg) => { app.innerHTML = '<div class="plan-error-banner">⚠️ ' + esc(msg) + '</div>'; };
+
+  let PLAN;
+  try {
+    PLAN = JSON.parse(document.getElementById('plan').textContent);
+  } catch (err) {
+    console.error('Plan data invalid — could not parse JSON', err);
+    showError("This plan's data is invalid and can't be shown. Try re-pasting the plan JSON, or ask for a fresh copy from the skill.");
+    return;
+  }
+
+  try {
+  const FN = {reach:['Reach','--reach','fn-reach'], nurture:['Nurture','--nurture','fn-nurture'], activation:['Activation','--activation','fn-activation']};
+  const PV = {data_driven:['Data-driven','--dd','pv-dd'], data_inferred:['Data-inferred','--di','pv-di'], judgment:['Judgment','--jg','pv-jg']};
+  const pvPill = k => { const p=PV[k]||PV.judgment; return `<span class="pill ${p[2]}"><span class="dot" style="background:var(${p[1]})"></span>${p[0]}</span>`; };
+  const fnPill = k => { const p=FN[k]||FN.reach; return `<span class="pill ${p[2]}">${p[0]}</span>`; };
+
+  const m = PLAN.meta;
+  // ---- top bar ----
+  app.appendChild(el(`
+    <div class="topbar">
+      <div class="who">
+        <div class="eyebrow">Content Plan · ${esc(m.plan_month)}</div>
+        <h1>${esc(m.creator)} <span class="muted" style="font-weight:600;font-size:.6em">${esc(m.handle)}</span></h1>
+        <div class="position">${esc(m.positioning)}</div>
+      </div>
+      <div class="badges">
+        <span class="badge">🎯 Goal <b>${esc(m.goal)}</b></span>
+        <span class="badge">📍 Positioning <b>${esc(m.positioning_status)}</b></span>
+        <span class="badge">🌱 <b>${esc(m.stage)}</b></span>
+        <span class="badge">🗓 <b>${esc(m.cadence)}</b></span>
+        <span class="badge themebtn" id="theme">◑ Theme</span>
+      </div>
+    </div>`));
+
+  // ---- tiles ----
+  const rp = PLAN.receipts.provenance_split;
+  app.appendChild(el(`
+    <div class="tiles">
+      <div class="tile"><div class="k">Reels</div><div class="v mono">${PLAN.reels.length}</div><div class="s">${esc(m.cadence)}</div></div>
+      <div class="tile"><div class="k">Funnel mix</div><div class="v mono">${PLAN.funnel.reach}·${PLAN.funnel.nurture}·${PLAN.funnel.activation}</div><div class="s">reach · nurture · activation</div></div>
+      <div class="tile"><div class="k">Evidence</div><div class="v mono">${rp.data_driven}·${rp.data_inferred}·${rp.judgment}</div><div class="s">data-driven · inferred · judgment</div></div>
+      <div class="tile"><div class="k">Built from</div><div class="v mono">${esc((PLAN.receipts.coverage.match(/\d[\d,]*/)||['—'])[0])}</div><div class="s">of your analysed reels</div></div>
+    </div>`));
+
+  const section = (title,hint,body)=>{ const s=el(`<section><div class="sec-head"><h2>${esc(title)}</h2>${hint?`<span class="hint">${esc(hint)}</span>`:''}</div></section>`); s.appendChild(body); app.appendChild(s); };
+  const bar = (items)=>{ // items: [{label,pct,cssvar}]
+    const total=items.reduce((a,b)=>a+b.pct,0)||1;
+    const segs=items.filter(i=>i.pct>0).map(i=>`<span style="flex:${i.pct};background:var(${i.cssvar})" title="${esc(i.label)}: ${i.pct}">${Math.round(i.pct/total*100)}%</span>`).join('');
+    const leg=items.map(i=>`<span class="item"><span class="dot" style="background:var(${i.cssvar})"></span>${esc(i.label)} <b class="mono">${i.pct}</b></span>`).join('');
+    return el(`<div><div class="bar">${segs}</div><div class="legend">${leg}</div></div>`);
+  };
+
+  // ---- A. Strategy ----
+  const strat = el(`<div class="grid g2"></div>`);
+  // goal + funnel
+  const gcard = el(`<div class="card"><div class="lbl">Goal & funnel objective</div><p>${esc(m.goal_detail)}</p></div>`);
+  gcard.appendChild(bar([
+    {label:'Reach',pct:PLAN.funnel.reach,cssvar:'--reach'},
+    {label:'Nurture',pct:PLAN.funnel.nurture,cssvar:'--nurture'},
+    {label:'Activation',pct:PLAN.funnel.activation,cssvar:'--activation'}]));
+  gcard.appendChild(el(`<p class="muted" style="font-size:12.5px;margin-top:10px">${esc(PLAN.funnel.reasoning)}</p>`));
+  strat.appendChild(gcard);
+  // audience
+  strat.appendChild(el(`<div class="card"><div class="lbl">Target audience · confidence ${esc(PLAN.audience.confidence)}</div>
+    <p><b>${esc(PLAN.audience.segment)}</b></p>
+    <div class="note">⚠️ On-ramp: ${esc(PLAN.audience.on_ramp)}</div></div>`));
+  // pillars
+  const pcard = el(`<div class="card" style="grid-column:1/-1"><div class="lbl">Content pillars & distribution</div></div>`);
+  pcard.appendChild(bar(PLAN.pillars.map((p,i)=>({label:p.name,pct:p.pct,cssvar:['--reach','--nurture','--activation','--accent'][i%4]}))));
+  pcard.appendChild(el(`<ul class="clean">${PLAN.pillars.map(p=>`<li><b>${esc(p.name)}</b> — ${esc(p.why)}</li>`).join('')}</ul>`));
+  strat.appendChild(pcard);
+  section('01 · Strategy','the why, before the calendar',strat);
+
+  // patterns matched
+  const pm = el(`<div class="card scroll"></div>`);
+  pm.appendChild(el(`<table class="tbl"><thead><tr><th>Lever we're using</th><th>n</th><th>Median</th><th>Reliability</th><th>Evidence</th><th>Why it fits</th></tr></thead>
+    <tbody>${PLAN.patterns_matched.map(p=>`<tr><td><b>${esc(p.lever)}</b></td><td class="mono">${esc(p.n)}</td><td class="mono">${esc(p.median)}</td><td>${esc(p.reliability)}</td><td>${pvPill(p.provenance)}</td><td class="muted">${esc(p.why)}</td></tr>`).join('')}</tbody></table>`));
+  section('02 · Patterns matched','the proven levers this plan uses',pm);
+
+  // patterns to test
+  const pt = el(`<div class="grid g2"></div>`);
+  PLAN.patterns_to_test.forEach(p=> pt.appendChild(el(`<div class="card"><h3>🧪 ${esc(p.name)}</h3><p><span class="lbl">Hypothesis</span>${esc(p.hypothesis)}</p><p><span class="lbl">Kill / scale</span>${esc(p.kill_scale)}</p></div>`)));
+  section('03 · Patterns to test','every reel is a bet with a kill/scale rule',pt);
+
+  // ---- B. Foundation ----
+  const f = PLAN.foundation;
+  const fcard = el(`<div class="card"><div class="grid g2">
+    <div><div class="lbl">Searchable name</div><p class="mono">${esc(f.name_field)}</p><div class="lbl" style="margin-top:8px">Bio</div><p>${esc(f.bio)}</p></div>
+    <div><div class="lbl">Pinned first 3</div><ul class="clean">${f.pinned.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+  </div></div>`);
+  section('04 · Foundation','fix the profile before posting',fcard);
+
+  // ---- C. Calendar ----
+  const calSec = el(`<section><div class="sec-head"><h2>05 · The calendar</h2><span class="hint">${PLAN.reels.length} reels — filter by funnel role</span></div>
+    <div class="filters" id="filters"></div><div class="reels" id="reels"></div></section>`);
+  app.appendChild(calSec);
+  const reelsWrap = calSec.querySelector('#reels');
+  const roleVar = r => (FN[r]?FN[r][1]:'--line');
+  PLAN.reels.forEach(r=>{
+    reelsWrap.appendChild(el(`
+      <article class="reel" data-role="${esc(r.funnel_role)}" style="--role:var(${roleVar(r.funnel_role)})">
+        <div class="rtop"><div><span class="rid">${esc(r.id)}</span><h3>${esc(r.title)}</h3></div></div>
+        <div class="rmeta">${fnPill(r.funnel_role)}${pvPill(r.provenance)}<span class="tag">${esc(r.structure)}</span><span class="tag">${esc(r.effort)} effort</span><span class="tag">P${esc(r.priority)}</span><span class="tag">${esc(r.pillar)}</span></div>
+        <div class="hooks">
+          <div><span class="hk">Spoken</span>${esc(r.hook.spoken)}</div>
+          <div><span class="hk">On-screen</span>${esc(r.hook.on_screen)}</div>
+          <div><span class="hk">Visual</span>${esc(r.hook.visual)} <span class="muted">· ${esc(r.hook.sound)}</span></div>
+        </div>
+        <p class="row"><span class="lbl">Retention</span>${esc(r.retention)}</p>
+        <p class="row"><span class="lbl">CTA</span>${esc(r.cta)}</p>
+        <p class="row"><span class="lbl">Topic</span><span class="muted">data:</span> ${esc(r.topic_data)} · <span class="muted">idea:</span> ${esc(r.topic_idea)} · <span class="muted">angle:</span> ${esc(r.angle)} · <span class="muted">for:</span> ${esc(r.audience)}</p>
+        <div class="receipt">${esc(r.receipt)}</div>
+      </article>`));
+  });
+  const roles=['all',...Object.keys(FN)];
+  const filters=calSec.querySelector('#filters');
+  roles.forEach(role=>{
+    const label = role==='all'?'All':FN[role][0];
+    const chip=el(`<button class="chip" aria-pressed="${role==='all'}">${esc(label)}</button>`);
+    chip.onclick=()=>{ filters.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','false')); chip.setAttribute('aria-pressed','true');
+      reelsWrap.querySelectorAll('.reel').forEach(x=>{ x.style.display=(role==='all'||x.dataset.role===role)?'':'none'; }); };
+    filters.appendChild(chip);
+  });
+
+  // ---- D. Execution ----
+  const exec = el(`<div class="grid g2"></div>`);
+  exec.appendChild(el(`<div class="card"><div class="lbl">Cadence & batching</div><p>${esc(PLAN.cadence.summary)}</p></div>`));
+  exec.appendChild(el(`<div class="card"><div class="lbl">Distribution</div><p><b>Posting time.</b> ${esc(PLAN.distribution.posting_time)}</p><p><b>Trending audio.</b> ${esc(PLAN.distribution.trending_audio)}</p></div>`));
+  exec.appendChild(el(`<div class="card"><div class="lbl">Community — Dream 100</div><p>${PLAN.community.dream100.map(h=>`<span class="tag">${esc(h)}</span>`).join(' ')}</p><p class="muted" style="font-size:12.5px">${esc(PLAN.community.routine)}</p></div>`));
+  exec.appendChild(el(`<div class="card"><div class="lbl">KPIs & the loop</div><p>${PLAN.kpis.per_reel.map(k=>`<span class="tag">${esc(k)}</span>`).join(' ')}</p><p class="muted" style="font-size:12.5px">${esc(PLAN.kpis.kill_scale)}</p></div>`));
+  exec.appendChild(el(`<div class="card" style="grid-column:1/-1"><div class="lbl">Captions / hashtags / SEO</div><p>${esc(PLAN.captions_seo)}</p></div>`));
+  section('06 · Execution & measurement','how it gets made and how you learn',exec);
+
+  // ---- honest benchmark ----
+  app.appendChild(el(`<div class="note" style="margin:18px 2px">📏 <b>Honest benchmark.</b> ${esc(m.benchmark)}</div>`));
+
+  // ---- E. Trust ----
+  const rec = PLAN.receipts, c=PLAN.critic;
+  const trust = el(`<div class="grid g2"></div>`);
+  const tcard = el(`<div class="card"><div class="lbl">How this was built from YOUR data</div>
+    <p>${esc(rec.coverage)}.</p>
+    <p><span class="lbl">Provenance</span></p></div>`);
+  tcard.appendChild(bar([
+    {label:'Data-driven',pct:rec.provenance_split.data_driven,cssvar:'--dd'},
+    {label:'Data-inferred',pct:rec.provenance_split.data_inferred,cssvar:'--di'},
+    {label:'Judgment',pct:rec.provenance_split.judgment,cssvar:'--jg'}]));
+  tcard.appendChild(el(`<p class="muted" style="font-size:12.5px;margin-top:10px">Tools run: ${rec.tools.map(t=>`<span class="tag">${esc(t)}</span>`).join(' ')}</p>`));
+  tcard.appendChild(el(`<p style="margin-top:8px">Drawn from ${rec.competitors.map(h=>`<span class="tag">${esc(h)}</span>`).join(' ')}</p>`));
+  tcard.appendChild(el(`<div class="note" style="margin-top:10px">▶️ ${esc(rec.one_action)}</div>`));
+  trust.appendChild(tcard);
+  trust.appendChild(el(`<div class="card"><div class="lbl">Critic & rules-gate</div><p><b>Verdict:</b> ${esc(c.verdict)} · ${esc(c.rounds)} round(s)</p><p class="lbl" style="margin-top:6px">What the critic changed</p><ul class="clean">${c.changes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`));
+  if (PLAN.decision_log && PLAN.decision_log.length) trust.appendChild(el(`<div class="card" style="grid-column:1/-1"><div class="lbl">How this plan was decided — plain-English trail (for QA)</div><ol class="clean">${PLAN.decision_log.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`));
+  section('07 · Trust','so you (and a reviewer) can check the plan',trust);
+
+  app.appendChild(el(`<div class="foot">Built by rm-content-planner · every claim is data-driven, inferred, or judgment — labeled, never hidden.</div>`));
+
+  // theme toggle
+  document.getElementById('theme').onclick=()=>{ const r=document.documentElement;
+    const cur=r.getAttribute('data-theme')|| (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+    r.setAttribute('data-theme', cur==='dark'?'light':'dark'); };
+  } catch (err) {
+    console.error('Plan data has an unexpected shape', err);
+    showError("This plan's data is in an unexpected shape and can't be shown fully. Ask for a fresh copy from the skill.");
+  }
+})();
+</script>
+</body>
+</html>

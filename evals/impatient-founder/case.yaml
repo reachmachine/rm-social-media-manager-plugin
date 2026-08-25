@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: impatient-founder
+runs: 2
+max_turns: 3
+timeout_seconds: 120
+tags: [mystery-shopper, intake, free]
+context:
+  history_file: transcript.jsonl

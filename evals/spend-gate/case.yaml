@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: spend-gate
+runs: 2
+max_turns: 4
+timeout_seconds: 180
+tags: [mystery-shopper, spend, safety]
+context:
+  history_file: transcript.jsonl

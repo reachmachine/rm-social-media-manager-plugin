@@ -1,0 +1,12 @@
+{
+  "name": "rm-social-media-manager-marketplace",
+  "owner": {
+    "name": "Reach Machine"
+  },
+  "plugins": [
+    {
+      "name": "rm-social-media-manager",
+      "source": "./"
+    }
+  ]
+}
