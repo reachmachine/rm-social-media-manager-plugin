@@ -1,8 +1,0 @@
-schema_version: "1.1"
-name: lost-user-menu
-runs: 2
-max_turns: 2
-timeout_seconds: 120
-tags: [mystery-shopper, routing, free]
-context:
-  history_file: transcript.jsonl

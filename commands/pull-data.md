@@ -4,13 +4,18 @@ argument-hint: "[@handle(s) to pull, or leave empty to be shown who is thin]"
 ---
 
 Fetch more reels for competitors already tracked in this workspace. **Spends RM credits.**
-Follow the skill's PLAYBOOK Step 3 rules, especially rule 6 (confirm-before-spend).
+Follow the skill's PLAYBOOK Step 3 rules, especially rule 6 (confirm-before-spend) —
+load ONLY `playbook/step-03-mcp-spend-and-progress.md`, not the whole method.
 
 Who to pull: $ARGUMENTS
 
 ## Decide who actually needs it — before quoting a cost
 
 1. `get_workspace_stats` + `search_watchlist` — who is tracked and how much we hold for each.
+   **Read the whole watchlist:** `search_watchlist` returns only 20 accounts per call by
+   default, so ask for `page_size=100` and keep asking for the next `page` until you have as
+   many accounts as the reply's own `total_count` says exist. An account sitting further down
+   the list is the one most likely to be thin, and it is never offered a pull if you stop at 20.
 2. `get_analysis_coverage` — where the data is thin **for the user's goal**, not thin in
    general. Pulling more reels for an account we already have plenty of is wasted money.
 3. **Say what pulling does and does not do.** `pull_data` fetches reels; it does **not** analyse

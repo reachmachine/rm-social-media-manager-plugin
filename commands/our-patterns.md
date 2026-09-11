@@ -11,12 +11,20 @@ Focus: $ARGUMENTS
 
 ## Build it in this order
 
-1. **Ground it first — `get_workspace_stats` + `get_analysis_coverage`.** Open with the honest
-   base: which workspace, how many competitors, how many reels analysed. Every section below
-   inherits that confidence level. **If coverage is thin, say so once at the top** and mark
-   the whole answer low-confidence rather than repeating the caveat per section.
-2. **Pull all five reads.** Scope once (`usernames=[handle]` or `set_data_selection`) so every
-   section describes the same data:
+1. **Scope FIRST, on its own.** Scope once so every section describes the same data. Either
+   pass `usernames=[handle]` to every read in point 2, or, for a hand-picked set of reels,
+   call `set_data_selection` **by itself and wait for it to come back**. Never send that call
+   in the same message as the reads: a read that goes out before the scope lands would
+   describe different reels from the rest of the answer, and a mixed-up answer is far worse
+   than a slow one.
+2. **Then send ALL of these reads in ONE message — they do not depend on each other.** One
+   round-trip covers the lot instead of eight: `get_workspace_stats`, `get_analysis_coverage`,
+   `get_hooks_library`, `get_cta_library`, `get_content_structures`, `get_content_strategy`,
+   `get_content_breakdown` and `get_tag_stats`. What each one gives you:
+   - `get_workspace_stats` + `get_analysis_coverage` — the honest base: which workspace, how
+     many competitors, how many reels analysed. Every section below inherits that confidence
+     level. **If coverage is thin, say so once at the top** and mark the whole answer
+     low-confidence rather than repeating the caveat per section.
    - `get_hooks_library` — the openings
    - `get_cta_library` — the asks
    - `get_content_structures` — the shapes
@@ -32,11 +40,30 @@ Focus: $ARGUMENTS
 
 ## Rigor
 
-Follow the skill's PLAYBOOK Step 3 and Step 7 rules exactly: **medians not means**, sample size
+Follow the skill's PLAYBOOK Step 3 and Step 7 rules exactly — load ONLY those two files,
+`playbook/step-03-mcp.md` and `playbook/step-07-strategy.md`, never the whole method: **medians not means**, sample size
 stated on every claim, each claim labelled DATA-DRIVEN (real n behind it) / DATA-INFERRED /
 JUDGMENT. A combined view makes it easy to sound authoritative off five thin slices — that is
 the specific failure to avoid here. Use RM's own tag labels; never speculate about how a tag
 is computed.
+
+**Benchmark lens — say which creators the answer came from.** These reads default to the
+accounts on your watchlist only. The pattern tools (`get_content_strategy`, `get_hooks_library`,
+`get_cta_library`, `get_content_structures`) take `scope`: `mine` is your watchlist, `niche` is
+the wider community pool, `both` combines them. The tag and post tools (`get_tag_stats`,
+`get_avg_scores`, `query_posts_by_tag`) take `analysis_mode`, whose
+`community_per_account` and `community_cross_account` values widen the pool the same way.
+**When a finding is about to drive a recommendation, read it again through the wider lens and
+compare** — a casual "just show me the list" answer stays on one lens. Label every answer with
+the set behind it and how many reels that is ("your 15 tracked accounts, 212 analysed reels"),
+and quote the count the wider read actually returns instead of assuming it is bigger. If the
+wider view is not available here — the community tools are not offered, or the pool comes back
+empty — say so plainly; never quietly fall back to the watchlist after being asked for the
+wider picture. Full detail: `playbook/step-03-mcp.md`.
+
+**If something in the answer looks wrong, do not explain it away.** Say the likely
+reason in plain words, say what can still be trusted, and report anything we do not
+already know about. The known signatures and the exact wording: `data-quality.md`.
 
 **Hard limit:** never call a spend or destructive tool here, and never call Apify. If the real
 answer is "we have not analysed enough yet", say that and point at

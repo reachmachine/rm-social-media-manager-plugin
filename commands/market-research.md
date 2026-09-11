@@ -4,7 +4,8 @@ argument-hint: "[the niche, audience, or offer to size]"
 ---
 
 Do real market research so the target segment is a decision, not a vibe. **Spends no Reach
-Machine credits.** Follow the skill's PLAYBOOK **Step 1 market-sizing rule (G233)** — it already
+Machine credits.** Follow the skill's PLAYBOOK **Step 1 market-sizing rule (G233)**, in
+`playbook/step-01-intake.md` — load that one file, not the whole method. It already
 sanctions `WebSearch` for exactly this.
 
 What to size: $ARGUMENTS
@@ -18,9 +19,12 @@ commercially. It is **never** allowed for finding benchmark Instagram accounts (
 
 ## How to do it
 
-1. **Start from the business.** `get_business_profile` + `get_creator_brief`. Sizing a market
-   without knowing the offer and the stage produces a number nobody can act on. If they are
-   empty, route to `/rm-social-media-manager:know-business` first.
+1. **Start from the business — and pull our own data in the same breath.** Send
+   `get_business_profile`, `get_creator_brief`, `get_taxonomy_definitions` and `get_tag_stats`
+   in ONE message; they do not depend on each other, so one round-trip covers all four. Sizing
+   a market without knowing the offer and the stage produces a number nobody can act on. If the
+   profile and brief are empty, route to `/rm-social-media-manager:know-business` first. Keep
+   the taxonomy and tag counts — point 4 uses them.
 2. **Size it top-down AND bottom-up, then compare.** Top-down: published market size, then the
    share that plausibly fits this offer. Bottom-up: reachable audience × realistic conversion ×
    price. **When the two disagree by a lot, say so** — that gap is the most useful output here,
@@ -28,13 +32,14 @@ commercially. It is **never** allowed for finding benchmark Instagram accounts (
 3. **Break it into sub-segments** and score each on: size, how reachable they are on Instagram,
    ability to pay, and how well this creator's actual proof fits. Recommend ONE beachhead
    segment and say what you are deliberately NOT targeting.
-4. **Cross-check against our own data where it exists.** `get_taxonomy_definitions` and
-   `get_tag_stats` show which niches Reach Machine actually holds data for. A segment we have no
-   competitor data for is harder to plan against — flag it.
+4. **Cross-check against our own data where it exists.** Use the taxonomy and tag counts you
+   already pulled in point 1 — they show which niches Reach Machine actually holds data for. A
+   segment we have no competitor data for is harder to plan against — flag it.
 5. **See how the niche's leaders operate, briefly (G372).** A quick scan of the niche's top 3-5
    players — their offer, price point where public, promise, and the funnel step they lead
    with — each cited with a source and a date. Full method, and why this stays a quick scan and
-   never a full teardown: PLAYBOOK Step 1's "Niche commercial landscape" bullet. This step must
+   never a full teardown: PLAYBOOK Step 1's "Niche commercial landscape" bullet
+   (`playbook/step-01-intake.md`). This step must
    **never** be used to find or suggest Instagram accounts to add — that stays Apify-only, in
    `/find-competitors` (G332).
 

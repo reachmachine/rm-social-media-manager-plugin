@@ -4,19 +4,24 @@ argument-hint: "[a tag/category name, an @handle, or one or more reel URLs]"
 ---
 
 Analyse reels so the insight tools have something real to read. This is the skill's analysis
-step — load PLAYBOOK **Step 3** and follow rules 2, 6, 6a, 6b, 6c and 6d exactly.
+step — load PLAYBOOK **Step 3**: `playbook/step-03-mcp.md` for rule 2, and
+`playbook/step-03-mcp-spend-and-progress.md` for rules 6, 6a, 6b, 6c, 6d and 6e. Follow them
+exactly. Do not load the rest of the method.
 
 What to analyse: $ARGUMENTS
 
 ## Prerequisite gate
 
-`get_workspace_stats` (and `search_watchlist` if needed). If the watchlist is empty there is
-nothing to analyse — say so and route to `/rm-social-media-manager:find-competitors`.
+**Send `get_workspace_stats`, `search_watchlist` and `get_analysis_coverage` in ONE message —
+they do not depend on each other.** One round-trip, not three, and none of the three spends
+anything. If the watchlist is empty there is nothing to analyse — say so and route to
+`/rm-social-media-manager:find-competitors`.
 
 ## Pick the target
 
-1. **Coverage first** — `get_analysis_coverage`. Find which tag subsets are thin **for the
-   user's goal**, per the PLAYBOOK's goal→tag table. Do not analyse what is already covered.
+1. **Coverage first** — read the `get_analysis_coverage` result from that message. Find which
+   tag subsets are thin **for the user's goal**, per the PLAYBOOK's goal→tag table. Do not
+   analyse what is already covered.
 2. **Then choose the shape of the run:**
    - **By classification / tag group** → `run_pipeline_by_category` (pair with
      `query_posts_by_tag` to see what it will cover first).
@@ -44,20 +49,48 @@ explicitly asks.
 
 **Pin the reel analysis itself to a Sonnet sub-agent (rule 6b)** — a default, not a lock.
 
+**Keep the assist loop small (rule 6e).** One reel at a time: fetch, analyse, `submit_analysis`,
+then write ONE short line about that reel and drop its frames and its instruction bundle from your
+working set before the next `get_assist_work`. Dispatch about **8 reels per batch, not 25** — each
+reel drops 8 keyframe images into this chat and they never leave, so a long batch gets slower and
+slower and can run out of room after the credits are already held.
+
 ## 🔴 Confirm-before-spend is a HUMAN gate
 
 Every spend call shows its un-confirmed cost preview and **WAITS for an explicit yes** before
 `confirm=true`. This applies to assist mode's dispatch too. Never set `confirm=true` yourself.
 State every cost preview in credits, exactly as the tool returns it — never convert it to dollars
-or state what it costs us (PLAYBOOK rule 6c, G368).
+or state what it costs us (PLAYBOOK rule 6c, in `playbook/step-03-mcp-spend-and-progress.md`, G368).
 
 ## While it runs
 
-Follow **PLAYBOOK rule 6d** exactly — poll `get_pipeline_status` every 20-30 seconds, give a
+Follow **PLAYBOOK rule 6d** (`playbook/step-03-mcp-spend-and-progress.md`) exactly — poll
+`get_pipeline_status` on a widening gap, not a fixed timer: first check at about **60 seconds**,
+keep it at 60 seconds while no reel has finished, and after that wait about **half the remaining
+estimated time** — never under **30 seconds**, never over **120 seconds**. Every poll re-sends this
+whole chat, so a fixed 20-30 second timer burns the customer's own Claude usage for nothing. 🔴 The
+moment `stalled_for_s` comes back as a number instead of `null`, the back-off is OFF: poll again
+straight away and then every 30 seconds. Give a
 friendly opening ETA, let the customer know they can step away, and absorb a stall into a calm
 update instead of turning it into a menu. `stop_pipeline` cancels, and is itself a destructive
 call needing an explicit yes. If a run fails, relay the server's own message, which usually says
 whether credits were taken.
+
+## 🔴 Count what you asked for against what came back
+
+Follow **PLAYBOOK rule 6h** (`playbook/step-03-requested-vs-delivered.md`, FRFRMU-1027). Short
+version, and it is not optional:
+
+- After **every** batch, read `unanalyzed_count` from `get_pipeline_status`. Above zero means the
+  run is **not** finished — never say "done" or "all analysed" while it is. Say how many are
+  missing, using the plain-English `reason` on each entry in `failed_reels` word for word.
+- A **refused** batch (a run is already active, or the analysis service is not responding) accepted
+  **nothing** and charged nothing. Its message says how many reels were turned away — add that to
+  your tally and never record it as a batch that ran. Follow the recovery step in the message; if
+  it says waiting will not fix it, do not retry in a loop.
+- At the end, one tally line: *"You approved N reels; M are analysed; K did not finish (reasons).
+  Retry the K? That holds credits for K reels only."* Follow `retry_hint` — it already knows when
+  asking again cannot work (a private or removed post), and you must not offer a retry then.
 
 When it finishes, point at `/rm-social-media-manager:our-patterns` or
 `/rm-social-media-manager:check-classifications` to read what the new analysis shows. If you

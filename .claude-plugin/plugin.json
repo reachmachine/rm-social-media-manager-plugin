@@ -1,8 +1,10 @@
 {
   "name": "rm-social-media-manager",
-  "description": "Reach Machine social media manager: content planning agent + skill",
-  "version": "1.5.1",
-  "author": { "name": "Reach Machine" },
+  "description": "Reach Machine social media manager: content planning + copywriter agents and skills",
+  "version": "1.8.0",
+  "author": {
+    "name": "Reach Machine"
+  },
   "mcpServers": {
     "reachmachine": {
       "type": "http",

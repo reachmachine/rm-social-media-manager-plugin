@@ -4,24 +4,28 @@ argument-hint: "[niche, seed @handles, or hashtags to search from]"
 ---
 
 Find modellable benchmark accounts. This is the skill's **Step 2** on its own — load that
-PLAYBOOK section and follow it exactly, including the discovery angles A–F.
+PLAYBOOK step file — `playbook/step-02-benchmarks.md`, and only that one — and follow it
+exactly, including the discovery angles A–F.
 
 Seeds the user gave: $ARGUMENTS
 
 ## Prerequisite gate — before searching anything
 
-`get_business_profile` + `get_creator_brief`. Discovery is seeded off the **subject's** niche,
-stage and named accounts. Without them you research the wrong market. If the niche is missing,
-stop and route to `/rm-social-media-manager:know-business`.
+**Send `get_business_profile` and `get_creator_brief` in ONE message — they do not depend on
+each other.** Discovery is seeded off the **subject's** niche, stage and named accounts.
+Without them you research the wrong market. If the niche is missing, stop and route to
+`/rm-social-media-manager:know-business`.
 
 ## Source order — catalog, then Apify
 
 1. **`discover_accounts` FIRST — free.** It returns only accounts Reach Machine already holds
    real data for. **Empty is normal**, not an error, and not a reason to invent anything.
-2. **Then Apify, for the live Instagram search** — angles A–F in PLAYBOOK Step 2.2, using
+2. **Then Apify, for the live Instagram search** — angles A–F in PLAYBOOK Step 2.2
+   (`playbook/step-02-benchmarks.md`), using
    `instagram-hashtag-scraper`, `instagram-search-scraper`, `instagram-scraper` and
    `instagram-profile-scraper`. Name these tools **bare** — the prefix differs on a customer
-   install, so a hardcoded one points at nothing.
+   install, so a hardcoded one points at nothing — **and put their input at the ROOT of the
+   call, as an object, never inside Reach Machine's `args` box and never as a JSON string.**
    **Angles D (related profiles) and F (trending audio) are not available** with these tools.
    Skip them and say you skipped them.
 

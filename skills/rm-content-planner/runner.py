@@ -97,15 +97,23 @@ SYSTEM_PROMPT = (
 # it true is fabricating consent, and Step 2.4's shortlist-approval gate is
 # equally unreachable headless (its only downstream effect, add_to_watchlist,
 # is already in the deny-list below, so removing it here is the one decision
-# that closes both gates at once). See PLAYBOOK.md Step 12 for the full
+# that closes both gates at once). See playbook/step-12-capture.md for the full
 # reasoning. This is a genuine "how much may headless do unsupervised"
 # product call, made here as an engineering default: headless PRODUCES a
 # plan, it does not PERSIST one.
+#
+# FRFRMU-988: search_exemplars and get_topic_heat were missing from this list
+# entirely (not denied on purpose — just absent), so under dontAsk both were
+# DENIED, and the playbook step that instructs each one unconditionally
+# (step-08-hook-recipe.md H.3b, step-05-differentiate.md 5.1c) had no way to
+# know its tool call had silently failed. Both are read-only, free, and touch
+# no workspace data beyond what the other read tools above already can.
 _RM_NONSPEND_TOOLS = [
     "mcp__reachmachine__get_business_profile",
     "mcp__reachmachine__update_business_profile",   # write, does NOT spend — positioning capture
     "mcp__reachmachine__get_creator_brief",
     "mcp__reachmachine__update_creator_brief",       # write, does NOT spend — durable intake
+    "mcp__reachmachine__delete_creator_brief_field", # write, does NOT spend — clears planning_progress at plan end (FRFRMU-981)
     "mcp__reachmachine__validate_content_plan",      # read, free — the Step 11.0 code gate (G208a)
     "mcp__reachmachine__report_gap",                 # write, does NOT spend — logs a product gap
     "mcp__reachmachine__list_workspaces",
@@ -117,6 +125,12 @@ _RM_NONSPEND_TOOLS = [
     "mcp__reachmachine__get_content_structures",
     "mcp__reachmachine__get_hooks_library",
     "mcp__reachmachine__get_cta_library",
+    "mcp__reachmachine__search_exemplars",   # read, free — Step 8 H.3b proven-hook lookup (FRFRMU-988)
+    "mcp__reachmachine__check_hook_clone",   # read, free — grades a written hook against the exemplars it cites; the save-path already runs this server-side, but a writer can run it themselves before committing to a hook (FRFRMU-991)
+    "mcp__reachmachine__get_topic_heat",     # read, free — Step 5.1c shortlist thinness check (FRFRMU-988)
+    "mcp__reachmachine__get_content_plans",  # read, free — reads a saved plan back, e.g. for cooldown (FRFRMU-975)
+    "mcp__reachmachine__save_draft_plan",    # write, does NOT spend — mid-plan checkpoint (FRFRMU-980)
+    "mcp__reachmachine__get_draft_plan",     # read, free — reads the checkpoint back (FRFRMU-980)
     "mcp__reachmachine__get_post_transcript",
     "mcp__reachmachine__get_posts_detailed",
     "mcp__reachmachine__get_profile_details",
@@ -125,6 +139,7 @@ _RM_NONSPEND_TOOLS = [
     "mcp__reachmachine__query_posts_by_tag",
     "mcp__reachmachine__get_tag_stats",
     "mcp__reachmachine__get_avg_scores",
+    "mcp__reachmachine__get_theme_lift",     # read, free — Step 3 rule 2a sufficiency table (FRFRMU-1019)
     "mcp__reachmachine__get_credit_usage",
     "mcp__reachmachine__get_data_sources",
     "mcp__reachmachine__get_billing_status",

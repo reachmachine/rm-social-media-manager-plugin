@@ -15,7 +15,8 @@ warning under "Headless / Agent SDK automation" before touching it.
 | File | What it is |
 |---|---|
 | `SKILL.md` | The skill's operating contract. Its #1 rule: **understand the business before planning.** |
-| `PLAYBOOK.md` | The full reusable method (8 steps + checklist) the skill follows. |
+| `PLAYBOOK.md` | The method's INDEX — the step list and which file holds each step. Small on purpose. |
+| `playbook/` | The method itself, one small file per step (`step-01-intake.md` … `step-12-capture.md`, plus `rigor-rules.md`). A command loads only the step it needs (FRFRMU-609). |
 | `runner.py` | Headless Claude Agent SDK program — **engineering/automation only, not customer-ready** (see below). |
 | `requirements.txt` | Python dependency (`claude-agent-sdk`), needed only for `runner.py`. |
 

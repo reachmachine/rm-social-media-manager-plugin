@@ -4,7 +4,8 @@ argument-hint: "[the @handle(s) to remove]"
 ---
 
 Remove competitors from this workspace's watchlist. **This is destructive and some of it cannot
-be undone.** Follow the skill's PLAYBOOK Step 3 rules; treat this with more care than any spend.
+be undone.** Follow the skill's PLAYBOOK Step 3 rules — load ONLY
+`playbook/step-03-mcp-spend-and-progress.md`; treat this with more care than any spend.
 
 Who to remove: $ARGUMENTS
 
@@ -28,7 +29,13 @@ makes the action look safer.
 ## The steps
 
 1. **Never remove from a filter or a guess.** `search_watchlist` first and resolve the exact
-   handle. If `$ARGUMENTS` is vague or matches more than one account, ask — do not pick.
+   handle. **Look at the whole watchlist before you resolve it** — `search_watchlist` returns
+   only 20 accounts per call by default, so ask for `page_size=100` and keep asking for the
+   next `page` until you have as many accounts as the reply's own `total_count` says exist.
+   Reading the rest of the list **only changes what you look at; it never changes what gets
+   removed.** Removal is decided by the named yes in step 3 and by nothing else — a longer
+   list is never a reason to remove more. If `$ARGUMENTS` is vague, or now matches more than
+   one account because you can finally see them all, ask — do not pick.
 2. **Show what will be lost**, per account: handle, reels held, reels **analysed**, and which of
    the two outcomes above applies. Numbers, not adjectives.
 3. **Ask for an explicit yes, naming the accounts.** One yes covers one named list. A yes for

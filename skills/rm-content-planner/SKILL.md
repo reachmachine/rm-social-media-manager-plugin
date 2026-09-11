@@ -9,7 +9,7 @@ description: >-
 when_to_use: >-
   Someone wants a Reels / short-form content plan or calendar for a specific
   creator or brand, built from Reach Machine competitor data.
-allowed-tools: Read, Write, WebFetch, WebSearch, Bash(start:*), Bash(open:*), Bash(xdg-open:*), mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_wait_for, mcp__playwright__browser_close
+allowed-tools: Read, Write, WebFetch, WebSearch, Bash(start:*), Bash(open:*), Bash(xdg-open:*), mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_wait_for, mcp__playwright__browser_close, Edit, Bash(mkdir:*), Bash(cp:*), Agent, Task
 ---
 
 # rm-content-planner
@@ -54,25 +54,37 @@ skill does **not** implement — two writers touching the same files is a real r
 explicitly rejected. `claude plugin update`, run by the creator through their own Claude Code /
 Claude.ai plugin manager, is the only supported way this skill gets updated.
 
-**First, read the method:** `${CLAUDE_SKILL_DIR}/PLAYBOOK.md`. Follow it exactly.
-This file is the short operating contract; the PLAYBOOK is the detail.
+**First, read the method's index:** `${CLAUDE_SKILL_DIR}/PLAYBOOK.md`. It is small on
+purpose — a table of the steps and the file each one lives in. **Then load ONLY the step
+file you are working on** (`${CLAUDE_SKILL_DIR}/playbook/step-03-mcp.md`, and so on).
+Follow it exactly. Never read every step file "just in case": that text comes out of the
+creator's own Claude usage, on this turn and on every turn after it. This file is the
+short operating contract; the PLAYBOOK step files are the detail.
 
 **This skill is SELF-CONTAINED — everything it needs is in this folder** (so it works for any
-business, even handed to someone outside this repo). Also load:
+business, even handed to someone outside this repo). **These companion files load AT THE STEP
+that uses them, not up front** — loading them all at the start is what made every command
+slow and expensive (FRFRMU-609):
 - **`${CLAUDE_SKILL_DIR}/TEMPLATE.md`** — the fixed output shape (Parts A–E) EVERY plan must follow.
+  Load it at **Step 8** (`playbook/step-08-deliverable.md`), where the plan gets written.
 - **`${CLAUDE_SKILL_DIR}/RULES_GATE.md`** — the universal checklist you run every draft through
   BEFORE showing the user (voice/compliance · book structures · benchmark-not-copy · **strategy
-  adherence** · data integrity).
+  adherence** · data integrity). Load it at **Step 11** (`playbook/step-11-rules-gate-critic.md`).
 - **`${CLAUDE_SKILL_DIR}/rules/`** — the generic marketing principles the gate is built on
   (`copywriting.md`, `funnel.md`, `authority.md`, `offer.md`, `traffic.md`). These are book-derived
   and **carry no business's private strategy on purpose** — judge every plan against the CREATOR's
-  own positioning + data, never anyone else's playbook.
+  own positioning + data, never anyone else's playbook. Load them at **Step 11**, with the gate.
 - **`${CLAUDE_SKILL_DIR}/dashboard.html`** — the reusable DASHBOARD the plan is delivered as (see
   the Deliver step). Self-contained, theme-aware; renders the plan from an embedded JSON object.
+  At **Step 8**, **copy** this file into the run folder with `cp` and then read only its
+  `<script id="plan">` block. **Never load the whole 34 KB file into the chat** — the CSS and
+  JavaScript in it are the same every single run, so reading them costs the creator money and
+  teaches you nothing.
 - **`${CLAUDE_SKILL_DIR}/PRODUCT_DOSSIER_PROMPT.md`** — for SaaS/software subjects (G408): the
   copy-paste prompt the creator runs in their OWN codebase's AI coding agent, which writes back a
   plain-English product dossier (features, audience, benefits — no code, no secrets). Offered in
-  Step 1, saved to the Creator Brief, re-run by the creator as the product grows.
+  Step 1, saved to the Creator Brief, re-run by the creator as the product grows. Load it only
+  when the subject IS a software product and they have said yes.
 
 ## Where the OUTPUTS go — folder organization (Claude Code runs)
 When run in Claude Code with a working folder, keep it clean and predictable:
@@ -133,11 +145,22 @@ the tracked competitors show another (e.g. "business coach" vs a 90%-AI/tech wor
 flag it and ask which is right; never plan on a doubted field, and if the web-only
 persona/stage is wrong tell the human to fix it — and tell them WHY, plainly: accurate
 profile data is what makes the plan accurate, a wrong field gives a wrong plan.
-**Persist everything with provenance:** positioning → `update_business_profile`, the full
-intake AND anything extra you asked to understand the business → `update_creator_brief`
-(value + source + confidence, under any keys the brief needs — it takes arbitrary keys
-and is the QA/QC record), as you go. If you truly cannot establish positioning,
-**STOP and ask** — a plan built without it is mimicry, not strategy.
+**Persist everything with provenance — but positioning has exactly ONE owner.** `positioning`
+(the structured object: ownable angle, first-party proof, one audience, PQR2) is written **only**
+with `update_business_profile`. **Never send a** `positioning` key to `update_creator_brief` —
+the server rejects any shape but the full object, and a plain sentence there used to overwrite
+the object and read back as "never set" (FRFRMU-1150). Your rough wording, why it is weak or
+strong, and what is still unverified go to `update_creator_brief` under the separate key
+`positioning_notes` (plain text; carry `source`, `confidence` and `tier` on the field as usual).
+Everything else in the intake, and anything extra you asked to understand the business, →
+`update_creator_brief` under any other key the brief needs (value + source + confidence — it is
+the QA/QC record), as you go. If you truly cannot establish positioning, **STOP and ask** — a
+plan built without it is mimicry, not strategy.
+
+**The customer's website gets its own step.** If they have a site, load
+`playbook/step-01-7-website-dossier.md` — ask once, crawl to the checklist, and save the result
+to `update_creator_brief` under the key `website_dossier` (see step 1.7). Then lead every intake
+question with what the site already said.
 
 ## THEN run the method (detail in the PLAYBOOK)
 - **Find benchmark accounts — Step 2 (runs for EVERY plan, not just empty workspaces).**
@@ -145,14 +168,20 @@ and is the QA/QC record), as you go. If you truly cannot establish positioning,
   relevant, *modellable* accounts — **call the `discover_accounts` tool first** (it exists
   now: free, read-only, and it returns only accounts Reach Machine already holds data for).
   Fall back to proposing from seeds ONLY when it returns nothing, and label that fallback
-  unverified to the creator (invalid handles cost $0),
+  unverified to the creator (invalid handles cost $0). **Never substitute a generic web
+  search for either path (G332)** — a tool failure is a connection problem to disclose
+  (Step 1, G235), not something to quietly improvise around.
   **pre-filter for FIT before spending** (drop brands/media/mega-accounts/off-niche/
   inactive), human approves, `add_to_watchlist` (confirm-before-spend), then **filter on
   REAL metrics after adding** (`remove_competitor` is free), pull + analyse. Benchmark
   for FIT, not fame. (Step 2)
 - **Ask the plan size first** — how many reels does the creator want? **Ask, with your
   recommendation** as the senior SMM (from their stage + sustainable cadence + horizon).
-  Never silently pick the number. (Step 1)
+  Never silently pick the number. **Say plainly what a bigger number costs them**
+  (FRFRMU-630): it does NOT spend more Reach Machine credits on its own, and it does NOT make
+  you read more competitor reels — that is capped at **12 deep reads a plan** either way. It
+  costs their time and this chat: more reels to write, check and review. Never quote a
+  currency figure or invent a credit number (rule 6c). (Step 1)
 - **Use the MCP correctly** — pick the creator subset (model on solo creators, not
   brands/media); check `get_analysis_coverage` and analyse the tag subset **each FUNNEL
   ROLE in the plan's mix needs** (role→row map in PLAYBOOK Step 3, G328 — union of rows,
@@ -163,7 +192,9 @@ and is the QA/QC record), as you go. If you truly cannot establish positioning,
   the levers (`get_content_strategy`, `get_content_breakdown` sorted by views,
   `get_hooks_library`, `get_content_structures`, `get_cta_library`); pull real
   reels with `get_post_transcript` for the 4-layer hook **and the `beats`
-  (= your retention data)**. **Confirm-before-spend is a HUMAN gate, not a
+  (= your retention data)** — **3-5 per funnel ROLE into ONE source table every reel in that
+  role cites, at most 12 a plan, NEVER one per calendar reel; a receipt itself needs no
+  transcript** (Step 3 rule 5a, FRFRMU-630). **Confirm-before-spend is a HUMAN gate, not a
   two-call trick:** on every spend tool, show the cost preview to the human and
   **WAIT for their explicit yes** — never call with `confirm=true` until they
   say proceed.
@@ -186,8 +217,10 @@ and is the QA/QC record), as you go. If you truly cannot establish positioning,
   hook + retention + stage CTA + funnel role + effort tag + priority rank +
   source), realistic cadence + batching (light reels grouped so a bad week
   still ships), an opportunistic news slot, caption/hashtag/SEO, a distribution
-  note (posting-time medians as a soft, UTC-caveated tie-breaker; trending
-  audio as judgment), a weekly KPI ritual with a mid-month tracker, a daily
+  note (posting-time medians as a soft, UTC-caveated tie-breaker; an audio
+  stance read from which sounds are rising among the accounts we track, with
+  the exact track confirmed in the creator's own panel at posting time), a
+  weekly KPI ritual with a mid-month tracker, a daily
   community routine (a real Dream 100 — serve before you ask), and honest
   benchmarks anchored to the creator's own median where one exists.
 - **Receipts (G74) — every plan ships them.** Each calendar reel cites the
@@ -205,13 +238,26 @@ and is the QA/QC record), as you go. If you truly cannot establish positioning,
   and repeat until the gate is fully clean. Ship only the passed version + note what changed
   (Part E2). (Step 11)
 - **Present as a DASHBOARD (the deliverable format).** Once the plan passes the gate + critic,
-  render it as the dashboard so it's easy to consume: copy `dashboard.html`, replace ONLY the
-  `<script id="plan">` JSON block with this run's plan data (same fields as the calendar/receipts +
-  the strategy sections — the file documents the shape), and hand the creator the finished HTML
-  (render it inline, or write it to the run's `dashboard.html` and hand it over as set out below —
-  "a file they can open" is not enough on its own, they need the path). Do NOT hand-edit the markup — everything
-  renders from the JSON. The markdown TEMPLATE remains the canonical content; the dashboard is its
-  presentation layer. *(A `submit_content_plan` JSON maps almost 1:1 — reuse it.)*
+  render it as the dashboard so it's easy to consume. **COPY the dashboard file. Never re-type
+  it.** It is 34 KB, and about 22 KB of that is CSS and JavaScript that is identical on every run.
+  Typing it out again is the slowest step of the whole hand-over, costs the creator roughly 18,000
+  tokens of pure boilerplate, and one wrong character can leave them a blank page. Build it in
+  three moves:
+  **(a) Make the folder, then copy.** Run `mkdir -p <run folder>`, then
+  `cp ${CLAUDE_SKILL_DIR}/dashboard.html <run folder>/dashboard.html`. The `mkdir -p` is not
+  optional: plain `cp` fails with "No such file or directory" when the run folder is not there yet,
+  and on a chat-only run there may be no folder at all.
+  **(b) Read only the plan block of the COPY** — the `<script id="plan">` block down to the
+  `</script>` that closes it — using `Read`'s `offset` and `limit`. Never read the whole file. (If
+  `Edit` then complains the file has not been read, this is the read that answers it.)
+  **(c) Make ONE `Edit` on the copy** that replaces ONLY that `<script id="plan">` JSON block with
+  this run's plan data (same fields as the calendar/receipts + the strategy sections — the block
+  itself documents the shape). Every other byte must come out exactly as the template had it.
+  Then hand the creator the finished HTML (render it inline, or hand over the run's
+  `dashboard.html` as set out below — "a file they can open" is not enough on its own, they need
+  the path). Do NOT hand-edit the markup — everything renders from the JSON. The markdown
+  TEMPLATE remains the canonical content; the dashboard is its presentation layer.
+  *(A `submit_content_plan` JSON maps almost 1:1 — reuse it.)*
   **HAND IT OVER — a dashboard nobody can find is a dashboard nobody got (G370).** The moment the
   file is written, do all three, in this order:
   1. **Print the absolute path** of the file — the full path starting at the drive or root, e.g.
@@ -228,7 +274,8 @@ and is the QA/QC record), as you go. If you truly cannot establish positioning,
      happen. **Headless / unattended runs (`runner.py`) skip step 3 entirely** and still print the
      path, because launching a browser on a server helps nobody.
 - **Capture (save to the Content Calendar)** — after the critic-passed plan is
-  delivered, **ASK the creator for consent** and, on an explicit yes, call
+  delivered **and the creator has reviewed it (Step 12's 🛑 REVIEW GATE B — silence is
+  not approval)**, **ASK the creator for consent** and, on an explicit yes, call
   `submit_content_plan` (a free, no-spend write) with the **STRUCTURED** plan +
   `plan_month` (`YYYY-MM`, the month it's FOR) + `title` + the `inputs` it was built
   from + the `critic` result + `consent: true` + `skill_version`. It files the plan
@@ -260,6 +307,8 @@ Machine's admin triage queue so the team actually sees it. Pass:
 - `severity` (low/medium/high) + `source: "rm-content-planner"`.
 Fire it and keep going — don't let it interrupt the plan. (Reuse before rebuild; if
 it also warrants a repo-side note, still log it in `marketing/engineering-gaps.md`.)
+For `type: "bug"` about a tool call that got REJECTED, read `data-quality.md`'s
+"Before you say 'broken'" section first, and fill `ruled_out`.
 
 **🔴 THE AUDIENCE RULE (G134) — defect detail goes to US, never to the client.**
 The client hired us for a content plan, not to read our defect log. `report_gap` is

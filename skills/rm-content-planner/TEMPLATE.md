@@ -44,6 +44,12 @@
   `plan.section_00.assumptions` in the structured save. If there are none, say so in one line ("Every
   input below was confirmed by you") rather than omitting the point.
 
+### A0b. Sales-readiness check  *(p33, FRFRMU-1071 — only when the account has an offer)*
+- The 5-question check from `step-04-stage.md` Step 4.8: *"Can your foundation pitch yet? N of 5."*
+- Each of the five questions names its pointer key, or **"unanswerable — [card] incomplete"** when the
+  card behind it is empty. Never invents an answer to make the count look better.
+- No offer on this account → omit this section entirely; there is nothing to pitch yet.
+
 ### A1. Goal & funnel objective  *(state it explicitly — this drives everything below)*
 - The goal, named plainly: **reach** / **lead-gen** (e.g. DM automation + lead magnet) / **engagement** /
   **authority / sales**. Pick ONE primary (a secondary is allowed).
@@ -113,24 +119,108 @@ Every reel row MUST carry all of:
 - **date / slot** · **pillar** · **series** *(if any)* · **moment-tie** *(building toward a launch/seasonal moment?)* · **topic** *(show the real data-niche AND the reframed idea)* · **angle** ·
   **audience segment** · **intent** *(educate/entertain/inform/inspire/etc.)* · **funnel role**
   *(reach/nurture/activation)* · **emotion** ·
+- **how the TOPIC is chosen, and whether it is allowed this month —
+  `playbook/step-05-differentiate.md` 5.1/5.2.** Two things it decides land in the row itself.
+  **(1) The row carries its own topic receipt** — `kind: topic`, with `topic_id` (the topic's name
+  exactly as `get_topic_heat` returned it), `viral_instances` (how many of its reels went viral —
+  a real number above zero), `distinct_accounts` (how many different accounts posted them) and
+  `hit_rate_band` (`hot` / `warm` / `cold` / `low_n`). An idea with no topic receipt is not a
+  finished row; the one exception is a **declared test slot**, which says it is a test and is
+  tagged JUDGMENT. **(2) A topic the last plans already covered is on COOLDOWN** and does not come
+  back unless it is a named series, or a stated sequel — the row saying in plain words why it is
+  back and what result brought it back. A repeat nobody explained is what the creator notices
+  before we do. ·
 - **4-layer hook** — **spoken** line · **on-screen text** line · **visual** cue · **sound** cue.
   All four are separate fields (`hook.spoken`, `hook.on_screen`, `hook.visual`, `hook.sound`) — the
   validator (G118) blocks the WHOLE reel if any one of the four is missing. **`sound` must never be
-  left blank, even though RM has no trending-audio data (see D2).** When you don't have a specific
-  sound to name, write an honest judgement call instead of inventing one — e.g. *"no trending-audio
-  data — using a spoken-word open"* or *"layer the platform's own trending audio here (judgment
-  call, pick at posting time)"*. A stated judgement is allowed; a made-up claim about a specific
-  song/sound is not (same honesty rule as everywhere else in this template). ·
+  left blank.** How it is chosen is its own recipe — **`playbook/step-08-audio-recipe.md`** — and
+  the stakes depend on the mode: a bed under a voice on a talking-head reel, but on a music-only
+  or lip-sync reel **the sound IS a hook layer** and must be deliberate. The row carries the audio
+  STRATEGY (own voice / reused track / a named candidate that is **rising among the accounts we
+  track**, with its numbers) plus the volume relationship; the creator confirms the exact track in
+  their own Instagram panel at posting time. A stated judgement is allowed; a made-up claim about
+  a specific song is not, and a sound's absence from our data proves nothing because the scraper
+  often reports no sound at all. ·
+- **how the hook is CHOSEN — `playbook/step-08-hook-recipe.md`.** That step file holds the
+  recipe: which channels this reel's format actually has, which proven template to borrow, and
+  the month's template test. Two things it decides land in the row itself. **(1) A layer this
+  reel's format does not have carries an honest written value, never a blank** — e.g.
+  `none — music-only format` for the spoken layer of a silent or music-only reel. It is a real
+  value, so the all-four-layers check still passes without anyone inventing a spoken line.
+  **(2) The hook carries its own template receipt** — `kind: hook_template`, with `template_id`
+  (the canonical template), `count` (how many reels used it), `account_spread` (how many
+  different accounts), `median` (their typical views) and `metric_used: views`. A hook with no
+  count behind it is tagged JUDGMENT and gets no receipt. ·
 - **retention line** — the open loop (in the hook) → mid re-hook (~40%) → loop-back ending that earns replays ·
+- **beat outline — `playbook/step-08-outline-recipe.md`.** Beats, never a full script: each beat
+  names what the moment DOES and roughly says, in about one line, so the words stay the
+  creator's. A speech reel gets **talk-beats**; a silent or music-only reel gets **shot-beats**
+  with on-screen text on every beat. **A re-hook beat at roughly the 40% mark is mandatory** —
+  the mid-video re-grab that stops the viewer leaving — and the outline reserves a beat for the
+  CTA without writing it. The outline carries its own receipt: `kind: structure`, with
+  `structure_type`, `exemplars` (each one's `post_urls` plus its `structure_grounding` flag, so
+  a reader can see whether the shape came from words that were heard or pictures that were
+  read) and `n`. A beat quoted as words anybody said must come from a `speech_grounded`
+  exemplar, never a `vision_only` one. ·
 - **CTA** — stage-appropriate (reply-bait when reach/plumbing is thin; recommend keyword-DM only once
   there's real reach to convert — but it's allowed earlier, with an explicit "few replies at this
   size" caveat, once the automation is confirmed built AND tested; missing/untested plumbing is a
   hard no regardless of stage) ·
+- **how the ask is CHOSEN — `playbook/step-08-cta-recipe.md`.** That step file holds the
+  recipe: the stage ladder, the plumbing check, and the ranking. Three things it decides land
+  in the row itself. **(1) Every activation row in the plan carries the SAME conversion
+  action** — one month, one thing to convert to. **(2) An ask that needs plumbing the creator
+  has not built AND tested is stepped down**, with the reason written in the row. **(3) The
+  ask carries its own receipt when it is presented as evidence-backed** — `kind: cta_pattern`,
+  with `cta_type`, `count` (how many reels in the slice made this ask), `accounts` (how many
+  different accounts), `median` (their typical **comments**) and `metric_used: comments`. An
+  ask's job is responses, so a CTA receipt quoting views is refused. ·
+- **caption — `playbook/step-08-caption-recipe.md`.** Every reel row carries its own caption;
+  it is not left to the creator. **The first line is a SECOND HOOK** — the reel's hook said in
+  DIFFERENT words, written to still make sense where the feed cuts it at roughly 125
+  characters. The body is stage-shaped (short and curious for reach, context for nurture, a
+  mini pitch with the ask spelled out for activation) and in the audience's language. **The
+  caption ends by echoing the reel's CTA exactly**, matching this row's own `cta` / `cta_type`
+  — a viewer who reads but never hears the ask still gets it. Hashtags belong to D3, not here.
+  ⚠️ `caption_axis` in the analysis data is the ON-SCREEN text style, NOT the Instagram
+  caption; the caption text is `content` on a post payload. ·
+- **keywords + tags — `playbook/step-08-hashtag-recipe.md`.** Every reel row carries its own
+  **search keywords** (2-3 phrases the audience really types, placed naturally in the caption,
+  the on-screen text and the spoken script) and a **functional set of 3-6 tags** — 1-2 niche,
+  2-3 topic, plus the series tag when the reel belongs to a series. Every tag's role must be
+  nameable; an off-topic trending tag is out. Stay within the niche's own tag-count norm and
+  under the caption spam ceiling. **Never promise reach from tags** — nobody outside
+  Instagram's own analytics can measure what a hashtag contributed, so the plan promises
+  relevance and consistency only. ·
+- **shooting direction — `playbook/step-08-visual-recipe.md`.** Not a table of numbers: the
+  row carries **3-5 winning reels from this slot's own slice to WATCH** (links, each with a
+  one-line note on what is on screen), the shot type from the delivery and format, and the
+  first frame from the hook's visual layer. **The look — lighting, colour, wardrobe, location,
+  styling — is the creator's own brand, tagged JUDGMENT, and never cites a competitor.**
+  Copying a competitor's look is the most visible form of mimicry there is. The direction
+  carries its own receipt: `kind: visual_exemplars`, with `post_urls`, `subject_descriptions`
+  (the notes, in the same order) and `count`. It must be filmable inside the slot's effort
+  budget. ·
 - **expected structure / format** *(tutorial, listicle, story, skit, talking-head, etc.)* ·
 - **effort** (light/medium/heavy) · **priority rank** ·
 - **data receipt** — the exact lever(s) this reel is built on: source @handle + reel URL (if any) + **n** +
   **median** + **reliability** + provenance tag. A reel with no real tool result behind it is tagged
-  **JUDGMENT** and gets no faked receipt.
+  **JUDGMENT** and gets no faked receipt. ·
+- **Reasoning — three lines, on every slot, or the slot does not ship.**
+  `playbook/step-08-reasoning-recipe.md`. This is the row that makes the slot explain itself, in
+  plain language the creator can read:
+  1. **Receipts** — one short line per claim this slot actually makes (the topic, the hook, the
+     beats, the ask, the sound, the shooting direction, the time). A slot tagged
+     `provenance: data_driven` must carry the matching receipts; a `judgment` slot must carry the
+     tag. Nothing unlabelled.
+  2. **Expected outcome — a base rate, never a forecast.** Only two shapes are allowed: *"posts
+     of this class ran a median of X views / Y comments across N accounts — your own results will
+     differ, and they are what tunes next month's plan"*, or *"Testing — no market evidence, this
+     one is a deliberate experiment"*. **A predicted number for THIS post, a chance of going
+     viral, or an outcome we cannot see (conversions, sales, what people replied) is banned.**
+  3. **Goal served** — one line mapping the slot's `funnel_role` to the plan's goal: reach →
+     **Reach**, nurture → **Engagement**, activation → **Leads**. An activation slot also names
+     the ONE conversion action; an anchor-week slot cites its declared exception.
 
 ---
 
@@ -143,11 +233,26 @@ Every reel row MUST carry all of:
 
 ### D2. Distribution
 - Posting time — a SOFT tie-breaker only, with the honest caveat (data is UTC, not the audience's timezone;
-  weekday gaps are often flat). Trending audio — from the platform's own panel (judgment; usually not in data).
+  weekday gaps are often flat).
+- Audio — the month's audio stance, per `playbook/step-08-audio-recipe.md`. We CAN now read which
+  sounds are **rising among the accounts we track** (never "trending on Instagram") and which
+  sounds this workspace's own analysed reels keep reusing. Quote the coverage figure with every
+  count: the scraper often reports no sound at all, so a sound's absence proves nothing. The
+  exact track is confirmed in the creator's own Instagram panel at posting time — which is also
+  what keeps the pick licensed for a professional account.
 
 ### D3. Captions / hashtags / on-platform SEO
 - The caption + hashtag + searchable-text framework (keyword in name/first line; on-screen text carries
   silent viewers).
+- **This section is the FRAMEWORK, not the captions themselves.** Each reel's actual caption is
+  written per row in C1, using `playbook/step-08-caption-recipe.md`. Keep the two apart: a
+  framework here with no caption on any row is the gap this recipe closes. The same split
+  applies to tags: the per-reel keywords and tag set are written per row in C1 using
+  `playbook/step-08-hashtag-recipe.md`, not here.
+- **No reach promise, ever.** This section may describe what the tags and keywords are FOR
+  (relevance, consistency, being findable in search). It must never say or imply that a tag
+  set will get the creator reach or discovery — that is unmeasurable by anyone outside
+  Instagram, and claiming it is the same failure as a guaranteed-result claim.
 
 ### D4. Community / engagement routine  *(how a cold account gets its first eyeballs)*
 - A named **Dream 100** (the specific accounts this plan modelled) + a daily routine (minutes/day, how many
@@ -180,6 +285,10 @@ Every reel row MUST carry all of:
 ### E2. Critic & Rules-Gate verdict
 - The result of the mandatory loop (see PLAYBOOK Step 11 + the Rules Gate): the verdict, and a short list of
   what the critic/gate changed. Only the passed version ships.
+- **This prose is the summary, not the record.** The machine-readable per-gate result (one entry per
+  gate with pass / fail / not-applicable, what was checked, and what changed) goes to
+  `submit_content_plan` as `rules_gate` — see PLAYBOOK Step 11. A verdict with no record behind it
+  cannot be checked by anyone later. (G650)
 
 ### E3. Decision log — HOW this plan was reached (for QA)  *(in the final document AND written back)*
 A plain-language, step-by-step trail of the big decisions and **why**, so a reviewer (or the creator) can
