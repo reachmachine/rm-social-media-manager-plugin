@@ -157,6 +157,16 @@ that already shipped weeks ago.
 
 Call `delete_creator_brief_field` with `key: "planning_progress"`.
 
+**The field's shape, for reference (moved here from `PLAYBOOK.md` to keep the index small).**
+`last_completed_step` is a step id, not necessarily an integer: plain `1`…`12` for a top-level
+step, or a lettered/decimal sub-step like `"1.6b"` / `"3.7"` / `"12.5"` (FRFRMU-1311 widened
+this from the old plain `<int>`) — so a skipped sub-step shows up instead of hiding inside
+"Step 1 complete." `status` is one of `"in_progress"`, `"delivered"` or `"abandoned"`, never
+left unset (FRFRMU-981): every checkpoint before this step writes `"in_progress"`; this step
+is where a successful save clears the field entirely (above); `step-12-capture.md` covers the
+declined-save `"delivered"` case, and `step-01-intake.md`'s resume bullet covers the
+`"abandoned"` case for an old plan the creator chose not to resume.
+
 **Why last, and why the order matters.** If `record_content_plan_run` or a ledger write
 fails partway through, a resume pointer that still says "just saved, write-backs
 pending" is real, useful state — clearing it first would erase that trail before the

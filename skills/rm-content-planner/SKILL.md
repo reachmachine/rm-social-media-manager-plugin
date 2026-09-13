@@ -59,7 +59,10 @@ purpose — a table of the steps and the file each one lives in. **Then load ONL
 file you are working on** (`${CLAUDE_SKILL_DIR}/playbook/step-03-mcp.md`, and so on).
 Follow it exactly. Never read every step file "just in case": that text comes out of the
 creator's own Claude usage, on this turn and on every turn after it. This file is the
-short operating contract; the PLAYBOOK step files are the detail.
+short operating contract; the PLAYBOOK step files are the detail. **That index's ordered
+list is the complete manifest of every step and sub-step that exists (FRFRMU-1311)** — it
+is what tells you a sub-step exists at all, so you never have to browse the `playbook/`
+folder to find one.
 
 **This skill is SELF-CONTAINED — everything it needs is in this folder** (so it works for any
 business, even handed to someone outside this repo). **These companion files load AT THE STEP
@@ -158,8 +161,8 @@ the QA/QC record), as you go. If you truly cannot establish positioning, **STOP 
 plan built without it is mimicry, not strategy.
 
 **The customer's website gets its own step.** If they have a site, load
-`playbook/step-01-7-website-dossier.md` — ask once, crawl to the checklist, and save the result
-to `update_creator_brief` under the key `website_dossier` (see step 1.7). Then lead every intake
+`playbook/step-01-1-website-dossier.md` — ask once, crawl to the checklist, and save the result
+to `update_creator_brief` under the key `website_dossier` (see step 1.1). Then lead every intake
 question with what the site already said.
 
 ## THEN run the method (detail in the PLAYBOOK)
@@ -171,10 +174,22 @@ question with what the site already said.
   unverified to the creator (invalid handles cost $0). **Never substitute a generic web
   search for either path (G332)** — a tool failure is a connection problem to disclose
   (Step 1, G235), not something to quietly improvise around.
+  **Apify's whole remit, hard rule (FRFRMU-1312): Apify finds handles, nothing more.**
+  Reach Machine does everything past a handle — pulling reels, judging performance,
+  choosing what to analyse. Discovery screens a candidate off `instagram-profile-scraper`
+  data ONLY (follower count, engagement, `latestPosts`) — **no reel scraping to screen a
+  candidate, ever** (FRFRMU-1307); a candidate's reels are pulled only after the customer
+  approves the shortlist, and only by Reach Machine. **Apify never scrapes a reel or a post
+  for ANY reason, not even to read off who posted it (FRFRMU-1315)** — a reel obtained that
+  way never enters the Reach Machine pipeline, so it is never processed or tagged. Discovery
+  is now `discover_accounts` first, then a keyword search for handles, then profile
+  screening — proof of performance arrives later, at the post-pull gate, not at discovery.
+  Full detail: Step 2.2 (`playbook/step-02-2-discovery.md`).
   **pre-filter for FIT before spending** (drop brands/media/mega-accounts/off-niche/
-  inactive), human approves, `add_to_watchlist` (confirm-before-spend), then **filter on
-  REAL metrics after adding** (`remove_competitor` is free), pull + analyse. Benchmark
-  for FIT, not fame. (Step 2)
+  inactive), derive the size band from the screened candidates themselves rather than a
+  fixed number (Step 2.3), human approves, `add_to_watchlist` (confirm-before-spend), then
+  **filter on REAL metrics after adding** (`remove_competitor` is free), pull + analyse.
+  Benchmark for FIT, not fame. (Step 2)
 - **Ask the plan size first** — how many reels does the creator want? **Ask, with your
   recommendation** as the senior SMM (from their stage + sustainable cadence + horizon).
   Never silently pick the number. **Say plainly what a bigger number costs them**

@@ -1,7 +1,7 @@
 {
   "name": "rm-social-media-manager",
   "description": "Reach Machine social media manager: content planning + copywriter agents and skills",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "author": {
     "name": "Reach Machine"
   },
@@ -12,7 +12,8 @@
     },
     "apify": {
       "type": "http",
-      "url": "https://mcp.apify.com?tools=apify/instagram-hashtag-scraper,apify/instagram-search-scraper,apify/instagram-scraper,apify/instagram-profile-scraper"
+      "url": "https://mcp.apify.com?tools=apify/instagram-hashtag-scraper,apify/instagram-search-scraper,apify/instagram-scraper,apify/instagram-profile-scraper",
+      "timeout": 600000
     }
   }
 }

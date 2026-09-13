@@ -3,9 +3,9 @@ description: "Find benchmark competitors on Instagram — our catalog first, the
 argument-hint: "[niche, seed @handles, or hashtags to search from]"
 ---
 
-Find modellable benchmark accounts. This is the skill's **Step 2** on its own — load that
-PLAYBOOK step file — `playbook/step-02-benchmarks.md`, and only that one — and follow it
-exactly, including the discovery angles A–F.
+Find modellable benchmark accounts. This is the skill's **Step 2** on its own — load
+`playbook/step-02-benchmarks.md` and `playbook/step-02-2-discovery.md` (Step 2.2, the
+discovery angles live there) and follow both exactly.
 
 Seeds the user gave: $ARGUMENTS
 
@@ -20,13 +20,15 @@ Without them you research the wrong market. If the niche is missing, stop and ro
 
 1. **`discover_accounts` FIRST — free.** It returns only accounts Reach Machine already holds
    real data for. **Empty is normal**, not an error, and not a reason to invent anything.
-2. **Then Apify, for the live Instagram search** — angles A–F in PLAYBOOK Step 2.2
-   (`playbook/step-02-benchmarks.md`), using
-   `instagram-hashtag-scraper`, `instagram-search-scraper`, `instagram-scraper` and
-   `instagram-profile-scraper`. Name these tools **bare** — the prefix differs on a customer
-   install, so a hardcoded one points at nothing — **and put their input at the ROOT of the
-   call, as an object, never inside Reach Machine's `args` box and never as a JSON string.**
-   **Angles D (related profiles) and F (trending audio) are not available** with these tools.
+2. **Then Apify, for the live Instagram search** — keyword search (`instagram-search-scraper`)
+   to find handles, then `instagram-profile-scraper` to screen each one (PLAYBOOK Step 2.2,
+   `playbook/step-02-2-discovery.md`). Name these tools **bare** — the prefix differs on a
+   customer install, so a hardcoded one points at nothing — **and put their input at the ROOT
+   of the call, as an object, never inside Reach Machine's `args` box and never as a JSON
+   string.** 🔴 **Apify never scrapes a reel or a post here, for any reason (FRFRMU-1315)** —
+   no `instagram-hashtag-scraper`, no `instagram-scraper` with `directUrls`: a reel obtained
+   that way never enters the Reach Machine pipeline, so it is never processed or tagged.
+   **Related profiles and trending-audio angles are not available** with the bundled tools.
    Skip them and say you skipped them.
 
 ## 🔴 Two separate spends, two separate gates

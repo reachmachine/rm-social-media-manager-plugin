@@ -4,8 +4,9 @@ argument-hint: "[@handle(s) to pull, or leave empty to be shown who is thin]"
 ---
 
 Fetch more reels for competitors already tracked in this workspace. **Spends RM credits.**
-Follow the skill's PLAYBOOK Step 3 rules, especially rule 6 (confirm-before-spend) —
-load ONLY `playbook/step-03-mcp-spend-and-progress.md`, not the whole method.
+Follow the skill's PLAYBOOK Step 3 rules, especially rule 6 (confirm-before-spend) and rule 6d
+(while it runs) — load `playbook/step-03-mcp-spend-and-progress.md` and
+`playbook/step-03-progress.md`, not the whole method.
 
 Who to pull: $ARGUMENTS
 
@@ -40,11 +41,16 @@ account, ask the founder's question: "This looks like part of a series — want 
 account for more?" A yes still goes through this command's normal cost-preview + explicit-yes
 flow above — the series check never adds its own way to spend.
 
-## After it runs
+## While it runs
 
-`get_pipeline_status` / `get_job_status` to follow it. If it fails, relay the server's own
-message — it is written for the user and usually says whether credits were taken. Do not
-paraphrase a failure into something vaguer than what the server said.
+Follow **PLAYBOOK rule 6d** (`playbook/step-03-progress.md`, FRFRMU-1289/1284) exactly: 🔴 wait
+`next_poll_after_s` seconds before calling `get_job_status` again, and never declare the pull
+stalled while `stalled_for_s` is `null` — this exact mistake dropped a paid-for competitor 20
+seconds before a real pull finished. When it finishes, check `outcome`: if it is `"partial"`,
+name the `empty_usernames` / `failed_usernames` the tool returns and say what you will do next
+— never quietly move on with a thinner set. If it fails, relay the server's own message — it is
+written for the user and usually says whether credits were taken. Do not paraphrase a failure
+into something vaguer than what the server said.
 
 **Hard limit:** never call Apify here — this command works on accounts already added. Finding
 new ones is `/rm-social-media-manager:find-competitors`.

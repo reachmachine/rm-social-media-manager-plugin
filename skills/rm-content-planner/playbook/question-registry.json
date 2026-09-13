@@ -1,0 +1,29 @@
+{
+  "_comment": "FRFRMU-1309 required-question registry — the JSON mirror of backend/app/mcp/creator_brief_question_registry.py. Pinned equal to that file by backend/tests/unit/test_frfrmu1309_question_registry.py. Do not edit one copy without the other. See asking-rules.md section 14 for how this is used.",
+  "questions": [
+    {"question_id": "audience", "required_by_step": "1", "label": "The ONE audience they serve"},
+    {"question_id": "problems", "required_by_step": "1", "label": "Their top 2-3 problems, in the audience's own words"},
+    {"question_id": "ownable_angle", "required_by_step": "1", "label": "Their one ownable angle"},
+    {"question_id": "bold_stance", "required_by_step": "1", "label": "Their bold stance / POV"},
+    {"question_id": "proof", "required_by_step": "1", "label": "Their first-party proof"},
+    {"question_id": "funnel_assets", "required_by_step": "1", "label": "Lead magnet + DM automation, wired and tested?"},
+    {"question_id": "goal", "required_by_step": "1", "label": "Goal + horizon: reach, leads, or authority"},
+    {"question_id": "capacity", "required_by_step": "1", "label": "How many quality reels can they actually make"},
+    {"question_id": "production_capability", "required_by_step": "1", "label": "What they can produce well right now"},
+    {"question_id": "niche_seeds", "required_by_step": "1", "label": "Niche/topic, hashtags, and any seed accounts"},
+    {"question_id": "offer", "required_by_step": "1", "label": "What they actually sell + rough price"},
+    {"question_id": "constraints", "required_by_step": "1", "label": "Anything the plan must NOT recommend"},
+    {"question_id": "brand_voice", "required_by_step": "1", "label": "Brand voice / tone, derived and confirmed"},
+    {"question_id": "upcoming_moments", "required_by_step": "1", "label": "Launches / promos / seasonal moments"},
+    {"question_id": "past_attempts", "required_by_step": "1", "label": "What they've already tried"},
+    {"question_id": "audience_questions", "required_by_step": "1", "label": "Their audience's real questions / DMs / FAQs"},
+    {"question_id": "plan_size", "required_by_step": "1", "label": "How many reels the creator wants in this plan"},
+    {"question_id": "personal_story", "required_by_step": "1", "label": "Who they are, why they started (optional, G373)"},
+    {"question_id": "stage", "required_by_step": "1.6", "label": "Account stage — asked only after Step 1.6"},
+    {"question_id": "backstory_sentence", "required_by_step": "1.4", "label": "F1 — Backstory confirm"},
+    {"question_id": "flaw_1", "required_by_step": "1.4", "label": "F2 — The flaw you'll show"},
+    {"question_id": "stance", "required_by_step": "1.4", "label": "F3 — The stance, tested by a pretend counter-comment"},
+    {"question_id": "parable_1", "required_by_step": "1.4", "label": "F5 — Parables: up to five small true moments"},
+    {"question_id": "voice_descriptors", "required_by_step": "1.4", "label": "F6 — Voice, a read-back test"}
+  ]
+}

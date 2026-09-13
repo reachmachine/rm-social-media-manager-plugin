@@ -5,9 +5,9 @@ argument-hint: "[tag name, @handle, or a reel URL to analyse]"
 
 Analyse reels so the insight tools have data to read. This is a re-entry point
 into the `rm-social-media-manager:rm-content-planner` skill's method — load its
-PLAYBOOK's "Step 3 — Use the RM MCP correctly" rules — load ONLY `playbook/step-03-mcp.md`
-and `playbook/step-03-mcp-spend-and-progress.md` (especially rules 2, 6, 6a,
-6b, 6c, 6d and 6e) and follow them exactly.
+PLAYBOOK's "Step 3 — Use the RM MCP correctly" rules — load ONLY `playbook/step-03-mcp.md`,
+`playbook/step-03-mcp-spend-and-progress.md` (especially rules 2, 6, 6a, 6b, 6c and 6e), and
+`playbook/step-03-progress.md` (rule 6d) and follow them exactly.
 
 What the user wants analysed: $ARGUMENTS
 
@@ -50,14 +50,15 @@ competitors first.
    never convert it to dollars or state what it costs us (PLAYBOOK rule 6c, G368).
 6. If you scoped with `set_data_selection`, call `clear_data_selection` when
    done.
-7. **While it runs, follow PLAYBOOK rule 6d exactly:** poll `get_pipeline_status` on a
-   widening gap, not a fixed timer — first check at about **60 seconds**, still 60 seconds
-   while no reel has finished, then about **half the remaining estimated time**, never under
-   **30 seconds** and never over **120 seconds**. Every poll re-sends this whole chat, so a
-   fixed 20-30 second timer burns the human's own Claude usage for nothing. 🔴 The moment
-   `stalled_for_s` comes back as a number instead of `null`, the back-off is OFF: poll again
-   straight away and then every 30 seconds. Give a friendly opening ETA, let the human know
-   they can step away, and absorb a stall into one calm update instead of a menu of options.
+7. **While it runs, follow PLAYBOOK rule 6d exactly (`playbook/step-03-progress.md`,
+   FRFRMU-1289):** 🔴 wait `next_poll_after_s` seconds before calling `get_pipeline_status`
+   again — that field is computed server-side from the run's own real pace; read it off every
+   reply and wait exactly that long, never invent your own gap or fixed timer. Every poll
+   re-sends this whole chat, so guessing burns the human's own Claude usage for nothing, and a
+   guess CAN drift (this replaced an algorithm that did, in a live incident). The moment
+   `stalled_for_s` comes back as a number instead of `null`, `next_poll_after_s` tightens on its
+   own — nothing extra to do. Give a friendly opening ETA, let the human know they can step
+   away, and absorb a stall into one calm update instead of a menu of options.
 8. 🔴 **When it ends, count requested against delivered — PLAYBOOK rule 6h
    (`playbook/step-03-requested-vs-delivered.md`, FRFRMU-1027).** Read `unanalyzed_count`
    from `get_pipeline_status`: above zero means the run did **not** finish, so never say

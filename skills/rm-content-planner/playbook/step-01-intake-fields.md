@@ -27,6 +27,19 @@ follow as a label, never as the opening word. **The factual fields carry NO card
 purpose** — stage, capacity, production capability, seeds, constraints, upcoming moments, past
 attempts, plan size. A framework there is noise, not help.
 
+- **Who the plan is for — persist Rule 0's answer the moment it is decided (FRFRMU-1292).**
+  Rule 0 (`step-01-intake.md`) already asks whether this plan is for the account owner's OWN
+  brand or a client/managed account — but asking it is not the same as REMEMBERING it. Save the
+  answer at once as a plain Creator Brief field (`update_creator_brief`, **not** a Foundation
+  card — same pattern as `benchmark_breadth`, FRFRMU-1151) named `subject_type`:
+  `{"value": "self"|"client", "source": "conversation", "confidence": "high"}`. This reuses the
+  EXACT field name and vocabulary Step 12 already writes onto the plan itself
+  (`inputs.business_context.subject_type` / `meta.subject_type`,
+  `plan_validator_checks_phase3.py`'s `subject_check` cross-checks the two) — it is not a new
+  concept, only the missing early save. Saving it here means a returning session's
+  `get_creator_brief` call (Step 1 rule 1) already knows who the plan is for, instead of a fact
+  that used to be lost the moment the conversation ended. **Bar (G696):** one of the two words,
+  never left implicit. No card — factual.
 - **Account stage — ask this AFTER Step 1.6 (the creator's own account), never before
   (FOUNDER DECISION, FRFRMU-1008).** Hold this field until the self-account add + pull
   (`playbook/step-01-6-self-account.md`) has happened, or the creator has declined it — do
@@ -57,6 +70,14 @@ attempts, plan size. A framework there is noise, not help.
   framework — **F.R.E.D.** + **PQR2**), then sharpen it into a **Big Domino** (the ONE belief
   that, once accepted, makes everything else fall) framed as a **New Opportunity** (a new
   *way*, not "the same thing, better"):
+  **Before asking items 2 (proof) or 3 (audience) — check Step 1.1 first (FRFRMU-1297).** If
+  `website_dossier` is not yet in the Creator Brief and this session has `WebFetch`, run Step
+  1.1 (`playbook/step-01-1-website-dossier.md`) — or get the decline recorded — before asking
+  either question cold. This matters most when Rule 0 (`step-01-intake.md`) found the subject
+  is a **client the person manages, not their own brand**: a manager who just took the account
+  on rarely carries the client's proof/results in their head, so the client's own site is the
+  right source, never a blank question to the manager. Once a dossier exists, lead with what it
+  found (`asking-rules.md` §11) instead of asking cold either way.
   1. Their one **ownable angle** — theirs, not a copy of a competitor's. **Never ask this cold
      (G696) — bring research.** Run section A below AFTER items 2-5 are answered, so you can
      cross their proof with the niche's sameness map. **Look at their account** to ground it:

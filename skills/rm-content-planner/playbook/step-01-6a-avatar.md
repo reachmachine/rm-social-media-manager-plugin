@@ -2,7 +2,7 @@
 > step, is in `PLAYBOOK.md` (small, always loaded). A "Step N" reference below means that
 > step's file in this same `playbook/` folder.
 
-> **Load this at Step 1**, right after `step-01-1-market.md`, before `step-01-6-self-account.md`.
+> **Load this at Step 1**, right after `step-01-5-market.md`, before `step-01-6-self-account.md`.
 > **Entry rule: only after `market_validation` is confirmed (p01, FRFRMU-1013), and only when
 > `avatar` is missing or the creator says "check my avatar."** Otherwise skip this whole file in
 > one line. This is p02 "Define the Dream-Customer Avatar"

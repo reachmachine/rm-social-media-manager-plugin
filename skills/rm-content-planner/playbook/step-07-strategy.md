@@ -40,7 +40,7 @@ its reasoning + provenance (§I):
 7.0d. **Confirm the validated market exists (p01, FRFRMU-1013).** Read the Creator Brief key
    `market_validation` before anything else in this step is treated as final. **Missing →
    say so plainly and STOP this step** (the rest of Part A depends on a checked niche, not a
-   guessed one); resume once Step 1.5 (`step-01-1-market.md`) has run. Present → nothing else
+   guessed one); resume once Step 1.5 (`step-01-5-market.md`) has run. Present → nothing else
    here changes.
 7.0e. **Confirm the Big Domino against self-data, when `big_domino` exists (p08, FRFRMU-1040) and
    `status` is still `hypothesis`.** Read `get_content_strategy` / `get_theme_lift` on this

@@ -2,7 +2,7 @@
 > step, is in `PLAYBOOK.md` (small, always loaded). A "Step N" reference below means that
 > step's file in this same `playbook/` folder.
 
-> **Load this at Step 1**, right after `step-01-2-avatar.md`, before Step 2 (discovery).
+> **Load this at Step 1**, right after `step-01-6a-avatar.md`, before Step 2 (discovery).
 > **Entry rule: only when `congregations` is missing or the creator says "find my
 > communities."** Otherwise skip this whole file in one line. This is p03 "Map Where the
 > Dream Customer Congregates" (`marketing/rules/process-cards/p03-map-congregations.md`,

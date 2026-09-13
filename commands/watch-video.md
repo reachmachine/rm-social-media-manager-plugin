@@ -4,9 +4,10 @@ argument-hint: "[a tag/category name, an @handle, or one or more reel URLs]"
 ---
 
 Analyse reels so the insight tools have something real to read. This is the skill's analysis
-step — load PLAYBOOK **Step 3**: `playbook/step-03-mcp.md` for rule 2, and
-`playbook/step-03-mcp-spend-and-progress.md` for rules 6, 6a, 6b, 6c, 6d and 6e. Follow them
-exactly. Do not load the rest of the method.
+step — load PLAYBOOK **Step 3**: `playbook/step-03-mcp.md` for rule 2,
+`playbook/step-03-mcp-spend-and-progress.md` for rules 6, 6a, 6b, 6c and 6e, and
+`playbook/step-03-progress.md` for rule 6d. Follow them exactly. Do not load the rest of the
+method.
 
 What to analyse: $ARGUMENTS
 
@@ -64,17 +65,17 @@ or state what it costs us (PLAYBOOK rule 6c, in `playbook/step-03-mcp-spend-and-
 
 ## While it runs
 
-Follow **PLAYBOOK rule 6d** (`playbook/step-03-mcp-spend-and-progress.md`) exactly — poll
-`get_pipeline_status` on a widening gap, not a fixed timer: first check at about **60 seconds**,
-keep it at 60 seconds while no reel has finished, and after that wait about **half the remaining
-estimated time** — never under **30 seconds**, never over **120 seconds**. Every poll re-sends this
-whole chat, so a fixed 20-30 second timer burns the customer's own Claude usage for nothing. 🔴 The
-moment `stalled_for_s` comes back as a number instead of `null`, the back-off is OFF: poll again
-straight away and then every 30 seconds. Give a
-friendly opening ETA, let the customer know they can step away, and absorb a stall into a calm
-update instead of turning it into a menu. `stop_pipeline` cancels, and is itself a destructive
-call needing an explicit yes. If a run fails, relay the server's own message, which usually says
-whether credits were taken.
+Follow **PLAYBOOK rule 6d** (`playbook/step-03-progress.md`, FRFRMU-1289) exactly — 🔴 **wait
+`next_poll_after_s` seconds before calling `get_pipeline_status` again.** That field is computed
+server-side from the run's own real pace; read it off every reply and wait exactly that long —
+never invent your own gap or fixed timer. Every poll re-sends this whole chat, so guessing a gap
+burns the customer's own Claude usage for nothing, and a guess CAN drift (this replaced an
+algorithm that did, in a live incident). The moment `stalled_for_s` comes back as a number instead
+of `null`, `next_poll_after_s` tightens on its own — nothing extra to do. Give a friendly opening
+ETA, let the customer know they can step away, and absorb a stall into a calm update instead of
+turning it into a menu. `stop_pipeline` cancels, and is itself a destructive call needing an
+explicit yes. If a run fails, relay the server's own message, which usually says whether credits
+were taken.
 
 ## 🔴 Count what you asked for against what came back
 

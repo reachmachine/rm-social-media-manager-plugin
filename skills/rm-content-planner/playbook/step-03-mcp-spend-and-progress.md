@@ -77,6 +77,14 @@
    grant yourself: giving a skill the power to launch sub-agents is a capability change a human owns.
    One thing is still unproven: that the sub-agent inherits the MCP connection in a real customer
    session. Worth one real smoke test the first time this runs.
+   🔴 **Feed the token estimate back, or it never becomes real (FRFRMU-1288).** Rule 6a's
+   `claude_tokens_source` can only ever say `"observed"` if something reports actual usage back.
+   When the sub-agent's own `Agent` tool result shows its input/output token counts for that ONE
+   reel, pass them as `claude_tokens_in` / `claude_tokens_out` on that SAME reel's
+   `submit_analysis` call (both optional — omit entirely if you don't know the numbers; never
+   guess or estimate one yourself). This is per reel, not a one-off end-of-batch report — do it on
+   every `submit_analysis` where you actually have the numbers, so the workspace's own observed
+   average keeps building instead of staying stuck on the table estimate forever.
 6c. **Price every spend in RM credits — NEVER in dollars, rupees, or any other currency, and
    NEVER as an internal cost we absorbed (G368).** Every cost preview, calibration-batch charge,
    and worst-case hold estimate is stated in the SAME unit the tools already use — credits, from
@@ -91,65 +99,12 @@
    question with a number — say plainly that Reach Machine prices in credits, not currency, and
    point them to their billing page. Do not compute or state a currency number yourself, not even
    as an estimate or a "well under" comparison.
-6d. **While a run is in flight — poll, estimate, let them step away, and absorb a stall instead
-   of escalating it (G341/G367).** A run can take several minutes. Nobody should have to babysit
-   it, and nobody should be handed a decision that isn't really theirs to make.
-   - **Right after dispatch, say it plainly once:** confirm what's running, that it will keep
-     going in the background, and that they don't need to stay and watch. Example: *"Started —
-     analyzing 11 reels. This runs in the background, so feel free to step away; I'll let you
-     know when it's done."* Do not repeat this every poll — say it once, at the start.
-   - **Poll `get_pipeline_status` on a widening gap, not a fixed timer (FRFRMU-614).** Keep polling
-     until the run reaches a terminal state (`completed` / `partial` / `failed`). Do it silently —
-     don't narrate every poll to the human, only the moments below. **Every poll is a whole model
-     turn, and a model turn re-sends this entire conversation**, so a fixed 20-30 second timer over
-     a ten-minute run quietly burns more of the human's own Claude usage than the analysis does.
-     `get_pipeline_status` is a one-shot read with no "wait" or long-poll option, so spacing the
-     reads out is the only lever there is. Pace it from the run's own numbers:
-     - **First poll at about 60 seconds** after dispatch.
-     - **While `completed` is still 0**, poll **every 60 seconds**. There is no measured pace yet,
-       and `stalled_for_s` stays `null` for this whole stretch by design — the server only calls a
-       run stalled once at least one reel has finished — so the tool's own `message` is the only
-       cover here, and that is why the gap stays short.
-     - **Once `completed` is 1 or more**, wait about **half the remaining estimated time**
-       (`remaining` from the ETA bullet below: `seconds_per_reel × (total - completed)`), with a
-       **floor of 30 seconds** and a **ceiling of 120 seconds**. Halving makes the polls bunch up
-       as the finish gets close, which is where an update is actually worth something.
-     - 🔴 **The moment `stalled_for_s` comes back as a number instead of `null`, the back-off is
-       OFF.** Poll again straight away, and then every 30 seconds, until it clears or the run
-       reaches a terminal state. The stall bullets below need several polls in a row to tell one
-       slow reel from a real stall — a widening gap must never be what slows that down.
-     **The 120-second ceiling is what stops this being a downgrade** — do not remove it. The server
-     needs a full **600 seconds** with no reel finishing before it sets `stalled_for_s` at all, so
-     the worst this back-off can add is one ceiling-length gap: about 2 minutes on top of the
-     server's own 10, instead of the 5-minute silences an uncapped halving would allow.
-     On an ~8-reel assist batch (rule 6e's size) this is roughly **5-7 polls instead of about 24**.
-     It reads its pace from the run itself, so it needs no edit if that batch size changes again.
-   - **ETA — computed from the run's own measured pace, never guessed.** Use `elapsed_s` (always
-     use this field; never track or estimate elapsed time yourself — the tool docstring says this
-     explicitly). Once at least one reel is done: `seconds_per_reel = elapsed_s / completed`,
-     `remaining ≈ seconds_per_reel × (total - completed)`. State it as an estimate that will
-     firm up ("about N minutes left, based on how fast it's gone so far — I'll update this as more
-     finish"), not a promise. Before any reel has finished, don't invent a number — say honestly
-     that the first reel is still being analyzed and a time estimate will follow once it lands.
-   - **A stall is the server's call, not yours.** `stalled_for_s` is `null` while the run is
-     healthy — never say "this looks stuck" while it's null, even if progress feels slow to you.
-     The first time it goes from `null` to a number, relay the tool's own `message` field
-     faithfully (paraphrase for tone, keep the facts and the reassurance) — it already explains
-     what's happening and what it means for money (no credits lost on reels that never finish; the
-     system's own safety net settles a stuck run automatically). **Do not turn this into a
-     decision the customer has to make.** This is exactly the founder's real incident: a run sat
-     at 4/11 for 10+ minutes and was handed to the customer as a 4-option menu instead of a calm
-     update — never repeat that.
-   - **Only ask when there is a REAL choice with real consequences.** If the stall message keeps
-     repeating over several more polls (the tool is still reporting the same stall), that is the
-     point to check in — and even then, offer only the choices that actually differ: if some reels
-     already finished, "keep waiting" vs. "stop now and use the N reels that are already done" is
-     a real choice (different results either way). If a genuine error state hands back a message
-     that requires a decision (e.g. insufficient credits, plan doesn't cover this), relay exactly
-     that, not a generic menu. Never offer "recommended" as a fourth option dressed up as a
-     choice — either recommend one thing plainly, or ask a real either/or.
-   - `stop_pipeline` cancels a run and is itself a destructive call needing an explicit yes — never
-     call it on the customer's behalf just because a poll looked slow. **When a run ends, rule 6h in `step-03-requested-vs-delivered.md` (FRFRMU-1027) takes over: count what you asked for against what came back, and never call a short run finished.**
+6d. **While a run OR a data pull is in flight.** Poll, estimate, let them step away, absorb a
+   stall instead of escalating it, and never treat a data pull's thinner honesty as an excuse to
+   skip the same discipline — full rule + the pull-specific additions now live in
+   `playbook/step-03-progress.md` (FRFRMU-1289/1284) so this file stays under the line cap. Load
+   it whenever you dispatch `run_pipeline`/`run_pipeline_assist`/`run_pipeline_by_category` or
+   `pull_data` and need to wait for it.
 6e. **Keep the assist loop's conversation SMALL — one reel at a time, in short batches
    (FRFRMU-618).** Assist mode is the default (rule 6a), so this is the normal path, not an edge
    case. Every `get_assist_work` call drops that reel's **8 keyframe images plus a fresh copy of

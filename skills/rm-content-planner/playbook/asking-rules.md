@@ -74,6 +74,14 @@ result, or feeling that belongs to the creator. Every draft the agent produces o
 behalf is read back and confirmed before it is saved — a draft that is never read back is a
 fabrication wearing a confirmation's clothes.
 
+**This includes a stance, opinion, or belief (FRFRMU-1301) — a bold stance IS a feeling that
+belongs to the creator.** But drafting one from the creator's OWN **published sources** — their
+website, their reviews, what they already told you — and reading it back for a plain yes/no is
+NOT invention. It is this section's own "draft… and confirm" pattern, applied to a harder
+field. What crosses the line is inventing a belief with **no source** and presenting it as
+theirs, or saving a draft the creator never confirmed. See §13 for the full bold-stance
+protocol.
+
 ## 6. The status vocabulary — the single source of truth
 
 Every question the plugin ever asks ends in exactly one of:
@@ -84,10 +92,16 @@ answered_pass | answered_weak | declined | not_applicable | deferred | unasked
 
 **A finished section carries zero `unasked` entries.** `unasked` is not a resting state — it
 only ever describes a question mid-conversation, never one the plugin has stopped asking about.
-Card files that already wrote this vocabulary locally (`step-01-1-market.md`,
-`step-01-2-avatar.md`, `step-01-3-congregations.md`, `step-01-4-persona-questions.md`,
+Card files that already wrote this vocabulary locally (`step-01-5-market.md`,
+`step-01-6a-avatar.md`, `step-01-6b-congregations.md`, `step-01-4-persona-questions.md`,
 `step-03-5-prospect-research.md`) keep their own copy — this file is what a NEW or older card
 points at instead of inventing a sixth spelling of the same six words.
+
+**"I don't know" is `deferred` (or `answered_weak` if a thin guess was given), never
+`declined` (FRFRMU-1301).** `declined` is for a question the creator was unwilling to answer;
+"I don't know" or "I haven't spoken to them yet" is someone who WANTS to answer but lacks the
+facts right now — exactly §4's "unsure / doesn't have the data" row, so it gets that row's
+coaching path, not a silent skip. §13 is the deepest version of this, for a bold stance/belief.
 
 **This does not lift Step 1 rule 7's two-refinement-try cap** (`step-01-intake.md`) — that cap
 still governs a single re-ask of the SAME question in the SAME words. §4's unblock paths are
@@ -165,3 +179,114 @@ A `not_found_on_site` field is asked normally, like any other missing answer. A 
 as `derived` in the rule-6 completeness score (`step-01-intake.md`) until the customer confirms
 it — then `confirmed`. **Found ≠ true until the owner says so** — rule 4 in `step-01-intake.md`
 stands unchanged: a website is one more source to cross-check, never a source to trust blindly.
+
+## 12. Never claim a save that has not happened yet (FRFRMU-1290, FRFRMU-1296)
+
+**Founder decision, 2026-09-12: save as you go, and only say so once the save has actually
+happened.** Step 1 saves each answer to the workspace as the conversation goes (Step 1 rules 5
+and 5a) — that is what stops a long interview being lost if a session dies. The words the agent
+uses about it must stay honest on both sides of that fact: never promise nothing is saved when it
+is, and never claim something is saved when it is not.
+
+**The agent may only tell the creator something is saved, recorded, locked in or captured AFTER
+the write call has returned successfully.** If no write has been made yet, it says what is true
+instead — "got it, I'll save that with the rest in a moment" — or it makes the write first and
+then reports it. The gated words: *saved*, *locked in*, *recorded*, *captured*, *noted down*, *on
+file*. None of them is said in the future tense as if it already happened.
+
+This cuts both ways. A promise that "nothing is saved anywhere" is false the moment a later rule
+saves as it goes (FRFRMU-1290); a claim that an answer is "locked in" when no write call has run
+is false in the other direction, and across a long interview that silently loses every answer
+(FRFRMU-1296). Neither failure is fixed by removing the saving behaviour — only by making the
+words match whichever one, save or don't-yet-save, actually happened.
+
+## 13. The bold-stance / belief question — the deepest "unsure" case (FRFRMU-1301)
+
+**Founder decision, 2026-09-12, verbatim:** *"when customer tells dont know, use their webuste
+and suggest them and also give them examples and a process on how they can answer that
+question. use simple english as well."*
+
+The bold-stance field (`step-01-intake-fields.md` item 5) and any question shaped like it — ask
+for a BELIEF, not a fact — hits §4's "unsure / doesn't have the data" row hardest, because a
+creator who has never put their POV into words has nothing to recall. §5 already says drafting
+from published sources and confirming is allowed, not invention; this section is the worked
+protocol for that, so the agent never just parks the field on the first "I don't know."
+
+**Offer the draft BEFORE parking the field — the agent never decides alone:**
+
+> *"I don't have enough to answer that myself either — but I can take a first crack at a draft
+> from your website and reviews, show you 2-3 examples from other [niche] businesses so you can
+> see the shape of a good answer, and give you a simple way to work out your own if none of
+> them fit. Want that, or would you rather park this one for now?"*
+
+Say what parking costs **in the offer itself**, not only after the creator picks it — e.g.
+*"parking this means the plan skips the identity pillar for now; we add it once you have an
+answer."* Never decide to park without asking first.
+
+**On a yes, the four moves, in this order:**
+1. **Draft from published sources.** The source is Step 1.1's `website_dossier`
+   (`playbook/step-01-1-website-dossier.md`) plus reviews found by `WebSearch`. A missing
+   dossier is a reason to go run Step 1.1 first, never a reason to give up on the draft.
+2. **Show 2-3 examples from their niche** — real bold stances other businesses in the same
+   space have taken, so the creator sees the shape of a good answer before judging their own.
+3. **Give a plain-English process** — a short, simple way for them to work out their OWN answer
+   later, e.g. *"ask yourself: what do you believe about training [audience] that most [niche]
+   places won't say out loud?"* A label like "the polarizing zone" is never the opening word
+   (same rule as every framework card, `step-01-intake-fields.md`'s delivery rules).
+4. **Read the draft back for a yes/no** — never save it as if the creator said it (§5).
+
+If the creator declines the OFFER itself (not the draft — the offer to try), park the field as
+`deferred`, restate what it costs, and move on. That is the honest end state, reached only after
+offering, never before.
+
+## 14. The required-question registry — closing the gap this contract left open (FRFRMU-1309)
+
+**What went wrong.** This whole file existed and an agent still finished an intake having never
+asked ~14 required fields, while `planning_progress` kept saying "Step 2 complete." Nothing
+listed WHICH questions a step needs, and nothing ever read `question_statuses` back to find a
+gap — §8's three fields validated their own shape and nothing else. A markdown rule nobody is
+forced to check gets skipped; this section is the backend half that cannot be.
+
+**The registry.** `playbook/question-registry.json` lists every
+`question_id` this contract enforces, and the step it belongs to. It mirrors, byte-for-byte,
+`app/mcp/creator_brief_question_registry.py` in the backend — one list, two copies, checked
+equal by that module's own test. Today it covers the Step 1 family only (`1`, `1.4`, `1.6`) —
+`step-01-intake.md` rule 6's 19 canonical fields (minus `stage`, held to `1.6` per FRFRMU-1008)
+plus `step-01-4-persona-questions.md`'s five fixed sub-questions. The rest of the method (market,
+avatar, congregations, the offer layer, and every other card this file governs) is not yet
+enforced this way — see `prompts/COMMS.md` (FRFRMU-1309) for the reasoning and the follow-up.
+
+**What the backend does with it.** Once the write's own `skill_version` reaches a floor
+(`CREATOR_BRIEF_QUESTION_STATUS_FLOOR`, `app/config.py`), a `planning_progress` checkpoint for a
+step that has registered required questions must carry `question_statuses` naming a real status
+(anything but `unasked`) for every one of them — a missing entry is rejected the same as an
+explicit `unasked`. Checkpointing a bare top-level step (`"2"`, not `"1.6"`) also requires
+everything registered under every earlier top-level step — this is what makes a `"2"` checkpoint
+catch a gap Step 1 left open, instead of only checking Step 2's own (empty) list. `delivered` and
+`abandoned` writes are always exempt — they end a plan and must never be blocked. Below the
+floor, or on any older build, nothing changes: this is a pure addition, never a new way to fail a
+write that used to save clean.
+
+**Two decisions already made — restated here so this file is the one place that has them
+(founder, 2026-09-06/07):**
+
+* **"Waiting on the owner" is `deferred` plus a reason — never a seventh status word.** A
+  question the creator can't answer without asking someone else (a partner, a business owner
+  they manage the account for) is `deferred`, same as "not ready right now" (§4). Do not invent a
+  new status for this — it would touch the vocabulary in §6, every card file that already wrote
+  it locally, and the 1042 chip plan.
+* **A skipped CONDITIONAL card writes `not_applicable` for each of its questions, with a reason
+  naming the entry rule — never silence.** `step-01-5-market.md`, `step-01-6a-avatar.md` and
+  `step-01-6b-congregations.md` each open with an "Entry rule: only when…" line that can skip the
+  whole file. When that happens, the questions it would have asked are not left `unasked` (which
+  would look, later, exactly like a forgotten question) — they are recorded `not_applicable`,
+  reason `"entry rule: <the file's own condition>"`, e.g. `"entry rule: positioning already
+  confirmed, creator did not ask to re-check the niche."` Absence must never mean both "didn't
+  apply" and "we forgot" — this is how the record tells the two apart.
+
+**What the customer sees — one honest line per section, in plain words, e.g.:**
+
+> *"Section 2 of 6 — Your business: 9 of 11 answered, 1 skipped, 1 saved for later, 0 not yet asked."*
+
+Never a bare "Step 2 complete" with no breakdown — that phrasing is exactly what let the original
+gap hide in plain sight.

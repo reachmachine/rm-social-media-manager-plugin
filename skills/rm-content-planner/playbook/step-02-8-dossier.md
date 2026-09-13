@@ -47,8 +47,12 @@ Add to the same dated block:
 
 6. **Who they target.** Roll this competitor's analysed reels up to a dominant audience segment
    via `get_content_strategy` — `DATA-DRIVEN`, cite `n`.
-7. **What drives their reach (organic only).** `get_format_ranking`, `get_recurring_audio`, and
-   the collab/tag frequency from Step 2's angle C — `DATA-DRIVEN`, cite `n`.
+7. **What drives their reach (organic only).** `get_format_ranking`, `get_recurring_audio` —
+   `DATA-DRIVEN`, cite `n`. **No collab/tag frequency anymore.** Step 2's angle C used to read
+   collaborators off an Apify-scraped reel; that angle is gone (FRFRMU-1315 — Apify may not
+   scrape a reel or a post, for any reason, because a reel obtained that way never enters the
+   Reach Machine pipeline and is never processed or tagged). Say `"not collected"` if a
+   customer asks who a competitor collaborates with — never guess it from memory.
 8. **Their persistent winners.** Link 2-3 of this competitor's analysed reels that are still
    performing (the swipe file) — no copies, ids/links only.
 9. **Paid traffic + paid ad copy — always `"unknown — not collected yet"`.** The server-side

@@ -31,13 +31,22 @@ exactly as today.
    and the creator signs into **their own Apify account** (browser sign-in, no token to
    paste). This is what actually powers angles A–F below against real Instagram.
 
-   🔴 **Say the sign-in path OUT LOUD, in these words, the first time discovery runs in a
-   session — do not keep it to yourself (G366).** Tell the creator: *"Instagram search runs
-   through Apify, which is a separate one-time sign-in from Reach Machine. Run `/mcp`, pick
-   the `apify` server, and sign in in the browser. If you don't have an Apify account,
-   making one at apify.com is free. There's no API key to paste and no `.env` file."* Then
-   wait for them. Never let a creator meet the STOP rule below without first having been
-   told how to get past it.
+   🔴 **Only say the sign-in speech when Apify is NOT actually connected — never as a
+   ritual (FRFRMU-1282).** Do not ask the creator or guess first. Just make the first
+   Apify call the flow needs anyway (angle E's keyword search on the seed niche, FRFRMU-1315
+   — the hashtag-reels angle this used to name is gone) and read the result:
+   - **It succeeds** → the creator is already signed in. Say nothing about signing in —
+     proceed straight into the results. Do not add a separate probe call just to check
+     connectivity first; that would spend the creator's money twice for one answer.
+   - **It fails with a connection/auth error** (not signed in, session expired) → THEN,
+     and only then, say the sign-in path OUT LOUD, in these words, the first time this
+     happens in a session — do not keep it to yourself (G366). Tell the creator:
+     *"Instagram search runs through Apify, which is a separate one-time sign-in from
+     Reach Machine. Run `/mcp`, pick the `apify` server, and sign in in the browser. If
+     you don't have an Apify account, making one at apify.com is free. There's no API
+     key to paste and no `.env` file."* Then wait for them, and retry the SAME call once
+     they say they've signed in. Never let a creator meet the STOP rule below without
+     first having been told how to get past it.
 
 🔴 **Apify spends the creator's OWN money, and Reach Machine cannot see or stop it.** RM
 credits, the spend ceiling and every confirm-before-spend guard in Step 3 rule 6 govern
@@ -86,12 +95,15 @@ never silently.
 
    **Two seed lists, same tools, same yes.**
    - **Niche-wide seeds** = the niche hashtags/keywords with the place word REMOVED
-     (`#semiprivatetraining`, "semi-private personal training").
+     (`#semiprivatetraining`, "semi private personal training" — no hyphen, see the
+     `search` rule in 2.2; the Apify actor rejects the hyphenated form, FRFRMU-1280).
    - **Local seeds** = place + niche, e.g. `instagram-search-scraper` →
-     `{"search": "Courtenay gym, Comox Valley fitness", "searchType": "user", "searchLimit": 10}`
-     and `instagram-hashtag-scraper` →
-     `{"hashtags": ["courtenayfitness"], "resultsType": "reels", "resultsLimit": 10}`. Same
-     root-shape rule as every Apify call in 2.2 below — no `args` wrapper.
+     `{"search": "Courtenay gym, Comox Valley fitness", "searchType": "user", "searchLimit": 10}`.
+     Same root-shape rule as every Apify call in 2.2 below — no `args` wrapper.
+     🔴 **No hashtag scrape for the local sample either (FRFRMU-1315).** This used to also
+     run `instagram-hashtag-scraper` to pull reels off a local hashtag — Apify may never
+     scrape a reel, local sample or not (see 2.2). `instagram-search-scraper` is the whole
+     local-seed toolkit now.
    - The local sample is capped at about **6-10 accounts read** — one or two extra scrapes,
      inside the same yes.
 
@@ -109,53 +121,17 @@ never silently.
      found, 4 confirmed local").
    - The local field may be alive on Facebook, not Instagram — the sentence always says
      **"on Instagram"**.
-2.2. **Expand — the STANDARD discovery angles (run every one that applies, then dedupe across
-   them).** Same set every run, so discovery is consistent for any account or niche. Each angle
-   names the Apify tool that does it — call these **bare**, never with a hardcoded `mcp__…`
-   prefix, because the prefix differs on a customer install — **and put their input at the
-   ROOT of the call, as an object.** Apify actors do NOT use Reach Machine's `args` box, and
-   never take a JSON string.
-
-   - Reach Machine tool: `search_watchlist` → `{"args": {"page_size": 100}}`
-   - Apify actor: `instagram-hashtag-scraper` → `{"hashtags": ["yoga"], "resultsType": "reels", "resultsLimit": 20}`
-   - `instagram-search-scraper` → `{"search": "yoga studio", "searchType": "user", "searchLimit": 20}`
-   - `instagram-profile-scraper` → `{"usernames": ["humansofny"]}`
-   - `instagram-scraper` → `{"directUrls": ["https://www.instagram.com/reel/<id>/"], "resultsType": "posts", "resultsLimit": 1}`
-
-   `waitSecs` caps at 45. If the validator says *"root: must have required property
-   `hashtags`"* (or `usernames`), you wrapped the input — unwrap it; the tool is fine.
-
-   - **A · Hashtag → top posts → authors** — the accounts winning on the subject's core niche
-     hashtags. → `instagram-hashtag-scraper`
-   - **B · Viral reel → its author** — the highest-view reels on those hashtags/keywords, then add
-     who made them (proven performers, not just active accounts). → `instagram-hashtag-scraper`
-     to find them, `instagram-scraper` for the reel's owner.
-   - **C · Collabs & tags on a viral reel** — its coauthors + tagged accounts (`coauthorProducers`
-     + `taggedUsers`); check each for relevance and add the fits. → `instagram-scraper`
-   - **D · Similar / related accounts** — Instagram's own "related profiles" off each strong seed.
-     🔴 **NOT covered by the bundled Apify tools.** Say so if you skip it; do not fake it by
-     guessing which accounts are "related".
-   - **E · Keyword search** — the niche terms → more accounts + hashtags.
-     → `instagram-search-scraper`
-   - **F · Trending-audio page** *(optional)* — accounts riding a niche's trending audio now.
-     🔴 **NOT covered by the bundled Apify tools.** Same rule as D — skip it and say so.
-   - **G · Indirect competitors — ask, never search.** Ask ONCE: *"Who else gets your customer's
-     money for the same problem, even with a different product?"* Take 1-2 named handles from
-     the creator only — never proposed by web search or by reading a rival's page (G332). Same
-     2.4/2.5/2.7 gates as any other add, then tag the item `indirect` with `add_competitor_tags`
-     so the dossier (`step-02-8-dossier.md`) and the plan can label its patterns "angle imports,
-     not direct benchmarks".
-   **Report which angles actually ran.** "Ran A, B, C, E; D and F are not available" is a real
-   answer. Silently running two angles and calling the set complete is not.
-   *(Opt-in fallback, only if the creator explicitly asks after being told Apify is unavailable:*
-   propose ~8–15 candidate handles by applying A–F logics to the seeds + your knowledge, one line
-   each on why it's a good role model, **labelled unverified**. Invalid handles cost $0 —
-   Step 2.5 validates them.)
-2.3. **Cheap PRE-filter — BEFORE spending a cent.** From the scraped/known metadata,
-   drop brands, media companies, agencies, mega-accounts a small creator can't model,
-   off-niche and inactive accounts. Rank by **FIT** (right size band, reels-active,
-   niche match, engagement signal). **Benchmark for FIT, not fame** — a 10M celeb is
-   mimicry bait (same anti-mimicry, stage-aware thinking as Step 4/Step 5).
+2.2. **Discovery — what Apify is for, and how.** See `playbook/step-02-2-discovery.md`:
+   Apify's whole remit (finds handles, nothing more, FRFRMU-1312), the two-stage rule
+   (profile-scraper-only screening before any reel gets pulled, FRFRMU-1307), the target of
+   10 self-found candidates before asking the customer (FRFRMU-1298), and the standard
+   discovery angles A–G. **Load it now, before continuing to 2.3.**
+2.3. **Cheap PRE-filter, then which accounts qualify.** From the scraped/known metadata,
+   drop brands, media companies, agencies, off-niche and inactive accounts. **Benchmark for
+   FIT, not fame** — a 10M celeb is mimicry bait (same anti-mimicry, stage-aware thinking as
+   Step 4/Step 5). See `playbook/step-02-3-bands-and-ladder.md` for the size-band derivation
+   (never a fixed follower number, FRFRMU-1308), the escalation ladder for a thin niche, the
+   local-accounts rule, and the zero-winners stop. **Load it now, before 2.4.**
 2.4. **The human approves the shortlist** — never add an account the human didn't
    approve. A **human gate**, same weight as every other approval here.
 2.5. **Add** with `add_to_watchlist` — it validates each handle on Instagram and only
@@ -166,20 +142,11 @@ never silently.
    or `tags=["local"]`, merge mode — no new field, the existing 5-tag-per-competitor cap
    applies (`indirect` can sit beside it). **Read `dropped_over_cap` back and say so** if a
    customer's hand-made tags push the breadth tag out of the 5 slots.
-2.6. **Filter on REAL metrics AFTER adding — the honest catch.** The true numbers
-   (`follower_count`, `median_er`, `avg_views`) only exist once tracked. **One
-   `search_watchlist` call already gives you most of them** — every account in its
-   list comes back with `follower_count`, `median_er`, `engagement_rate` and
-   `pulled_posts_count`. So read the list, and do **not** call `get_profile_details`
-   once per shortlisted account: that is 8-15 separate round-trips to fetch numbers
-   you were already handed. Ask for `page_size=100`, sort `follower_count_desc`, and
-   let the server narrow the set with the `min_followers` / `max_followers` /
-   `has_follower_count` filters; keep asking for the next `page` until you have as
-   many accounts as the reply's own `total_count` says exist. Of the three numbers
-   above only `avg_views` is missing from the list — call `get_profile_details` just
-   for the few accounts where `avg_views` is genuinely what decides keep-or-drop.
-   Then **drop the bad benchmarks** — `remove_competitor` is free, so cleanup costs
-   nothing. Confirm with `get_workspace_stats`.
+2.6. **Filter on REAL metrics AFTER adding — the honest catch, including the benchmark
+   quality gate.** See `playbook/step-02-6-screening.md` for the full recipe (moved out
+   of this file, FRFRMU-1303, to stay under the 300-line cap) — read the account list off
+   ONE `search_watchlist` call, do not call `get_profile_details` per account, then apply
+   the typical-reel-views gate before moving on.
 2.7. **Show the FINISHED set back to the customer — a second human gate, not just the
    shortlist one (G238).** After 2.6's filtering, list the surviving benchmarks for the creator —
    handle, why it was kept (the fit reason from 2.3, plus its real metrics from 2.6) — and ask

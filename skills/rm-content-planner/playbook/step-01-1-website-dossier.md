@@ -3,7 +3,7 @@
 > step's file in this same `playbook/` folder. The Rigor Rules **§A–§I** are in
 > `playbook/rigor-rules.md`.
 
-## Step 1.7 — Crawl the customer's website against a checklist, and STORE it (G234, FRFRMU-1149)
+## Step 1.1 — Crawl the customer's website against a checklist, and STORE it (G234, FRFRMU-1149)
 
 Today's rule (G234, `step-01-intake.md`) fetches a website **once** and the finding lives only
 in the conversation — it dies when the session ends. A SaaS business gets a full, re-runnable

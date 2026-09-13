@@ -51,13 +51,14 @@ THREE roads, in this order, never skipping the swap for the reset (FRFRMU-1146):
 Never say "hiccup", "bug on our end", or "try again later" — this is not a bug, it is the
 plan's real limit, and retrying changes nothing.
 
-**Before asking anything else — say why, and what happens to it (G236, G240).** In one short
-line, before the first profile question: *"I'm going to ask about your business and positioning —
-that's what makes this plan accurate instead of generic, instead of only telling you after
-something doesn't match. It's used only to build your plan and improve future ones for you;
-nothing leaves your workspace, and nothing is saved anywhere without your OK at the very end."*
-This is the same reasoning rule 4 below already uses when a mismatch is found, and the same
-privacy line Step 12 already gives at save-time — said ONCE here, upfront, instead of only after
+**Before asking anything else — say why, and what happens to it (G236, G240).** In one short line,
+before the first profile question: *"I'm going to ask about your business and positioning — that's
+what makes this plan accurate instead of generic, instead of only telling you after something
+doesn't match. It's used only to build your plan and improve future ones for you. I'll save your
+answers to your workspace as we go, so nothing is lost if we get interrupted, and no plan is
+produced or published until you approve it."* This is the same reasoning rule 4 below already uses
+when a mismatch is found, and the same privacy line Step 12 already gives at save-time — said ONCE
+here, upfront, instead of only after
 something goes wrong or only at the very end.
 
 Then five rules govern the conversation itself (G100):
@@ -256,7 +257,7 @@ Then five rules govern the conversation itself (G100):
    with no fixed cap, because its depth is controlled by the user, not a counter.
 
 **Read the customer's website first, if they have one (G234).** Load
-`playbook/step-01-7-website-dossier.md` — one permission, a checklist crawl, one saved dossier.
+`playbook/step-01-1-website-dossier.md` — one permission, a checklist crawl, one saved dossier.
 That file is the whole rule: it covers asking permission, reading the pages that answer the
 founder's 8-field checklist, and saving what was found so intake can lead with it instead of
 asking cold.

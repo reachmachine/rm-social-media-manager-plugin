@@ -92,22 +92,52 @@ file holds the rest of the field list, split out only to stay under the 300-line
   goal, not the baseline. This number drives the effort tagging and batching in Step 8.
   **Bar (G696):** a number tied to their real calendar, not motivation. "Daily if I push myself"
   fails; "2 a week — I film Sundays" passes. No card — factual.
-- **Production capability — ask, and treat it as an ON-RAMP, not a filter.**
-  "What can you produce well right now — comfortable on camera? can you edit /
-  screen-record? can you perform a skit, or only talk to camera?" Save it to the
-  Creator Brief (`production_capability`). **This does NOT let you drop a format the
-  market rewards.** The data defines the *target*; ability defines the *starting
-  ramp*. So: lead the early calendar with formats they can execute **well now** (for
-  quick wins), AND when a high-reach format needs a skill they lack, **never silently
-  cut it** — surface it with a **production path**: learn it, use an AI tool / avatar,
-  outsource the edit, or a doable **adjacent** format that hits the *same*
-  psychological driver (e.g. can't perform skits → a reaction or POV talking-head that
-  lands the same relatable-humor beat). Flag it as the capability to grow into. A plan
-  that ignores what the market wants because the creator "can't do it yet" is following
-  the creator, not the market — that is the mistake to avoid. (See Step 8 + the Rules
-  Gate production check.)
-  **Bar (G696):** names what they do WELL right now and what they can't. "I can do anything"
-  fails; "comfortable talking to camera, can't edit" passes. No card — factual.
+- **Production capability — a LIST, not one dial (FRFRMU-1310); ask, and treat it as an
+  ON-RAMP, not a filter.** "What can you actually produce?" — check every box that fits, not
+  just one: **real people on camera** / **real member or client footage** / **coach talking to
+  camera** / **screen recording** / **graphics only** / **AI-generated**. A creator can name more
+  than one; save all that apply.
+  **AI-generated gets ONE mandatory follow-up, always — never accepted bare (FRFRMU-1310).**
+  *"When you say AI-generated, what exactly — an AI voiceover over stock or generated visuals, an
+  AI avatar standing in for a real person, AI-generated 'client' footage, or something else? Just
+  so the plan never shows something that isn't real as if it were."* An answer with no detail is
+  not a pass — ask the follow-up before saving.
+  **Cross-check it against the proof already on file, out loud (FRFRMU-1310).** This same
+  intake may already carry real first-party proof or an origin/transformation story (positioning
+  items 2 and 6, `step-01-intake-fields.md`) — named clients, a real before/after. If the
+  AI-generated answer would depict PEOPLE or RESULTS (an AI avatar standing in for a real client,
+  generated "before/after" footage) while real proof like that is already on record, say so
+  plainly: *"you told me about [the real story/proof] — AI-generated footage of a person or a
+  result would contradict that, since it isn't really them. I'd keep the AI generation to
+  graphics, voiceover, or b-roll, and use your real footage for anything showing a person or an
+  outcome. Sound right?"* Never let an AI-generated answer silently stand in for a real story
+  already told.
+  **The safe default for health, fitness, medical, and other regulated wellness niches
+  (FRFRMU-1310).** When the niche/topic (below) is one of these and the creator hasn't
+  explicitly said otherwise, default to: **no AI-generated depictions of people or of results**
+  (before/afters, transformations, testimonials). Say it as a recommendation, not a silent rule —
+  *"for health content I'd keep any AI generation to graphics or voiceover, never a person or a
+  result — want that as the default, or do you have a specific case in mind?"* **Carry the
+  decision into Constraints (below)** so Step 8 sees it as an off-limit, not something only this
+  field remembers.
+  Save to the Creator Brief (`production_capability`): `{"value": {"capabilities": [<one or more
+  of the six words above>], "ai_generated_detail": "<the follow-up answer, or null if AI-generated
+  wasn't picked>", "ai_people_or_results_ok": true|false}, "source": "conversation", "confidence":
+  "high"}`.
+  **None of this lets you drop a format the market rewards.** The data defines the *target*;
+  ability defines the *starting ramp*. So: lead the early calendar with formats they can execute
+  **well now** (for quick wins), AND when a high-reach format needs a skill they lack, **never
+  silently cut it** — surface it with a **production path**: learn it, use an AI tool / avatar
+  (subject to the cross-check and default above), outsource the edit, or a doable **adjacent**
+  format that hits the *same* psychological driver (e.g. can't perform skits → a reaction or POV
+  talking-head that lands the same relatable-humor beat). Flag it as the capability to grow into.
+  A plan that ignores what the market wants because the creator "can't do it yet" is following the
+  creator, not the market — that is the mistake to avoid. (See Step 8 + the Rules Gate production
+  check.)
+  **Bar (G696):** names what they do WELL right now and what they can't, and — if AI-generated is
+  named — the follow-up detail. "I can do anything" fails; "comfortable talking to camera, can't
+  edit" passes; "AI-generated" alone fails (no detail); "AI-generated — voiceover over stock
+  footage" passes. No card — factual.
 - **Niche + seed accounts + hashtags — this feeds discovery (Step 2).** Their **niche/topic** in a
   phrase, their **core hashtags**, and **2–3 accounts they admire or see as competitors**. **Seeds are
   OPTIONAL and VALIDATED, not trusted:** many creators won't know any — that's fine, the Step 2 angles
@@ -136,7 +166,10 @@ file holds the rest of the field list, split out only to stay under the 300-line
   later" fails. No card — factual.
 - **Constraints & off-limits (MUST ASK).** Anything the plan must NOT recommend: won't show face? topics
   or **claims they can't make** (health / finance / legal / regulated)? competitors they won't name?
-  brand no-go words or tone? Capture them — a plan that ignores them is unusable.
+  brand no-go words or tone? Capture them — a plan that ignores them is unusable. **If production
+  capability (above) landed on a no-AI-people-or-results default or decision, it lands here too**
+  (FRFRMU-1310) — e.g. "no AI-generated depictions of people or results" — so Step 8 sees it as an
+  off-limit alongside every other constraint, not only inside `production_capability`.
   **Bar (G696):** silence FAILS. Pass = a concrete list, OR an explicit "none of these apply"
   given AFTER you prompted the categories (face on camera? regulated claims? competitors not to
   name? no-go words?). An unprompted "no constraints" is not a pass. No card — factual.
