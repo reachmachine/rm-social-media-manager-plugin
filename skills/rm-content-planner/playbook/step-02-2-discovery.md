@@ -35,10 +35,15 @@ is what the plan is based on."*
 > plugin is not supposed to pull any reels. … first only use profile scrapper and check the
 > follower and engagement. based on this make a logical decision covering all the edge case."*
 
-- **Stage 1 — screening.** Judging a discovered handle (does it fit?) reads
-  `instagram-profile-scraper` ONLY. Follower count, engagement, and `latestPosts` are enough
-  to judge a candidate. **No reel scraping to screen a candidate, ever** — never pull a
-  candidate's own reel library via Apify to decide whether they belong on the shortlist.
+- **Stage 1 — screening.** Judging a discovered handle (is it real, and worth learning from?)
+  reads `instagram-profile-scraper` ONLY. Follower count, engagement, and `latestPosts` are
+  enough to judge a candidate. **No reel scraping to screen a candidate, ever** — never pull a
+  candidate's own reel library via Apify to decide whether they belong on the shortlist. This
+  is a JUDGMENT CALL on raw profile data, not the FIT filter — the real, structural verdict
+  (`niche_fit_verdict`: direct / adjacent / off / unclear, FRFRMU-1528/1536) is computed
+  automatically the moment the customer approves adding a candidate, by `add_to_watchlist`'s own
+  screen (`screened[].niche_fit_verdict` in its response) — never re-implement that judgment
+  here by hand.
 - **Stage 2 — only after the customer approves the shortlist** (Step 2.4) do a candidate's
   reels get pulled, and by Reach Machine (`pull_data` → `run_pipeline`, Step 2.8) — **never by
   Apify.**
@@ -82,10 +87,12 @@ find that out once we pull their reels."* Never let a shortlist read as already 
 performance just because it came out of discovery.
 
 **Find candidates yourself before handing the work back (FRFRMU-1298).** When our catalog
-(`discover_accounts`) is empty, do not ask the customer for handles first. Run the angles
-below and aim for **at least 10 candidates** before you ask for anything. Per FRFRMU-1308 this
-is a target to aim at, not a hard number: report honestly when a niche genuinely cannot fill
-it (see Step 2.3's thin-band sentences), and never invent a handle to reach 10.
+(`discover_accounts`) is empty, do not ask the customer for handles first — and by this point
+the free `request_niche_data` collection is already filed (Step 2's opening, FRFRMU-1535); this
+Apify pass is the "want it faster?" half, not the only road forward. Run the angles below and
+aim for **at least 10 candidates** before you ask for anything. Per FRFRMU-1308 this is a target
+to aim at, not a hard number: report honestly when a niche genuinely cannot fill it (see Step
+2.3's thin-band sentences), and never invent a handle to reach 10.
 
 **Expand — the remaining discovery angles (run every one that applies, then dedupe across
 them).** Same set every run, so discovery is consistent for any account or niche. Each angle

@@ -122,12 +122,14 @@ _RM_NONSPEND_TOOLS = [
     "mcp__reachmachine__get_analysis_coverage",
     "mcp__reachmachine__get_content_strategy",
     "mcp__reachmachine__get_content_breakdown",
+    "mcp__reachmachine__get_posting_time_performance",  # read, free — Step 8 item 7's distribution.posting_time check (FRFRMU-1539)
     "mcp__reachmachine__get_content_structures",
     "mcp__reachmachine__get_hooks_library",
     "mcp__reachmachine__get_cta_library",
     "mcp__reachmachine__search_exemplars",   # read, free — Step 8 H.3b proven-hook lookup (FRFRMU-988)
     "mcp__reachmachine__check_hook_clone",   # read, free — grades a written hook against the exemplars it cites; the save-path already runs this server-side, but a writer can run it themselves before committing to a hook (FRFRMU-991)
     "mcp__reachmachine__get_topic_heat",     # read, free — Step 5.1c shortlist thinness check (FRFRMU-988)
+    "mcp__reachmachine__get_hashtag_norms",  # read, free — Step 8 HT.2 tag norm read (FRFRMU-1551)
     "mcp__reachmachine__get_content_plans",  # read, free — reads a saved plan back, e.g. for cooldown (FRFRMU-975)
     "mcp__reachmachine__save_draft_plan",    # write, does NOT spend — mid-plan checkpoint (FRFRMU-980)
     "mcp__reachmachine__get_draft_plan",     # read, free — reads the checkpoint back (FRFRMU-980)
@@ -145,6 +147,9 @@ _RM_NONSPEND_TOOLS = [
     "mcp__reachmachine__get_billing_status",
     "mcp__reachmachine__set_data_selection",         # write, does NOT spend — scopes a later read (G226)
     "mcp__reachmachine__clear_data_selection",        # write, does NOT spend — resets that scope (G226)
+    "mcp__reachmachine__get_data_request_status",    # read, free — rigor-rules.md §J rung 2 (FRFRMU-1545)
+    "mcp__reachmachine__request_niche_data",         # write, does NOT spend — files/joins a niche data request (FRFRMU-1545). Same absent-from-both-lists trap as FRFRMU-988: missing here means dontAsk silently DENIES it, and §J's new rung would look followed but never actually run headless.
+    "mcp__reachmachine__record_plan_review",         # write, does NOT spend — whole-plan approve/rework gate (FRFRMU-1548)
 ]
 
 # Explicitly DENIED (A3 — a deny holds in every mode). Every tool that spends
@@ -310,9 +315,19 @@ def _write_bundle_files(skill_dir: pathlib.Path, files: dict[str, str]) -> None:
             continue
         dest = skill_dir / filename
         dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_text(content, encoding="utf-8")
+        # FRFRMU-1568: force LF on write. Python's default text-mode newline
+        # translation turns every "\n" in `content` into the platform's
+        # line ending on write — on a Windows customer machine that is
+        # "\r\n", so a bundle already normalised to LF server-side
+        # (FRFRMU-1568) becomes "\r\r\n" (a blank line after every line).
+        # `newline="\n"` disables that translation; `open()` (not
+        # `Path.write_text`'s newline kwarg, which needs Python 3.10+) keeps
+        # this working on whatever Python floor a customer's machine has.
+        with open(dest, "w", encoding="utf-8", newline="\n") as f:
+            f.write(content)
     if version_content is not None:
-        (skill_dir / "VERSION").write_text(version_content, encoding="utf-8")
+        with open(skill_dir / "VERSION", "w", encoding="utf-8", newline="\n") as f:
+            f.write(version_content)
 
 
 def check_and_update_skill(skill_dir: pathlib.Path, call_tool) -> None:

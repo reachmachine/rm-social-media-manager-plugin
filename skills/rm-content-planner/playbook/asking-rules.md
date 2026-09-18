@@ -262,10 +262,16 @@ step that has registered required questions must carry `question_statuses` namin
 (anything but `unasked`) for every one of them — a missing entry is rejected the same as an
 explicit `unasked`. Checkpointing a bare top-level step (`"2"`, not `"1.6"`) also requires
 everything registered under every earlier top-level step — this is what makes a `"2"` checkpoint
-catch a gap Step 1 left open, instead of only checking Step 2's own (empty) list. `delivered` and
-`abandoned` writes are always exempt — they end a plan and must never be blocked. Below the
-floor, or on any older build, nothing changes: this is a pure addition, never a new way to fail a
-write that used to save clean.
+catch a gap Step 1 left open, instead of only checking Step 2's own (empty) list. **This is not a
+toll paid once at Step 2 — EVERY later bare top-level checkpoint (`"3"` through `"12"`) pulls in
+the SAME cumulative list again: all 24 Step-1-family entries (rule 6's 18 canonical fields,
+`stage` at `1.6`, the 5 persona sub-questions at `1.4`).** And because a checkpoint is a full
+overwrite of `planning_progress`, not a merge (see `PLAYBOOK.md`'s Progress-checkpoints section),
+`question_statuses` must be resent IN FULL at every one of those checkpoints — answered once at
+Step 2 and then dropped is exactly what produced the live "step '7' requires 24 fields" failure
+this section exists to prevent. `delivered` and `abandoned` writes are always exempt — they end a
+plan and must never be blocked. Below the floor, or on any older build, nothing changes: this is
+a pure addition, never a new way to fail a write that used to save clean.
 
 **Two decisions already made — restated here so this file is the one place that has them
 (founder, 2026-09-06/07):**

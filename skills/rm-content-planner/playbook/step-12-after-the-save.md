@@ -19,6 +19,31 @@ credits, and both ride the consent the creator just gave.
 
 ---
 
+### 0. Say the next step (FRFRMU-1548, founder decision 2026-09-15)
+
+**Before the two write-backs below — the customer sees this, they don't wait for it.** After the
+save, the plan is NOT the end: the customer is explicitly asked to review the WHOLE plan (every
+reel, not one at a time) and say whether they're happy with it. Nothing proceeds on silence.
+
+- **Approved as a whole → offer the copywriter step, never auto-start it.** Say plainly: *"Once
+  you've reviewed everything and you're happy with the whole plan, say 'write the copy for this
+  plan' and I'll script it — that's a separate step so you see every reel clearly before we spend
+  time on the actual words."* If write tools are on this connection, call `record_plan_review`
+  with `action="approved"` once they confirm — it locks every reel in one action so the
+  copywriter's existing per-reel gate (`approval.status == "approved"`) drafts the whole plan.
+- **Rework requested → ask WHY, in their own words, never a category.** *"What should change?"*
+  — free text, not a dropdown; a category destroys the exact signal this exists to capture. Call
+  `record_plan_review` with `action="rework_requested"` and that `reason_text` verbatim. This
+  feeds admin QA/QC (the founder's own words: "report to admin on why the change was asked for")
+  and rolls into the Creator Brief so the NEXT planning run can read it back. Then redo the plan —
+  this is a real loop, not a one-shot fix.
+- **No write tools on this connection?** Say where the review happens instead of promising a tool
+  call: the app's own plan page. Never silently skip the ask.
+- **The gate is never a wall.** If the customer doesn't respond, the plan still exists — review
+  pending, not blocked. Never leave them stuck waiting on us, or us stuck waiting on them.
+
+---
+
 ### 1. 🔴 RECORD THE RUN — call `record_content_plan_run`
 
 **This is not optional and it is the step most likely to be forgotten.** The moment
@@ -71,11 +96,21 @@ a data pull, a reel selection, an analysis batch, a strategy decision, the criti
 with `seq` (order), `kind`, `inputs` (what you read and how fresh), `action` (plain-English),
 `outputs.reel_uids` (which reel(s) it fed, when it fed any), and `provenance` (`data` /
 `inferred` / `judgment` — a step that was pure judgment says so, never dressed up as data).
+
+**Also fill the five FRFRMU-1552 fields per step, whenever you know them** — `needed` (what
+this step needed before it could run), `got` (the real numbers/result it got back), `bar`
+(`{rule, verdict}` — the plain-English success bar this step checked against, and its verdict:
+`met` / `not_met` / `thin` / `not_applicable` — never a boolean), `decision` (what you decided as
+a result), and `loop_id` (set on EVERY step in one check → widen → re-check cycle, so a step that
+re-ran an earlier one shares the same `loop_id` and sets `retry_of_seq` to the seq it re-ran).
+These five fields are what a person actually reads — fill them honestly, not decoratively.
+
 Batch every step from this run into ONE call with a fresh `idempotency_key`, same retry rule as
-above. **Honest limit:** there is no frontend "How this was decided" panel yet — this write-back
-makes the trace queryable (`get_build_trace`) today, but nobody sees it on the reel profile
-until that UI ships. Do the write-back anyway: a trace nobody reads yet still beats no trace to
-read once the panel lands.
+above. This write-back is now visible to the customer AND an admin: **`BuildTracePanel`**
+(`frontend/src/components/content-calendar/BuildTracePanel.tsx`) renders it as "How this was
+built — step by step" on the dashboard, reused on the IG Posts page via
+`get_build_trace(reel_uid=…)` and on FRFRMU-1533's admin QA page — so a step you fill honestly
+here is exactly what a person reads there, and a step you skip is a gap they will see too.
 
 ---
 
@@ -84,7 +119,17 @@ read once the panel lands.
 Call `update_creator_brief` with the key **`topic_history`** (`source: "derived"`). The shape is
 canonical and defined ONCE, in `playbook/step-05-differentiate.md` §5.1a — read it there before
 writing this key for the first time. In short: a **flat** list, newest cycle first, one entry per
-topic (never grouped under a cycle), each carrying `{cycle, topic, series?, tier, source}`.
+topic (never grouped under a cycle), each carrying
+`{cycle, topic, series?, tier, source, plan_id, state}`.
+
+**`plan_id` and `state: "planned"` (FRFRMU-1530) — write both, on every entry, every time.**
+`plan_id` is THIS `submit_content_plan` reply's `plan_id` (the same one you just used in §1
+above) — it is the server's match key for reconciling this ledger later, so a topic can be told
+apart from a same-month sibling plan's topics. `state` always starts `"planned"`: this plan has
+been handed to the creator, but nothing in it has been posted yet. The server updates `state` on
+its own from here — to `"posted"` once a real verdict or a confirmed post link happens, to
+`"archived"` if this plan gets archived before that (freeing the topic again) — never overwrite a
+`state` the server already changed; only ever write fresh `"planned"` entries here.
 
 **Why this exists at all:** no Reach Machine tool can read a saved plan back, so without this
 ledger the cooldown in Step 5.1 has nothing to read and the next plan can innocently repeat this

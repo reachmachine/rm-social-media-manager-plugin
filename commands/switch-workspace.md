@@ -53,4 +53,15 @@ Also re-check positioning: **positioning IS per-workspace**, so a new workspace 
 none yet. Missing positioning means any plan can only clone competitors — route to
 `/rm-social-media-manager:know-business` to set it.
 
+## Check the industry too (FRFRMU-1322)
+
+`get_workspace_stats` (already pulled in point 3) also returns `niche_status`. If it comes back
+`"proposed"`, say plainly: *"your benchmarks may be drawn from the wrong industry — the data now
+looks more like `<niche_candidate>` than `<niche>`. Want me to switch it?"* Only call
+`set_workspace_niche` after an explicit yes (it is confirm-gated: call it once without
+`confirm=true` first to preview, then again with `confirm=true`). `"pending"` means a possible
+change is being watched, nothing final — say so in one line and move on; `"unknown"` means not
+enough data yet. **Never explain HOW the industry is worked out** — no thresholds, no counts, no
+mention of any waiting period.
+
 **Hard limit:** never call a spend or destructive tool here, and never call Apify.

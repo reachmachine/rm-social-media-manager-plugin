@@ -70,10 +70,10 @@ All names below are shortened — the real form is
 
 | Command | What it does | Spends? |
 |---|---|---|
-| `workflow_plan` | The full method, start to finish (same as invoking the skill) | only on your explicit yes |
-| `workflow_insights` | Ask any free-form question of your analysed data | never |
-| `workflow_research` | Find benchmark accounts and add them (human-approved shortlist) | only on your explicit yes |
-| `workflow_analyze` | Analyse reels by tag or by video — assist mode first (about half price, not free) | only on your explicit yes |
+| `workflow-plan` | The full method, start to finish (same as invoking the skill) | only on your explicit yes |
+| `workflow-insights` | Ask any free-form question of your analysed data | never |
+| `workflow-research` | Find benchmark accounts and add them (human-approved shortlist) | only on your explicit yes |
+| `workflow-analyze` | Analyse reels by tag or by video — assist mode first (about half price, not free) | only on your explicit yes |
 
 **Fourteen single-action commands**, so you can redo one step without redoing a plan:
 

@@ -41,6 +41,7 @@
 | Assumptions disclosed | recorded assumptions vs `section_00.assumptions` | validator `assumptions_disclosed` | Gate 6 · `TEMPLATE.md` A0 |
 | Retrieved hook wording clone | a retrieved hook's wording vs the exemplar(s) it cites, alone (no structure/topic needed) | save-time check (`hook_clone_check`, warn only) | Gate 4 · this file |
 | Receipts verified | claimed `n` / `median` vs this workspace's real data | save-time check (`verify_receipts`) | Gate 7 · Step 11.0 (G207) |
+| Claim backed by call | a claimed `checked_*` status vs this session's real tool-call journal | save-time check (`claim_backed_by_call`) | Gate 7 · `rigor-rules.md` §K (FRFRMU-1539) |
 | One conversion action | every `activation` row's ask pointing at the SAME action | gate box | Gate 5 · `step-08-cta-recipe.md` CT.1 |
 | Plumbing, ask by ask | each row's ask vs the asset behind it | gate box | Gate 5 · `step-08-cta-recipe.md` CT.2 |
 | Caption CTA echo | each caption's ending vs that row's `cta` / `cta_type` | gate box | Gate 5 · `step-08-caption-recipe.md` C.3 |

@@ -111,6 +111,13 @@ A beat list with rough timing, in this order:
    (`re_hook`), and analysed reels carry the creator's own re-grab lines in `retention_hooks`,
    so build it from the exemplars where it was captured, and from the retention craft in
    `playbook/step-06-retention.md` (open loop → mid re-hook → loop-back) where it was not.
+   **This beat IS `retention.rehook.options[recommended-or-first].line` (FRFRMU-1544/1546) —
+   write it ONCE, here, and the saved `retention` field points at the SAME line.** With 1546's
+   3-5 ranked options, "the beat" is whichever option carries `recommended: true`, or
+   `options[0]` when none does (an honest thin-data case) — never a line that differs from
+   every option in the array. Never write a second, different line into `retention` that only
+   summarises this beat — that is exactly how a real audit found the saved field degrading
+   into a paraphrase of the hook.
    **The BEAT is mandatory; its craft is not.** Vary the form so the plan does not turn into
    thirty reels all saying "but wait":
    - a new-information tease ("the part nobody mentions is…"),

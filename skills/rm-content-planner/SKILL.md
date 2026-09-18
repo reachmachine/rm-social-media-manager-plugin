@@ -54,6 +54,60 @@ skill does **not** implement — two writers touching the same files is a real r
 explicitly rejected. `claude plugin update`, run by the creator through their own Claude Code /
 Claude.ai plugin manager, is the only supported way this skill gets updated.
 
+## Check for an open data request on this niche (FRFRMU-1545)
+
+As soon as `list_workspaces` (Step 1) has told you this workspace's `niche` — skip this
+entirely while `niche` is still empty/unknown, there is nothing to check yet — call
+`get_data_request_status` with that niche. It is free, read-only, and exists exactly for
+this: *"call this at the start of a session for a niche you've asked about before, so you
+can offer the upgrade the moment data has unlocked."* Read its `message` field:
+
+- **`found: false`** — nothing on file for this niche. Say nothing, proceed normally.
+- **`status` is `open`/`approved`** — a request is already in flight from an earlier
+  session. Mention it once, briefly, then keep going: *"heads up — we're still collecting
+  more data for your niche (usually within N business days), so parts of this plan may
+  still be thinner than we'd like."*
+- **`status` is `unlocked`** — new data has landed. Relay the tool's own `message` VERBATIM
+  (it already states the real analysed count, per the founder's "never say 'ready' over a
+  thin niche" rule) and ask before doing anything with it — never auto-upgrade.
+
+Skip this on a headless `runner.py` run only if the workspace's niche is not yet resolvable
+at session start — headless already allow-lists both tools (`runner.py`'s
+`_RM_NONSPEND_TOOLS`), so it is safe to call there too once the niche is known.
+
+## Check for unfinished assist work — before proposing new spend (FRFRMU-1570)
+
+Right after the version check above, still before `get_creator_brief` or anything else: call
+`get_assist_work` (free, read-only — omit `run_id` so it checks every assist run for this
+customer, not just one). Assist mode is about half price BECAUSE the customer's own Claude does
+the write-up; if that write-up never happens, the run silently converts to full price 24 hours
+after it was pulled. This check is what stops that from firing in the ordinary, blameless case
+(the customer just closed their laptop last time) — same tier as the version check: cheap,
+read-only, and it must run before any new spend is proposed. Finishing work already owed is
+always better value than starting new work.
+
+- **`pending_count` is 0 (or the tool says nothing is waiting)** — say nothing, proceed normally.
+- **`pending_count` is greater than 0** — tell the creator ONE short, plain line near the start
+  of your very first reply this session, then finish the reels before or alongside whatever they
+  asked for: *"You have N reels waiting to be analysed from last time — I'll finish those now so
+  you don't get charged the full rate."* Then loop: read the bundle `get_assist_work` returned
+  (frames + context), write the analysis to match the schema it gave you, call `submit_analysis`,
+  and call `get_assist_work` again until `pending_count` reaches 0. `get_assist_work` already
+  serves the oldest reel first, so a large backlog naturally clears the ones closest to the
+  24-hour conversion first — if it is large, say the rest is queued rather than making the
+  creator wait through all of it before anything else this session.
+- **The tool call itself fails, errors, or is unreachable** — this is OUR infrastructure problem,
+  not the creator's (see "THE AUDIENCE RULE" below); say nothing to the creator about it and
+  proceed normally. Log it with `report_gap` if you want it flagged to us.
+
+**Skip this on a headless `runner.py` run** — `submit_analysis` is on `runner.py`'s own deny
+list (`_RM_SPEND_OR_DESTRUCTIVE_TOOLS`), so a headless run could never finish the work it found
+anyway; assist write-ups only happen in a customer-facing session.
+
+**Read `get_assist_work`'s own tool description for the full pull loop** (parallel workers,
+`instructions_version` caching, detecting a cut-off bundle) — this section only says WHEN to
+start the loop, not how to run it.
+
 **First, read the method's index:** `${CLAUDE_SKILL_DIR}/PLAYBOOK.md`. It is small on
 purpose — a table of the steps and the file each one lives in. **Then load ONLY the step
 file you are working on** (`${CLAUDE_SKILL_DIR}/playbook/step-03-mcp.md`, and so on).
@@ -231,8 +285,9 @@ question with what the site already said.
   one conversion action for the month), the calendar (all columns + 4-layer
   hook + retention + stage CTA + funnel role + effort tag + priority rank +
   source), realistic cadence + batching (light reels grouped so a bad week
-  still ships), an opportunistic news slot, caption/hashtag/SEO, a distribution
-  note (posting-time medians as a soft, UTC-caveated tie-breaker; an audio
+  still ships), an opportunistic news slot, caption/hashtag/SEO, a structured
+  distribution field (posting-time as a soft, timezone-caveated tie-breaker —
+  or an honest "not checked"; never invented — §K; an audio
   stance read from which sounds are rising among the accounts we track, with
   the exact track confirmed in the creator's own panel at posting time), a
   weekly KPI ritual with a mid-month tracker, a daily
@@ -273,6 +328,12 @@ question with what the site already said.
   the path). Do NOT hand-edit the markup — everything renders from the JSON. The markdown
   TEMPLATE remains the canonical content; the dashboard is its presentation layer.
   *(A `submit_content_plan` JSON maps almost 1:1 — reuse it.)*
+  **Every field the plan carries must land somewhere in the dashboard (FRFRMU-1547/1549/1550).**
+  `${CLAUDE_SKILL_DIR}/plan_field_manifest.json` is the checked list of per-reel and plan-level
+  fields (mirrored from the backend's own manifest — see `test_plan_field_manifest_parity.py`);
+  the dashboard's completeness test fails the moment a manifest key has nowhere to render. If you
+  add a new field to a step-08 recipe, add it to that manifest and to step-12's shape block too, or
+  the completeness test will not know to check it.
   **HAND IT OVER — a dashboard nobody can find is a dashboard nobody got (G370).** The moment the
   file is written, do all three, in this order:
   1. **Print the absolute path** of the file — the full path starting at the drive or root, e.g.
@@ -305,9 +366,11 @@ time-sensitive news · **never add the creator's own account to the watchlist
 before competitors are already analysed in the workspace** (a brand-new
 workspace guesses its niche from whichever accounts are in it, so adding your
 own account first can set the workspace's niche wrong) · **never present
-posting-time recommendations as a hard rule** — the medians are in UTC, not
-localized to the audience's own timezone, so treat them as a soft tie-breaker
-only · use RM's friendly labels, never reveal tag formulas.
+posting-time recommendations as a hard rule** — they are shown in the
+workspace owner's own timezone (UTC only when none is set), never the
+audience's, so treat them as a soft tie-breaker only · **never claim a check
+you didn't run** — a "checked X" sentence names its tool call or it says
+"not checked" (§K) · use RM's friendly labels, never reveal tag formulas.
 
 ## Developer hat — report gaps LIVE via `report_gap`
 The moment you hit a **change request, feature request, or bug** while running this
@@ -365,7 +428,7 @@ check is in PLAYBOOK Step 11.0: `validate_content_plan`'s own `summary.checks_ru
 tells you the LIVE check count the server actually runs — if it disagrees with what
 this PLAYBOOK documents, your copy is out of date; see Step 11.0 for what to do.
 
-## Rigor rules (v1.1) — see the PLAYBOOK "Rigor Rules (§A–§I)"
+## Rigor rules (v1.1) — see the PLAYBOOK "Rigor Rules (§A–§K)"
 Separate **data** from **judgment** out loud, and put confidence in the output:
 - **Confidence + n on every recommendation**, read from **median** not mean. Below
   n≈5 → label it "a bet". (§B)

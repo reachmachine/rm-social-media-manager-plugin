@@ -25,7 +25,9 @@ anything. If the watchlist is empty there is nothing to analyse — say so and r
    analyse what is already covered.
 2. **Then choose the shape of the run:**
    - **By classification / tag group** → `run_pipeline_by_category` (pair with
-     `query_posts_by_tag` to see what it will cover first).
+     `query_posts_by_tag` to see what it will cover first). 🔴 Its `mode` field already defaults
+     to `"assist"` (FRFRMU-1517) — leave `mode` unset for the assist path below; only pass
+     `mode="full"` if the human explicitly asked for full price.
    - **Specific videos by URL, or a hand-picked set** → `run_pipeline`, or scope with
      `set_data_selection` using `post_urls`.
    Say which one you are using and why — they cost differently.
@@ -55,6 +57,14 @@ then write ONE short line about that reel and drop its frames and its instructio
 working set before the next `get_assist_work`. Dispatch about **8 reels per batch, not 25** — each
 reel drops 8 keyframe images into this chat and they never leave, so a long batch gets slower and
 slower and can run out of room after the credits are already held.
+
+**Pass `have_instructions_version` from your SECOND `get_assist_work` call onward (FRFRMU-1567)** —
+the first call hands you the token; keep passing it while you still hold the instructions in
+context, so later calls skip resending ~15K tokens. Before analysing ANY bundle, confirm it carries
+an `end_of_bundle` block and one "Frame N of M" label per frame `end_of_bundle` says it sent —
+missing either means your client cut the response before it arrived. Re-request the SAME reel
+(`get_assist_work` with that `post_url`) rather than analysing a bundle you cannot confirm arrived
+whole; the closing frames are exactly what a cut removes first, and that's where CTAs live.
 
 ## 🔴 Confirm-before-spend is a HUMAN gate
 

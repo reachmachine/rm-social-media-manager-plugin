@@ -12,6 +12,26 @@
 still be **refreshed** (niches drift, accounts go stale). Never plan off a thin or
 stale benchmark set.
 
+**Check the industry before trusting the benchmarks (FRFRMU-1322).** `get_workspace_stats`
+(and `list_workspaces`) also return `niche`, `niche_status` and `niche_candidate`. Read
+`niche_status` every time, before building on the benchmark set:
+- `"proposed"` — the workspace's data now points at a DIFFERENT industry than the one it is
+  set to. Tell the customer plainly: *"your benchmarks may be drawn from the wrong industry —
+  the data now looks more like `<niche_candidate>` than `<niche>`. Want me to switch it?"*
+  On an explicit yes, call `set_workspace_niche(niche=<niche_candidate>, confirm=true)`
+  (confirm-gated — call it once without `confirm=true` first if you want to double-check the
+  preview). Never switch it without asking.
+- `"pending"` — a possible change is being watched but nothing is final yet. Say so in one
+  line ("still working out your industry, nothing changes yet") and move on — do not offer a
+  switch.
+- `"unknown"` — not enough analysed data to know the industry yet. Proceed with discovery
+  normally; this resolves itself once the workspace has real reels.
+- `"confirmed"` — nothing to flag.
+
+🔴 **Never explain HOW the industry is worked out** — no thresholds, no reel counts behind the
+decision, no mention of any waiting period. Say what is wrong ("may be drawn from the wrong
+industry") and what changes if they say yes, never the mechanism.
+
 **The SUBJECT drives discovery.** Seed everything off the subject's niche from Step 1
 (their handle, topics, hashtags, and the 2–3 accounts they named) — for an agency
 that finds the **client's** competitors, not the agency's.
@@ -26,7 +46,12 @@ exactly as today.
 
 1. **`discover_accounts` FIRST — free, read-only.** It returns only accounts Reach Machine
    has **already collected real data for**. It does NOT search Instagram, so it comes back
-   empty for any niche we have not covered yet. Empty is normal, not an error.
+   empty for any niche we have not covered yet. **Empty is not an error — it is a dead end
+   you must walk the creator out of (FRFRMU-1535, founder decision 2026-09-16). Do BOTH, in
+   order:** call `request_niche_data` now (free, company-funded, no spend gate — read
+   `next_steps` in the reply for the current status) and tell the creator it is already
+   filed, **THEN** offer the live Apify search below as a way to get something today (still
+   spend-gated, still billed to their own account — read `next_steps.live_search`).
 2. **Then Apify, for a LIVE Instagram search** — the plugin ships an `apify` MCP connection
    and the creator signs into **their own Apify account** (browser sign-in, no token to
    paste). This is what actually powers angles A–F below against real Instagram.
@@ -58,7 +83,9 @@ Apify calls off one vague approval.
 🔴 **If Apify is not connected, STOP — do not substitute anything (G332, founder decision
 2026-08-19).** A generic web search is NOT a valid substitute. If `discover_accounts` is
 empty and Apify is unavailable, unreachable, or the creator declines the spend, say plainly
-that you cannot do Instagram discovery right now and why — then stop. Do **not** quietly run
+that you cannot do Instagram discovery right now and why — then stop (the free
+`request_niche_data` collection above is on file either way, so this is a pause, not a dead
+end). Do **not** quietly run
 a web search and present its results as benchmark accounts. Do **not** invent handles. The
 propose-from-seeds fallback below is **opt-in only**: offer it in one line, and use it solely
 if the creator explicitly asks, labelled to their face as **unverified suggestions, not Reach
@@ -112,8 +139,10 @@ never silently.
    `instagram-profile-scraper` → `{"usernames": ["<local candidate handles>"]}` and only COUNT from the reply:
    accounts found, how many posted in the last 60 days, how many use reels at all, median
    followers. **If a post's date or type is missing from the reply, write `unknown` — never
-   infer it** (same honesty rule the dossier already applies to paid traffic). Only a local
-   account that also passes 2.3's FIT filter becomes a benchmark.
+   infer it** (same honesty rule the dossier already applies to paid traffic). A local account
+   only becomes a benchmark once it is actually added and its real `niche_fit_verdict`
+   (FRFRMU-1528/1536, computed by `add_to_watchlist` — never decided here, only anticipated
+   from 2.3's size-band judgment) reads `direct` or `adjacent`, not `off`.
 
    Two more honesty rules:
    - A place-word search can return accounts that are not actually local — count only the
@@ -142,6 +171,13 @@ never silently.
    or `tags=["local"]`, merge mode — no new field, the existing 5-tag-per-competitor cap
    applies (`indirect` can sit beside it). **Read `dropped_over_cap` back and say so** if a
    customer's hand-made tags push the breadth tag out of the 5 slots.
+   **Reading `screened` (FRFRMU-1564): quote `summary`, never paraphrase a bare value.**
+   Each entry's `checks` dict already spells out what every number means — unit, which
+   direction is good, the threshold, whether it even counts toward the verdict
+   (`scoring: false` for `comment_to_like`/`recent_views_per_follower` — recorded, never
+   flagged on). Read the `summary` sentence out loud to the customer instead of inventing
+   your own reading of the raw `value` — a days-since number like `recent_activity` reads
+   backwards if you guess instead of quoting ("0" is NOT dormant; it means posted today).
 2.6. **Filter on REAL metrics AFTER adding — the honest catch, including the benchmark
    quality gate.** See `playbook/step-02-6-screening.md` for the full recipe (moved out
    of this file, FRFRMU-1303, to stay under the 300-line cap) — read the account list off
@@ -149,7 +185,9 @@ never silently.
    the typical-reel-views gate before moving on.
 2.7. **Show the FINISHED set back to the customer — a second human gate, not just the
    shortlist one (G238).** After 2.6's filtering, list the surviving benchmarks for the creator —
-   handle, why it was kept (the fit reason from 2.3, plus its real metrics from 2.6) — and ask
+   handle, why it was kept (its real `niche_fit_verdict`/`niche_fit_reason`, FRFRMU-1528/1536 —
+   read off `search_watchlist`/`get_profile_details`, never re-judged by hand — plus its real
+   metrics from 2.6) — and ask
    plainly: *"Here's your final benchmark list — does this look right to you?"* Then:
    - **If they say yes** — move on to 2.8.
    - **If they object to one** (e.g. "that account isn't really like me") — ASK why, then decide
@@ -215,6 +253,11 @@ it does not grade one: a bursty account may be running campaigns on purpose.
   inactive) → drop it like a bad benchmark (`remove_competitor`, free).
 - **Stale set** — treat a benchmark set as stale if it hasn't been refreshed in ~30–60 days or the
   niche has visibly moved; re-run the discovery angles then.
+- **A filed `request_niche_data` unlocks mid-session or next session (FRFRMU-1535).** Never
+  re-add or re-enrich an account the creator already has from a live search — `discover_accounts`
+  already excludes tracked handles, so just re-run it: what comes back now IS the "new to you"
+  set. Say the real split, e.g. *"12 accounts came in; 9 are new to you"* — never the raw
+  arrived count alone, and never imply the paid search was wasted.
 
 **Then continue to Step 3** with a fresh, fit benchmark set.
 

@@ -70,9 +70,9 @@ The books teach great STRUCTURE but often in a hype VOICE. Keep the structure, f
       the same driver). The plan follows the MARKET, ramped to the creator's ability — never the reverse.
 
 ## Gate 3 — Retention (does each reel earn watch-time, not just the click?) · `gate_3_retention`
-- [ ] Every reel has a **retention line**: an open loop in the hook → a mid re-hook (~40%) → a loop-back
-      ending. A hook with no body-retention fails. Watch-time + replays are what push a reel past the
-      follower base.
+- [ ] Every reel has a real **retention object** (FRFRMU-1544): `open_loop` (the IDEA the hook plants,
+      never its wording) → `rehook.options` (a SAYABLE line at ~40%, checked by `retention_rehook_present`
+      and `retention_rehook_distinct_from_hook`) → `loop_back`. A hook with no body-retention fails.
 - [ ] **Retention is tagged honestly.** It is **SMM JUDGMENT** (never DATA-DRIVEN) unless it was built from a
       real beat structure the tools returned; shares/saves-per-1k may support it as DATA-INFERRED. RM can't see
       competitor watch-time — a structural guess must not be dressed as data.
@@ -111,6 +111,7 @@ The books teach great STRUCTURE but often in a hype VOICE. Keep the structure, f
       hard gate, at every stage, because a promise the creator can't keep is worse than no CTA.
       Thin reach on top of working plumbing is a **caution, not a bar**: it usually gets few
       responses and can cost reach, but it is the creator's call to make. *(funnel)*
+- [ ] **CTA variety = wording AND the ask itself** (2026-09-15, FRFRMU-1544): >= 3 distinct `cta_type`s per plan (`cta_type_variety`, `cta_wording_variety`).
 - [ ] The plan moves rented reach toward **owned traffic** (followers → email/DM list) over time.
       *(funnel Secret #5, traffic Secret #5)*
 - [ ] The month maps to a **value ladder** with ONE conversion action worked backwards. *(funnel Secret #2)*
@@ -222,6 +223,7 @@ that contradicts its own strategy fails.*
       substance with no pattern is a bet (declared Step 7.4 test only); substance is always
       `first_party`/`from_expert`, never a frequency claim. `check_slot_has_both_receipts` +
       `check_substance_not_data_driven` flag these. Fix = run `step-08-join-recipe.md`.
+- [ ] **A "checked X" claim names its call (§K).** `distribution.posting_time`'s `checked_*` status needs a real `get_posting_time_performance` call this session (`claim_backed_by_call`), or say `not_checked`.
 
 ## Gate 8 — Deliverable feasibility & variety (the calendar must actually SHIP) · `gate_8_feasibility_variety`
 - [ ] **Total effort ≤ capacity:** each week's summed effort (heavy/medium/light) fits what the creator can

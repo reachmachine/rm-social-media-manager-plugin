@@ -30,6 +30,17 @@
           }
         ]
       }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "social-media-manager",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/first-reply-intro-guard.sh"
+          }
+        ]
+      }
     ]
   }
 }

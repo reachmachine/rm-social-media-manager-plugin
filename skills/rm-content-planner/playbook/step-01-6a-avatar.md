@@ -65,7 +65,8 @@ recall.
 ### Save it
 
 Write the result to the Creator Brief as the Foundation card key `avatar`, in the
-`/settings/profile` shape (FRFRMU-1042). `provenance` is one of the four card-wide values
+`/settings/profile` shape (FRFRMU-1042). `status` is `"confirmed"`, or `"hypothesis"` while
+PQR2/phrases are still thin. `provenance` is one of the four card-wide values
 (`FROM-EXPERT` for a web/user-supplied phrase, `DATA-DRIVEN` for a reel-transcript-sourced
 phrase, `JUDGMENT` for the agent's own drafted trait line) — the finer per-ticket detail lives
 in the extra `source` field, which the shape check does not require but does not forbid either:
@@ -73,7 +74,7 @@ in the extra `source` field, which the shape check does not require but does not
 ```
 {
   "card": "avatar", "title": "Dream-customer avatar",
-  "status": "confirmed",   # or "hypothesis" if PQR2/phrases are still thin
+  "status": "confirmed",
   "summary": "<name + one-line situation>",
   "items": [
     {"item_id": "trait_line", "label": "Name + situation", "text": "<the drafted avatar>",

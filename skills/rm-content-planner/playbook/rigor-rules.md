@@ -1,8 +1,8 @@
-> **Playbook rules file.** The Rigor Rules **§A–§J** that every step is held to. The step list,
+> **Playbook rules file.** The Rigor Rules **§A–§K** that every step is held to. The step list,
 > and which file holds each step, is in `PLAYBOOK.md`. A "Step N" reference below means that
 > step's file in the `playbook/` folder.
 
-## The Rigor Rules (§A–§J) — the full standard every step is held to
+## The Rigor Rules (§A–§K) — the full standard every step is held to
 
 *(This is the detail behind the "Rigor Rules" summary near the top. Not an appendix — these are
 applied INSIDE the steps, referenced by each step that uses them.)*
@@ -160,6 +160,15 @@ provenance tag is no longer just a promise you make in prose — emit the number
 fields (Step 12) or the check flags it. The rule above still governs the *judgment* half (which
 tier a borderline call belongs to) — the code checks the arithmetic, you own the judgment.
 
+**Changing a reel's provenance tag updates the summary counts in the SAME edit, never after
+(FRFRMU-1318).** `receipts_summary.provenance_split` (Step 12) is a count of the reels' own
+`provenance` fields — it is a derived total, not an independent value you set once and forget.
+The live incident this rule closes: the Step 11 critic downgraded one reel from `data_inferred`
+to `judgment` and the plan's `provenance_split` kept its old numbers, so the honest-split check
+(`provenance_split_honest`) correctly blocked the save. Whoever edits a reel's `provenance` —
+you, in Step 8, or the critic, in Step 11 — recounts `provenance_split` across every reel and
+writes the new totals before moving on, not as a separate later pass.
+
 ### J. Data first, judgment last, judgment still grounded (FRFRMU-1024)
 The founder, live, 2026-09-06: *"we have to analyze more as we lack data as we need to have
 data driven decision. we go to judgement only after analyzing all the videos and judgement
@@ -170,19 +179,37 @@ stated policy — every step that can reach for JUDGMENT cites this section. The
    competitors (rule 2a's sufficiency table), then the community/niche scope (rule 2b) —
    never a smaller batch chosen for cost, never a shortcut to judgment while relevant
    un-analysed reels remain that the creator agreed to analyse.
-2. **Judgment only when the relevant reels are exhausted, or the creator declined the
+2. **Still thin after BOTH scopes are checked → call `request_niche_data` with the workspace
+   niche (FRFRMU-1545).** This is free — Reach Machine's own team collects more, on the
+   business's own credits, usually within `sla_business_days`. Call `get_data_request_status`
+   first so a second ask on the same niche never files a duplicate job. Then keep going on
+   what already exists, labelled honestly (never a pause) — the save reply's `honesty` block
+   carries the request back as `honesty.data_request`, and `step-12-capture.md` step 3 is where
+   you relay its `message` to the creator, plainly, in the same breath as confirming the save (on
+   EVERY save, clean or not — never only when `step-12-blockers-remain.md` also fires). This is a
+   rung on the ladder, not a substitute for it: it never replaces
+   step 1's own widening, and it never turns a judgment reel into DATA-DRIVEN (§I stays the
+   wall).
+3. **Judgment only when the relevant reels are exhausted, or the creator declined the
    spend.** Declining is a valid, honestly-labelled path (§I's "SMM JUDGMENT" tag,
    `step-03-mcp-spend-and-progress.md` rule 6g's three options) — it is never a silent
    default.
-3. **Even a judgment reel is grounded, never a free invention.** It names the NEAREST real
+4. **Even a judgment reel is grounded, never a free invention.** It names the NEAREST real
    data it extrapolates from — an adjacent pillar's proven pattern, the creator's own
    first-party proof, or a community/niche signal (labelled niche-wide, per rule 2b). A
    judgment reel's reasoning (`step-08-reasoning-recipe.md` R.1) carries one line: *"grounded
    on: <the nearest real data>."*
-4. **Tell the creator plainly, every time.** *"We need to analyse N more reels for this part
+5. **Tell the creator plainly, every time.** *"We need to analyse N more reels for this part
    to be data-driven — here's what that costs — or I mark these reels as judgment, grounded
    on <X>."* Never present a judgment-based reel as if it were proven (§I stays the wall: a
    judgment tag is never relabelled to look like data).
+
+**A server-side backstop also exists (FRFRMU-1545) — `submit_content_plan` auto-files the same
+request when the SAVED plan's data-driven share lands below the reliability floor, even if
+step 2 above was somehow skipped.** That backstop never depends on this playbook being
+followed — it is there so a thin niche is escalated either way. Following step 2 yourself
+still matters: it lets you tell the creator about the SLA in the moment, instead of them only
+finding out from the saved plan's own record.
 
 **Honest limit — "all the videos" means all RELEVANT reels for the role/slice** (the goal→tag
 rows in `step-03-mcp.md` rule 2), never the whole `low_performance` pool — that stays banned
@@ -193,3 +220,37 @@ sufficiency table and the goal→tag rows, never by "every reel in the workspace
 DATA-INFERRED — the tag stays JUDGMENT (§I), and the validator's `n ≥ 5` receipt check is
 unchanged. It is a transparency line, so a human reading the plan can see WHERE a judgment
 call came from, not a claim that the judgment is now proven.
+
+### K. A claim about a check names its call (FRFRMU-1539)
+
+A saved plan once stated *"no reliable posting-time data at this sample size"* — a specific,
+confident claim about the customer's own data — from an agent that had never called the tool
+that would confirm or deny it. That is a different, worse failure than a missing analysis: it is
+a fact that was invented, not a gap that was left honest.
+
+**The rule.** Any sentence of the shape *"no data for X," "X was checked," "X shows nothing"*
+must name the tool it came from and what it found — or the only honest sentence is **"X was not
+checked."** This applies to a small, NAMED registry — never free-text judgment about what counts
+as "a check":
+
+| Claim | Tool that backs it |
+|---|---|
+| Posting time | `get_posting_time_performance` |
+| Hook channel mix (spoken / on-screen / visual / sound) | `get_content_breakdown` (dimension `hook_channel`) |
+| Trending audio | `get_trending_audio` |
+| Self-account activity | `get_profile_posts` / `get_content_strategy(scope: mine)` |
+
+Posting time is the one claim with a STRUCTURED, machine-checkable field today —
+`distribution.posting_time` (Step 8 item 7, `TEMPLATE.md` D2, Step 12's plan shape) — so the
+server cross-checks it against this session's own tool-call record at save time and blocks a
+mismatch (`claim_backed_by_call`, RULES_GATE.md Gate 7). The other three rows are enforced here,
+in prose, the same way every other rigor rule is: by you, reading this before you write the
+sentence. Self-account activity is the SAME claim FRFRMU-1534 already names for "zero self-posted
+reels" — one rule, one registry, not two.
+
+**Three different sentences, never blurred:**
+1. **Checked it, found a signal** — name the tool, quote the row(s) and their reliability.
+2. **Checked it, found nothing usable** — name the tool, say so plainly. This is NOT the same
+   sentence as "not checked" — it is a stronger, more useful claim, and it is only honest when
+   you actually made the call.
+3. **Did not check it** — say exactly that. Never dress it up as either of the two above.

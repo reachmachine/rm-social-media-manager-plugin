@@ -19,6 +19,7 @@
     {"question_id": "audience_questions", "required_by_step": "1", "label": "Their audience's real questions / DMs / FAQs"},
     {"question_id": "plan_size", "required_by_step": "1", "label": "How many reels the creator wants in this plan"},
     {"question_id": "personal_story", "required_by_step": "1", "label": "Who they are, why they started (optional, G373)"},
+    {"question_id": "content_language", "required_by_step": "1", "label": "What language their customers read and watch in"},
     {"question_id": "stage", "required_by_step": "1.6", "label": "Account stage — asked only after Step 1.6"},
     {"question_id": "backstory_sentence", "required_by_step": "1.4", "label": "F1 — Backstory confirm"},
     {"question_id": "flaw_1", "required_by_step": "1.4", "label": "F2 — The flaw you'll show"},

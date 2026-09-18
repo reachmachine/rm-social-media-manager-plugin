@@ -121,6 +121,13 @@ Two additions:
 - **If `big_domino` exists (p08, FRFRMU-1040), add a `belief` field: the ONE belief this slot
   plants (`reach`/`nurture`) or the ONE objection it knocks down (`activation`) — never two.** No
   key → no `belief` field, R.3 is exactly the table above.
+- **If this slot's outline has a `myth_bust`/`objection`/`story_setup` beat citing a `false_beliefs`
+  row (`step-08-outline-recipe.md`'s Substance conditional — the beat's own `substance_ref`), add a
+  `belief_row` field carrying that SAME `item_id`.** This is the field
+  `check_all_three_doubts_covered` (backend, FRFRMU-1045) reads to confirm the plan's three
+  confirmed core rows each got a reel — it was never written before FRFRMU-1530, so that check
+  could never fire. Never invent a row here that the beat doesn't already cite. No such beat → no
+  `belief_row` field, R.3 is exactly the table above.
 
 ---
 

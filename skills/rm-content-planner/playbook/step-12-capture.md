@@ -81,12 +81,14 @@ At Review Gate A (Step 7), show the **diff** against the existing calendar
 were a brand-new plan the creator has to review from scratch.
 
 1.5. **🔴 ALWAYS run the free `validate_content_plan` dry-run on the EXACT plan you are
-   about to send, right before this call — every time, not only after a rejection
-   (FRFRMU-1029).** A save attempt with no dry-run in this same session is a playbook
-   violation. Read every violation's `fix` ({field_path, expected, example}) and apply
-   it — do not guess, and do not paste the raw validator JSON at the creator. Once it
-   comes back with 0 blockers, tell the creator "checked: 0 blockers" in one short
-   line, then move to step 2. This closes the gap a 2026-09-06 QA run hit: three
+   about to send, right before THIS call — every time, not only after a rejection
+   (FRFRMU-1029).** **The requirement is tied to the save itself, never to "session"
+   (FRFRMU-1318) — resuming from an earlier turn does NOT carry that turn's dry-run
+   forward.** A save attempt with no dry-run run immediately before it — a resumed
+   session included — is a playbook violation. Read every violation's `fix`
+   ({field_path, expected, example}) and apply it — do not guess, and do not paste the raw validator JSON
+   at the creator. Once it comes back with 0 blockers, tell the creator "checked: 0
+   blockers" in one short line, then move to step 2. This closes the gap a 2026-09-06 QA run hit: three
    retry rounds (no receipt → thin receipt → provenance-split mismatch) that a single
    dry-run — read properly — would have caught in one pass.
    **If blockers are STILL there after Step 11's 3-round cap, do NOT save yet — read
@@ -121,10 +123,14 @@ were a brand-new plan the creator has to review from scratch.
                   effort, priority,
                   provenance: "data_driven" | "data_inferred" | "judgment",         ← MACHINE-READABLE
                   receipt: { source_handle, source_url, n: <int|null>,              ← STRUCTURED, not a
-                             median: <number|null>, reliability, tag, note } },       sentence
+                             median: <number|null>, reliability, tag, note },         sentence
+                  discovery: { keywords: [str], tags: [{tag, role}] }, caption, hashtags: […], reasoning: {receipts, expected_outcome, goal_served}, needs_disclaimer },  ← MACHINE-READABLE (FRFRMU-1551/1547)
                 … ],
        cadence: { per_week: <int>, weeks: <int> },                              ← MACHINE-READABLE
-       kpis, captions_seo, distribution,
+       kpis, captions_seo,
+       distribution: { posting_time: { status, tool, scope, timezone,         ← MACHINE-READABLE
+                                        quoted: [...], caveat } },              (§K, FRFRMU-1539)
+       glossary: [ { term, field, plain, source, example_url } ],   ← MACHINE-READABLE (FRFRMU-1551, TEMPLATE.md D7)
        receipts_summary: { …, provenance_split: { data_driven, data_inferred, judgment } } }  ← COUNTS
      ```
      **Cross-account receipts (G336).** If a reel's pattern is real across MULTIPLE tracked
@@ -137,12 +143,11 @@ were a brand-new plan the creator has to review from scratch.
      **Why the machine-readable fields matter (G118).** `validate_content_plan` (Step 11) and the
      save-time check read these fields to enforce the countable guarantees — effort ≤ capacity, ≥3
      distinct `receipt.source_handle`, a DATA-DRIVEN reel must carry `receipt.n ≥ 5` + a `median`, the
-     `funnel.counts` the calendar actually delivers, the honest `provenance_split`. **Put the numbers in
-     the STRUCTURED fields, not only in the prose** — a receipt written as a sentence can't be checked,
+     `funnel.counts` the calendar actually delivers, the honest `provenance_split`. **Put the numbers in the STRUCTURED fields, not only in the prose** — a receipt written as a sentence can't be checked,
      so a `receipt` object with `n`/`median` null (and the human line in `receipt.note`) is how you say
      "no data receipt" honestly. Keep the human-readable prose too (the dashboard uses it); the
-     structured fields sit ALONGSIDE it. **Include the `decision_log` (TEMPLATE E3)** so the reasoning
-     is written back and QA-verifiable later.
+     structured fields sit ALONGSIDE it. **Include the `decision_log` (TEMPLATE E3)** so the reasoning is written back and QA-verifiable later.
+     **`caption`/`hashtags`/`reasoning`/`needs_disclaimer` (FRFRMU-1547)** come from the step-08 recipes and proof-bank's `regulated_disclaimer_required` flag — check against `plan_field_manifest.json`.
      **The Phase 2/3 checks (G118) read these fields — never leave them out:**
      - `meta.language` — the language the hooks/captions are actually written in (Step 3 item 3).
        Checked by `language_set`; missing it means nothing that depends on language can be verified.
@@ -158,13 +163,13 @@ were a brand-new plan the creator has to review from scratch.
      - `reel.topic_idea` — the specific idea this reel covers, in a few words (not the niche — the
        actual angle, e.g. `"why most X fail in month 1"`). Checked by `self_cannibalization`, which
        flags two reels chasing the same idea so they don't compete with each other.
-     - `reel.cta_type` — set this ONLY when the CTA promises an activation action the automation must
-       back up: `"keyword_dm"` or `"lead_magnet"`. Leave it unset for reply-bait / no-CTA reels.
-       Checked by `activation_needs_plumbing` — an explicit `cta_type` is the plan stating its own
-       intent: missing/untested plumbing always **blocks** (the creator can't keep the promise), no
-       matter the account's stage; with the plumbing confirmed built AND tested, a cold-start account
-       only gets a **warn** about the reach cost (Step 4). A free-text CTA that merely reads like a DM
-       promise (no `cta_type` set) never blocks — at most a warn.
+     - `reel.cta_type` — **set on EVERY reel now (FRFRMU-1544, founder decision 2026-09-15):** one of
+       `get_cta_library`'s 11 values (`no_cta, follow, save, share, comment_open, comment_keyword,
+       dm_open, link_in_bio, visit_site, attend_event, watch_more`), chosen per `step-08-cta-recipe.md`
+       CT.1's funnel-role table. Checked for VARIETY by `cta_type_variety` (>= 3 distinct across the
+       plan). **Separately,** `activation_needs_plumbing` still reads this SAME field for its own
+       plumbing-promise check (`"keyword_dm"`/`"lead_magnet"` — a pre-1544 sub-vocabulary, see
+       `prompts/COMMS.md` FRFRMU-1544 for a naming gap flagged there, not fixed here).
      - `plan.prerequisites`, `reel.week`, `reel.depends_on` (G129) — if a reel needs something built
        first (e.g. a keyword-DM automation for an activation CTA), **schedule the prerequisite and give
        the reel a later week — do NOT downgrade the CTA to something weaker.** Example: if week-4 reels
@@ -204,10 +209,11 @@ were a brand-new plan the creator has to review from scratch.
      subject_handle: "<the confirmed per-workspace @handle from Step 1.6>",
      production_capability: [<string>],
      capacity: { reels_per_week: <int> }, requested_plan_size: <int>,
-     target_audience_segment}, data_signature: {analysed_reels_count, competitors_count,
+     target_audience_segment, false_beliefs}, data_signature: {analysed_reels_count, competitors_count,
      audience_segments, levers_used: [{lever, winner, median, n, reliability}]} }`.
      **`capacity.reels_per_week` and `requested_plan_size` must be integers** — the validator
      compares the plan's effort + size against them (G118).
+     **`false_beliefs` (FRFRMU-1530) — pass the WHOLE card**, unchanged, whenever it exists (no key → leave it out); without it `check_all_three_doubts_covered` (backend) stays silently unable to check.
    - **`critic`** — the Step 11 result: `{verdict, changes: [...]}` (what the critic changed).
    - **`rules_gate`** — the Step 11 structured Rules-Gate record: `{checks: [{id, status, note,
      fix}], rounds, unresolved}`, one entry per gate you actually walked, ids exactly as in
@@ -226,6 +232,8 @@ were a brand-new plan the creator has to review from scratch.
 
 3. **Confirm** to the creator: *"Saved to your Content Calendar under [Month Year] — open
    it any time under Plan → Content Calendar."*
+
+   **If the reply's `honesty.data_request` is not null, relay its `message` too, in the same breath — this fires on ANY save, clean or not (FRFRMU-1545).** The niche's data was thin, so the server filed a free request on the business's own credits; don't let the creator learn this only from opening the plan later, e.g. *"...also, your niche was low on analysed data, so I asked our team to pull more — free, ready within [sla_business_days] days."* (Separate from `step-12-blockers-remain.md` rule 4, which fires only when blockers remain.)
 
    **If the save fails, try again before giving up (G250).** Before your first `submit_content_plan`
    call, make up a short unique `idempotency_key` for this plan — any random string is fine, e.g.

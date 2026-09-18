@@ -27,7 +27,7 @@ community). Skip the translation and you ship confident-looking mimicry.
 
 ## The Rigor Rules — the standard EVERY step is held to (NOT a stage you do once)
 
-These ten rules (**§A–§J**, in full in `playbook/rigor-rules.md`) are **live in every step** —
+These eleven rules (**§A–§K**, in full in `playbook/rigor-rules.md`) are **live in every step** —
 not an appendix, not a final stage. They are the difference between a plan that is data-DRIVEN
 and one that only *looks* data-informed. Each step below names the §s it must obey.
 
@@ -41,6 +41,7 @@ and one that only *looks* data-informed. Each step below names the §s it must o
 - **§H Experiment** — every reel gets a hypothesis + a **stage-appropriate** kill/scale rule.
 - **§I Provenance** — tag every choice DATA-DRIVEN / DATA-INFERRED / JUDGMENT by the operational rule; the `validate_content_plan` code check (G118) now enforces the countable half.
 - **§J Data first, judgment last** — thin slice → analyse more relevant reels (own, then community/niche) → only then judgment; a judgment reel still names what grounds it.
+- **§K Claim names its call** — "checked X" names the tool that ran, or the honest sentence is "not checked" (FRFRMU-1539).
 
 **When the data is thin or degraded**, do not fake confidence and
 do **NOT** drop straight to judgment — §J in `playbook/rigor-rules.md`
@@ -191,7 +192,7 @@ which used to disagree (FRFRMU-1311).**
 | 12 | `playbook/step-12-capture.md` | Capture — save the plan to the creator's Content Calendar | 11 |
 | 12 | `playbook/step-12-after-the-save.md` | The two write-backs once the plan is stored | 12 |
 | 12.5 | `playbook/step-12-blockers-remain.md` | What to do when blockers are still open at save time | 12 |
-| — | `playbook/rigor-rules.md` | The Rigor Rules §A-§J in full | — |
+| — | `playbook/rigor-rules.md` | The Rigor Rules §A-§K in full | — |
 | — | `playbook/asking-rules.md` | The asking contract — how EVERY question the plugin asks is asked (FRFRMU-1051) | — |
 
 **A "Step N" reference inside any step file means that step's file in the table above.**

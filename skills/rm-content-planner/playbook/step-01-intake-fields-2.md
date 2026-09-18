@@ -210,6 +210,17 @@ file holds the rest of the field list, split out only to stay under the 300-line
   actually finish beats a bigger one you won't."*
   **Bar (G696):** a number the human chose AFTER hearing your recommendation. A number you
   picked for them fails the bar by definition. No card — factual.
+- **Content language — REQUIRED, one ISO code (FRFRMU-1575).** Ask plainly: *"What language do
+  your customers read and watch in?"* This is NOT about comparing your language to a
+  competitor's (that check already runs separately, per-account, once a benchmark is added) —
+  it decides the language the captions and scripts THIS plan writes come out in. Save the
+  ISO 639-1 code (e.g. `en`, `pt`, `hi`) with `update_business_profile`'s `content_language`
+  field. If the creator already set it on a past plan, read it back and confirm rather than
+  asking cold — never ask twice for the same fact.
+  **Bar (G696):** a real language, named or clearly implied ("English", "we post in Hindi").
+  "Whatever's easiest" fails — ask once more for the actual language; still vague after that,
+  default to the language the creator is asking you in and record it as `derived`. No card —
+  factual.
 
 - **The swipe file's human half (p28, FRFRMU-1066) — one occasional ask, `deferred` allowed
   per FRFRMU-1051.** *"Anything you've saved that made you buy or stop scrolling — an ad, an

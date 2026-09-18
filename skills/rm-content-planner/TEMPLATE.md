@@ -151,7 +151,13 @@ Every reel row MUST carry all of:
   (the canonical template), `count` (how many reels used it), `account_spread` (how many
   different accounts), `median` (their typical views) and `metric_used: views`. A hook with no
   count behind it is tagged JUDGMENT and gets no receipt. ·
-- **retention line** — the open loop (in the hook) → mid re-hook (~40%) → loop-back ending that earns replays ·
+- **retention object** (FRFRMU-1544/1546) — `{open_loop, rehook: {options: [{line, form,
+  provenance, receipt, recommended}]}, loop_back}`. `open_loop` is the IDEA the hook plants,
+  never its wording; each `rehook.options[]` entry is a real, SAYABLE line at ~40% (never a
+  stage direction) — 3-5 of them, ranked, with `recommended: true` on at most one and only when
+  it has real support behind it; `loop_back` points the ending at `open_loop`. See
+  `playbook/step-06-retention.md` for the full shape, `get_retention_patterns`, and the
+  mechanical checks. ·
 - **beat outline — `playbook/step-08-outline-recipe.md`.** Beats, never a full script: each beat
   names what the moment DOES and roughly says, in about one line, so the words stay the
   creator's. A speech reel gets **talk-beats**; a silent or music-only reel gets **shot-beats**
@@ -232,8 +238,13 @@ Every reel row MUST carry all of:
 - Priority ranks so the plan degrades gracefully, not collapses.
 
 ### D2. Distribution
-- Posting time — a SOFT tie-breaker only, with the honest caveat (data is UTC, not the audience's timezone;
-  weekday gaps are often flat).
+- Posting time — a structured, REQUIRED field, not prose (rigor rule §K, FRFRMU-1539):
+  `distribution.posting_time: {status: "checked_signal" | "checked_no_signal" | "not_checked",
+  tool: "get_posting_time_performance", scope, timezone, quoted: [{name, count, reliability,
+  median_views}], caveat}`. `checked_signal` is a SOFT tie-breaker only — never a hard rule.
+  `timezone` is whatever the tool's own `timezone` field reports (the workspace owner's own zone,
+  FRFRMU-922) — UTC only when none is set, and say so when it is. Weekday gaps are often flat,
+  so don't oversell a small one.
 - Audio — the month's audio stance, per `playbook/step-08-audio-recipe.md`. We CAN now read which
   sounds are **rising among the accounts we track** (never "trending on Instagram") and which
   sounds this workspace's own analysed reels keep reusing. Quote the coverage figure with every
@@ -267,6 +278,20 @@ Every reel row MUST carry all of:
 - Realistic expected numbers for THIS account's stage vs the competitor "aspirational ceiling", clearly
   labelled. Never present competitor medians as what to expect.
 
+### D7. What these words mean (FRFRMU-1551) — a glossary, built generic
+- **One line per DISTINCT `format`/`structure` value actually used in `reels[]` this run** — never
+  a fixed list. A creator without a video background cannot act on a label they cannot look up.
+- **The plain-English text is `get_taxonomy_definitions`' own definition, quoted verbatim** — the
+  agent never paraphrases or invents one. A value the taxonomy does not define yet is written in
+  plain words and labelled "our description," never presented as sourced.
+- **One real example link per term** — the first of that reel's `visual.watch_these` links whose
+  label matches the term (`playbook/step-08-visual-recipe.md` V.2 already produces these). Seeing
+  30 seconds of a real montage teaches more than a definition alone.
+- **Never hardcode a term to one niche's vocabulary** — the glossary reads whatever this plan
+  actually used, so it works the same for a gym plan and a SaaS demo plan.
+- Saved as plan-level `glossary: [{term, field, plain, source, example_url?}]` — `plan_validator`'s
+  `glossary_covers_terms` check warns when a used term has no entry.
+
 ---
 
 ## PART E — TRUST
@@ -276,7 +301,9 @@ Every reel row MUST carry all of:
 - **Tools that actually ran** this session (name them).
 - **Provenance split as COUNTS:** X DATA-DRIVEN / Y DATA-INFERRED / Z JUDGMENT — the honest admission IS the point.
 - **Competitor accounts** the plan drew from (@handles).
-- **ONE action** to start with.
+- **ONE action** to start with (FRFRMU-1548): "review the whole plan and approve it, then say
+  'write the copy for this plan'" — never "start filming reel #1", since a beats-only plan has no
+  words yet to film.
 - **Intake confidence:** how deep this plan's inputs actually were — "X of Y key fields confirmed by
   you, Z derived by us and accepted, W missing." If the completeness score is below the floor (Step
   11 flags this), say so honestly: "this plan leans more on judgment than usual because the intake
@@ -308,3 +335,10 @@ JUDGMENT. Include:
 **Persist it for QA:** include this `decision_log` in the structured `plan` saved via `submit_content_plan`
 (Step 12) — so it is written back to the account and verifiable later — and render it in the dashboard's
 trust section. Plain language throughout (no raw tag names / §-labels in the creator-facing copy).
+
+### E4. Review disclaimer  *(FRFRMU-1525 — standing notice, never a per-claim block)*
+Print `plan_disclaimer.text` from `get_creator_brief`'s response verbatim, once, at the end of every
+plan. This is a plain notice — "these are suggestions, please review them before you publish" — never a
+warning about a specific claim, and it never stops you finishing or delivering the plan. Every account
+starts on the same default wording and can edit + approve its own version; either way, the field is
+always present, so there is nothing to fall back to yourself.

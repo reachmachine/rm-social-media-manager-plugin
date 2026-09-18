@@ -74,6 +74,47 @@ workspace to compare against.
   **Never reach for a paid scrape before this free read**, and never say "I can't tell" about
   something `get_profile_details` can answer — `search_watchlist` alone (no `media_count` on
   its rows) is not enough to conclude that.
+  - **Returning session, self account already tracked? `search_watchlist` LOCATES the row —
+    it never replaces the `get_profile_details` check above (FRFRMU-1534).** If the handle
+    is already saved to the Creator Brief but you don't have the profile id in hand this
+    session, call `search_watchlist(search_query=<handle>)`, confirm the returned row's
+    `role == "self"`, then take its id straight into the SAME `get_profile_details` read
+    above — don't stop at the search result and don't add it as a second, parallel check.
+  - **The same `get_profile_details` call also returns `pulled_posts_count` and
+    `latest_post_date` — read them too, every time, not just `media_count` (FRFRMU-1534).**
+    They tell apart three different states, and each gets its own honest sentence:
+    | State | How you know | What you say |
+    | --- | --- | --- |
+    | A — never posted | `media_count == 0` | "RM already shows 0 posts recorded for this account — nothing more to check." (above) |
+    | B — they post, RM hasn't pulled them | `media_count > 0` and `pulled_posts_count` is 0 or null | the paid-scrape offer above |
+    | C — RM already holds their posts | `pulled_posts_count > 0` | **read them before anything else (below) — never the scrape offer, and never a "no data" claim** |
+    **Hard rule:** the words "this account has zero self-posted reels," "nobody's posted to
+    your account," or "we don't have Instagram data from your audience yet" may **never** be
+    said in any session without having made this read THIS session — and when you do say it,
+    quote the actual `media_count` / `pulled_posts_count` numbers, not a memory of a past
+    session. Handle `paywall_active: true` on `get_profile_posts` (below) honestly too — that
+    means "posts exist, 0 credits to view them right now," never "no posts."
+  - **State C — use what RM already holds, before any "borrow patterns from competitors"
+    reasoning.** Call `get_profile_posts` (same `profile_id`) and show, plainly, once: each
+    post's date (`publishedAt`), views (`engagement.views`), and RM's friendly tags — per the
+    algorithm-confidentiality rule, describe what a tag MEANS, never the formula behind it —
+    plus the posting cadence from `account_metrics`. This is the single most relevant "what
+    worked for THIS business" signal there is; it does not get skipped because the account was
+    added in an earlier session.
+  - **Already holding some pulled posts (State C)? Check `reels_count` before offering ANOTHER
+    pull — do not just re-offer because the sample is thin (FRFRMU-1563).** A live test on a
+    real account (`westcore.courtenay`, `pulled_posts_count: 4`, `media_count: 11`) proved
+    "always offer a fresh pull when the sample looks thin" wrong: the paid pull was re-run and
+    returned the exact same 4 reels — those 4 were the account's entire history, and the offer
+    would have spent real money for nothing. `media_count` counts every post type (photos,
+    carousels, reels together), so it is the WRONG field to compare against
+    `pulled_posts_count` for this decision — read `reels_count` from `get_profile_details`
+    instead (FRFRMU-1295: reels only, `null` means "Apify didn't say," never 0):
+    | `reels_count` | What it means | What you do |
+    | --- | --- | --- |
+    | known, `> pulled_posts_count` | more reels exist than RM has pulled | offer a pull, state the exact new-reel estimate and cost, wait for yes |
+    | known, `== pulled_posts_count` | RM already holds every reel this account has | say so plainly — *"RM already holds all N of your reels — nothing more to pull."* — and do NOT offer to spend |
+    | `null` (Apify didn't report it) | you cannot tell if more reels exist | say so honestly — *"RM holds N reels; I can't tell if that's all of them without a paid scrape."* — and default to **not** spending; only offer if the human asks |
 - **Once the handle is saved to the Creator Brief, benchmark numbers leave the self account
   out automatically.** RM's aggregate "mine" insight numbers — on the insight pages and in the
   agent's own analytics tools — exclude the self account by default, so competitor benchmarks
@@ -89,9 +130,35 @@ workspace to compare against.
   3. **What they do that UNDER-performs the niche** → **fix or drop**.
   This gap — "what works in the niche" vs "what THIS account should do next" — is one of the
   strongest strategy inputs. Carry it into Step 7 explicitly.
-- **Anchor the honest-benchmarks item (Step 8) to the creator's own rolling
-  median**, wherever enough of their own data exists — that's a more honest
-  ceiling than a competitor's mega-view.
+  - **Cross-check every new topic idea against posts already pulled for the self account
+    (FRFRMU-1534).** Before a topic goes into the plan, check it against State C's already-
+    read posts (above). A close match to a topic already posted is never re-run blind — call
+    it out by name, its date, and its result, then either bring it back **on purpose** as a
+    deliberate sequel with something changed (a different hook, a different CTA) or hold it
+    with a stated reason. Silence about a topic that already ran is the exact failure this
+    ticket exists to close.
+- **Anchor the honest-benchmarks item (Step 8) to the creator's own rolling median — quantify
+  "enough" from the SERVER's floor, never a hardcoded number (FRFRMU-1534/1563).** State C's
+  `get_profile_posts` read already returns `account_metrics.reel_sample_size` (how many reels
+  the median came from) and `account_metrics.benchmark_reel_sample_floor` (the configured
+  minimum before that median can be judged at all) — read both, every time; never hardcode "5"
+  in a sentence, because the server-side floor is the thing that can change, not the playbook.
+  `reel_sample_size >= benchmark_reel_sample_floor` makes the self median a DATA-DRIVEN anchor
+  — a more honest ceiling than a competitor's mega-view. Below the floor, still show and use
+  the median, but label it DATA-INFERRED and say "thin sample" out loud with the two real
+  numbers, e.g. *"You have 4 reels — the floor for a real pattern is 5 — too few to call a
+  pattern yet, but here's the real signal so far: median 707 views, all four Excellent
+  Engagement Rate."* Never present a sample below the server's floor as a settled pattern.
+  - **This is a DISCLOSURE gate, not a data-volume gate (FRFRMU-1563).** Being below the floor
+    never means "say nothing" or "wait for more data before planning" — it means every
+    self-performance claim in this plan downgrades to `judgment` provenance (the exact value
+    `record_build_steps` accepts, Step 12) with the real reason written in plain words in that
+    step's `inputs`/`action` — e.g. "only 4 of the server's floor of 5 reels are on file for
+    this account, so this call is judgment, not a proven pattern." The plan still gets built;
+    it just tells the truth about how sure it is. **Re-check this every session** (Step 1.6
+    already runs every session per `step-01-intake.md` rule 1) — a floor that was missed last
+    month may be cleared this month once more reels post, and the gate must reflect today's
+    numbers, not a stale memory of a past shortfall.
 - **Close the loop.** The weekly measurement ritual (Step 8) should produce a
   tiny tracker — per reel: saves-per-1k, watch-time %, shares-per-1k — for the
   creator to fill in after each reel goes out. The **next** planning run reads

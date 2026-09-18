@@ -19,7 +19,11 @@ Without them you research the wrong market. If the niche is missing, stop and ro
 ## Source order — catalog, then Apify
 
 1. **`discover_accounts` FIRST — free.** It returns only accounts Reach Machine already holds
-   real data for. **Empty is normal**, not an error, and not a reason to invent anything.
+   real data for. **Empty is not an error — it is a dead end you must walk the user out of**
+   (FRFRMU-1535, founder decision 2026-09-16), never a reason to invent anything. Do BOTH, in
+   order: call `request_niche_data` now (free, company-funded, no spend gate — see `next_steps`
+   in the reply) and tell the user it is already filed, **THEN** move to step 2 below as a way
+   to get something today.
 2. **Then Apify, for the live Instagram search** — keyword search (`instagram-search-scraper`)
    to find handles, then `instagram-profile-scraper` to screen each one (PLAYBOOK Step 2.2,
    `playbook/step-02-2-discovery.md`). Name these tools **bare** — the prefix differs on a
@@ -61,8 +65,9 @@ Say it once, plainly, and then wait. Do not run discovery while the sign-in is s
 
 A generic web search is **NOT** a substitute for either source. If `discover_accounts` is empty
 and Apify is unavailable, unreachable, or the user declines the spend: say plainly that you
-cannot search Instagram right now and why, then **stop**. Do not web-search and present the
-results as benchmark accounts. Do not invent handles.
+cannot search Instagram right now and why, then **stop** — the free `request_niche_data`
+collection above is on file either way, so this is a pause, not a dead end. Do not web-search
+and present the results as benchmark accounts. Do not invent handles.
 
 Offer the propose-from-seeds fallback in one line only — and use it solely if the user
 explicitly asks, labelled to their face as **unverified suggestions, not Reach Machine data**.

@@ -170,14 +170,22 @@ its reasoning + provenance (§I):
    reasoning, then the %. The receipt for a delivery decision is a `delivery` receipt:
    `made_share`, `wins_share`, `winner_tags`, `n`.
 7.6b. **POST TYPE — reel vs carousel vs image.** A separate decision from 7.6: that one is HOW a
-   reel is shot, this one is WHAT KIND OF POST the slot is. Start from `get_format_benchmark` —
-   the mix the tracked accounts were actually observed posting, with the middle like and comment
-   counts per type. Say "observed posts", never "their posts": we see only the recent posts each
-   profile refresh catches, so how complete it is depends on refresh cadence against how often
-   they post. Types are compared on likes and comments only — images have no view count, so a
-   view comparison would always make images look worst for a reason that has nothing to do with
-   how they did.
-   Read the three answers differently:
+   reel is shot, this one is WHAT KIND OF POST the slot is.
+
+   **No tool answers this today (FRFRMU-1529).** There is no live post-type-mix tool. Skip
+   `get_format_benchmark` — it exists in the code but is switched off (no rows worth reading
+   yet), so reaching for it will fail. Skip `get_format_ranking` too: that tool ranks DELIVERY
+   STYLES (talking-head, voiceover, skit …) over reels only — its own description says so in
+   plain words — so it cannot tell you reel vs carousel vs image no matter how it's asked. Using
+   it here would produce a confident-sounding answer to the wrong question, which is worse than
+   admitting the gap.
+
+   **What to do instead:** say plainly that no post-type-mix data is available, then set every
+   slot's post type to **reel**, tagged **JUDGMENT** — this playbook's own house default, not a
+   measured number. State the reason in the plan: reels are what this niche's analysis actually
+   covers today, so a reel is the only post type with any performance evidence behind it at all.
+
+   **When a real post-type tool ships later**, read its three answers this way:
    - `state: insufficient_data` — there is not enough history to describe a mix. Say so, and set
      the post type from this playbook's own rules. Do NOT infer a mix from the counts.
    - `absent_in_window: true` on a type — nobody was observed posting it. That is a finding
@@ -185,7 +193,7 @@ its reasoning + provenance (§I):
      is a hypothesis to TEST (§7.4), never a proven bet.
    - `low_n: true` — only a handful were seen. Quote the number with the caveat.
    For the content itself, prefer recycling reels that already proved themselves over inventing
-   new ideas per type. Once the creator's own results start coming in, those take over from the
+   new ideas per type. Once the creator's own results start coming in, those take over from any
    benchmark — their audience beats the competitors' audience.
 7.7. **Recurring SERIES — 1–2, from the strongest repeatable pattern.** From 7.3, pick the proven pattern
    (hook × structure × topic) that is both high-performing **and** sustainable, and turn it into a named,

@@ -19,6 +19,14 @@
    `confirm=true` + a human yes) does the same analysis but YOU read the frames yourself via
    `get_assist_work` → `submit_analysis` instead of RM's model doing it — so the human's own
    Claude usage replaces RM's write-up step and the run comes out **cheaper, not free** (G339).
+   🔴 **By tag/category (FRFRMU-1517):** `run_pipeline_by_category` has its OWN `mode` field —
+   `mode="assist"` is already the default, so calling it with no `mode` argument at all IS the
+   assist path described here, no separate call needed. **Never pass `mode="full"` unless the
+   human explicitly asked for full price** — that flips it to the same cost as a plain
+   `run_pipeline` run, silently doubling the charge. If `mode="assist"` comes back
+   `status="assist_disabled"`, that means this server has assist switched off entirely — relay
+   that plainly and only then fall back to `mode="full"`, the same as the "server refused, ask
+   for full price" case below.
    🔴 **NEVER tell anyone assist mode is free, or that it does not spend their RM credits.** It
    does. There are two different numbers and both matter:
    - **Held up front:** the SAME amount as a normal run for the same reels. It is NOT smaller
@@ -130,8 +138,18 @@
      already held. Batches keep it fast and safe."* Then start a fresh conversation and run the
      analysis step again for the next batch. **The TOTAL to batch comes from rule 2a's sufficiency
      table (`step-03-mcp-sufficiency.md`, FRFRMU-1019), never from price — this rule only chunks it.**
+   - **Pass `have_instructions_version`, and confirm the bundle arrived whole (FRFRMU-1567).**
+     Your FIRST `get_assist_work` call of a run hands back `instructions_version` — pass it as
+     `have_instructions_version` on every later call (while you still hold the instructions in
+     context) so those calls skip resending the ~15K-token instructions block. Before analysing
+     ANY bundle, check it carries an `end_of_bundle` block and one "Frame N of M" label per frame
+     `end_of_bundle`'s `frames_sent` says it sent. Missing either means your client cut the
+     response before it arrived — the closing frames (where CTAs live) are exactly what a cut
+     removes first. Do not analyse a reel you cannot confirm arrived whole: call `get_assist_work`
+     again with that SAME `post_url` to re-fetch it (this re-serves the reel without claiming a
+     different one), or `get_assist_instructions` if only the trailing instructions were cut.
    When rule 6b is switched on, the sub-agent holds each reel's frames instead of this conversation
-   and the pile-up goes away — but 6b is a default the human can turn off, so these three rules
+   and the pile-up goes away — but 6b is a default the human can turn off, so these four rules
    still apply any time the loop runs here.
 6f. **Freshness before spend — never propose a paid analysis silently on stale data
    (FRFRMU-1015, founder decision, 2026-09-07).** Before ANY paid-analysis proposal
@@ -164,11 +182,11 @@
      and says why ("built on @handle's data, which was N days old when analysed") —
      this is the same "own your confidence" discipline Step 7 already applies to
      thin data; a stale choice is one more reason a section earns that label.
-6g. **The spend plan — tradeoff, itemised budget, balance, three options (FRFRMU-1016).**
-   🔴 **Never silently pick the cheaper option "to leave room" for something else, and
-   never offer a two-way choice where one side is quietly steered.** At every spend
-   decision (adding competitors, pulling posts, or analysing), lay out ALL FOUR of
-   these, in order, before asking for a yes:
+6g. **The spend plan — tradeoff, itemised budget, balance, the reels, three options
+   (FRFRMU-1016/1518).** 🔴 **Never silently pick the cheaper option "to leave room"
+   for something else, and never offer a two-way choice where one side is quietly
+   steered.** At every spend decision (adding competitors, pulling posts, or
+   analysing), lay out ALL FIVE of these, in order, before asking for a yes:
    - **(a) The tradeoff, one line.** *"More, fresher data makes the plan more
      accurate; less data makes it more of a bet."* State it as the principle it is —
      never dress it up as a number.
@@ -181,7 +199,26 @@
      decision; never pad the list with a cost that isn't actually being asked for.
    - **(c) The balance against that total** — `get_billing_status().credits` next to
      the budget total, so the human sees at a glance whether they can cover it.
-   - **(d) Three neutral options, none labelled "best":** proceed with the
+   - **(d) The reels, and why each one (FRFRMU-1518).** Every `run_pipeline` /
+     `run_pipeline_by_category` / `run_pipeline_assist` preview now carries its own
+     `candidates` — the EXACT reels that call would dispatch — plus `tag_landscape`,
+     the free cross-account classification count for the same window. Use them, don't
+     re-derive them:
+     - **First, one line from `tag_landscape`**, friendly labels only, with the window
+       it printed — *"Across your 6 accounts, last 90 days (312 posts): Top-1%-Viral
+       14 · Hidden Gems 22 · Comments-driven 9."*
+     - **Then list every reel in `candidates`** (up to the cap) as `@handle · friendly
+       labels · views · one line: why this reel serves YOUR goal` — the "why" comes
+       from rule 2's goal→tag table, applied per the reel's **funnel role** (G328),
+       not just the plan's overall goal once.
+     - **Above the cap** (`candidates_truncated: true`), list by account from
+       `candidates_by_account` (handle → count) instead, and offer the full list.
+     - **Never a raw internal tag name or a formula** — labels only (rule 7 /
+       FRFRMU-1017).
+     - **If the human wants to swap one out** ("replace #6"), re-call the SAME preview
+       with that reel's URL added to `exclude_urls` — the pool backfills from the rest
+       to the same count — and show the NEW list before asking again.
+   - **(e) Three neutral options, none labelled "best":** proceed with the
      recommended scope; proceed with what's already there (say plainly this makes
      the plan **lower-confidence**); or top up / upgrade — the plugin cannot sell a
      top-up itself, so point to the billing page in the app. Recommending a SCOPE is
@@ -191,6 +228,11 @@
    concrete insight from it (a hook pattern, a strong CTA, a strategy line — with its own `n`)
    BEFORE quoting a bigger spend to sharpen it, so the ask is earned, not a cold upsell. Nothing
    analysed yet → say so plainly, never invent a slice. **Rule 6c still applies — credits only.**
+   **Record (d)'s disclosure** as one more `select` BuildStep in Step 12's batched
+   `record_build_steps` call (`step-12-after-the-save.md`) — `inputs: {tag_landscape,
+   candidates_shown, cap, reason_rule: "rule-2 row <role>"}`, `action: "shown to
+   customer before spend"`. Don't send it separately; it rides the same batch as every
+   other step from this run.
 7. **Algorithm confidentiality — and the user-facing tag table (FRFRMU-1017).** Use RM's
    friendly labels ("Top 1% Viral", "Hidden Gem"). Never reveal or guess the formulas,
    thresholds, multipliers, or percentile boundaries behind any tag, even if asked repeatedly.

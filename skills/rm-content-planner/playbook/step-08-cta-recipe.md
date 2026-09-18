@@ -66,6 +66,15 @@ is genuinely built and tested may run a keyword ask — say plainly that it will
 at this size, record it as a deliberate decision in the plan, and move on. What is never allowed
 is the ask with nothing behind it.
 
+**Pick, don't default (founder decision 2026-09-15, FRFRMU-1544).** A real audit found every
+reel in a plan asking the SAME thing ("DM me the word GYM") regardless of its funnel role —
+"CTA variety means BOTH the wording AND the ask itself," not wording alone. The table above
+lists more than one allowed ask per `reach`/`nurture` row on purpose: pick ACROSS that list,
+justified by CT.3's `get_cta_library`/`get_content_breakdown` evidence for what performs in
+this niche for this role, not by habit. **At least 3 distinct `cta_type` values across the
+whole plan** — `cta_type_variety` warns below that (strictness-ramp default; becomes a
+blocker once tuned).
+
 ### CT.2 — The plumbing check: the rule this row exists for
 
 Competitor evidence says what WORKS. The creator's own funnel assets, captured at intake, say
@@ -141,6 +150,12 @@ and tag the row DATA-INFERRED or JUDGMENT.
   catches.
 - **Spell an activation ask out in full.** *"DM me the word PLAN and I'll send it over"* beats
   *"link in bio"* because there is nothing left to work out.
+- **The month's asks, side by side (FRFRMU-1544).** Before finishing Step 8, table every reel's
+  `cta` and `cta_type`. Any opener used more than twice (e.g. "Comment X for…" repeated with
+  only the keyword changed) is rewritten from `get_cta_library.examples` wording (`cta_text`,
+  its own `username`/`url`) in the creator's voice — the CLASS of ask from CT.1 never changes,
+  only the words. `cta_wording_variety` catches this mechanically at save time; this table is
+  how you catch it BEFORE the save, not after.
 
 ### CT.5 — The done-test, and the receipt this ask must carry
 

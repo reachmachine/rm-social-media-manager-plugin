@@ -58,23 +58,23 @@ to tags.
 
 ### HT.2 — Read what the winners actually do with tags (free)
 
-Every reel the plan pulled carries its full caption in `content`, and **the hashtags are inside
-that caption text** — they are written at the end of it, so you can read them straight off the
-same list call the plan already made. No extra read, no credits.
+**Call `get_hashtag_norms` (FRFRMU-1551) — do not read captions by hand.** A real audit found a
+delivered plan with zero hashtags on all 8 reels; the manual read this bullet used to ask for is
+exactly the kind of step that quietly does not happen. One free call returns:
 
-From the winners in this slot's slice, read three things:
+- **`median_tag_count`** — the niche's own norm. This is descriptive: it is what these creators
+  do, not what they should do;
+- **`recurring`** — tags that recur across MULTIPLE accounts, already ranked spread-first (a tag
+  used forty times by one account is that account's signature, not the niche's norm — the tool
+  does this ranking for you);
+- **`thin`** — **true below 5 captions read (founder decision, 2026-09-15).** When `thin` is
+  true, do NOT present `median_tag_count`/`recurring` as a settled niche norm. Say the real count
+  out loud — *"no niche tag norm yet — read from 3 captions"* — and default to **3-4** relevant
+  tags instead of chasing the 3-6 range in HT.3 below.
 
-- **the median tag COUNT** — the niche's own norm. This is descriptive: it is what these
-  creators do, not what they should do;
-- **the tags that recur** across several winners in this pillar — those are the ones the niche
-  actually shares;
-- **where the ceiling is.** Our own caption preprocessor flags a caption as tag-spam when the
-  tags outnumber roughly **one for every three words of real caption body**. That ratio is a
-  CEILING, never a target.
-
-**Honest small numbers apply.** With four winners to read, say "four" and treat the count as
-directional. **Spread beats volume:** a tag used forty times by one account is that account's
-signature, not the niche's norm.
+**Where the spam ceiling is.** Our own caption preprocessor flags a caption as tag-spam when the
+tags outnumber roughly **one for every three words of real caption body**. That ratio is a
+CEILING, never a target.
 
 ### HT.3 — Build the set: 3 to 6 functional tags
 
@@ -104,13 +104,10 @@ Before the row is finished:
 - the keywords appear **naturally** in the caption, the on-screen text and the spoken script,
   and none of them broke the creator's voice;
 - the **series tag is the same on every reel of that series**;
-- **no reach promise appears anywhere** in the row or the plan's discovery section.
-
-### Noted for later — do NOT build it under this recipe
-
-A per-niche hashtag-norms reading (median tag counts and recurring-tag frequency, computed
-once per niche instead of read by hand each time) is buildable entirely on this free data. It is
-deliberately **on hold** until the manual read in HT.2 proves too slow at real library sizes.
-Written down here so nobody re-derives it and nobody builds it early.
+- **no reach promise appears anywhere** in the row or the plan's discovery section;
+- **write it into the reel's `discovery` field (FRFRMU-1551)**: `{keywords: [...], tags: [{tag,
+  role}, ...]}` — a tag/keyword set that lives only in the chat is a tag/keyword set the
+  dashboard cannot render and the customer never sees. This is the exact "zero hashtags on any
+  reel" bug a real audit found: the recipe ran, the output had nowhere to land.
 
 ---

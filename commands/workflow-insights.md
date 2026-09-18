@@ -33,7 +33,7 @@ performance / a specific account they want to look at.)
    - Strategy view → `get_content_strategy`
 3. **Read coverage before you write the answer** — insight tools only see
    analysed reels. If coverage is thin for what they asked, SAY SO and mark the
-   answer low-confidence; recommend `/rm-social-media-manager:workflow_analyze` to widen
+   answer low-confidence; recommend `/rm-social-media-manager:workflow-analyze` to widen
    it. Do not silently answer from a thin slice.
 4. **Hold every claim to the skill's rigor rules:** medians not means, sample
    sizes stated, provenance tagged (DATA-DRIVEN only with real n behind it —

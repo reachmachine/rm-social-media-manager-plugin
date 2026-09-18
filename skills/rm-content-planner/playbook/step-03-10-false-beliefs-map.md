@@ -85,6 +85,17 @@ strongest — nobody wants to be the one making one) **unless this niche's own `
 copywriter (`skills/rm-copywriter/belief-breaker.md`) reads `m_type` and the row to write the
 script; it never re-tags a row.
 
+**Core three first (FRFRMU-1530).** Before the `m_type` order above, the three rows named by
+`core_vehicle`/`core_internal`/`core_external` are the plan's FIRST belief-breaker candidates —
+the customer personally confirmed these three, and that confirmation is first-party truth
+(rigor rule §A), not a candidate to be outranked by an `m_type` tiebreak. When the plan needs more
+objection/myth-busting slots than there are core rows, the rest come from the remaining rows in
+`m_type` order, same as before. **Skipping a core row needs a stated reason in that reel's
+reasoning block** (e.g. "skipped `row_1`: covered last cycle, see topic ledger") — silence is not
+a reason. This is the only place this ordering is decided; a consumer file (`step-07-strategy.md`,
+`step-08-outline-recipe.md`, `step-08-join-recipe.md`) cites a row by `item_id`, it never keeps its
+own copy of this rule.
+
 ### What this step refuses to do
 
 Save a row with no source and no `inferred` flag · write a headline with "secret"/"steal"/a

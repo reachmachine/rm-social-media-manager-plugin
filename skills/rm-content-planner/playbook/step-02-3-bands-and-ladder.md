@@ -22,7 +22,9 @@ themselves** — never a number carried over from a different niche or a differe
 
 **B — The ceiling.** Take the follower count of the account at **rank 3** in that sorted list —
 not rank 1. Rank 1 is where a mis-identified celebrity, or a fluke mega-account that slipped
-past the FIT filter, lands and drags the whole judgment upward.
+past Step 2.2's screening (FRFRMU-1528/1536's real, structural `niche_fit_verdict` has not run
+yet at this point — it only computes once a candidate is actually added, at Step 2.4+), lands
+and drags the whole judgment upward.
 
 **C — The top edge.** Pick the LARGEST of these five settings that is **at or below** the
 ceiling from step B: **1,000 / 10,000 / 100,000 / 1,000,000 / 10,000,000.** Picking from five
@@ -93,10 +95,12 @@ these three it is — never merge them, never use one sentence for another's sit
 
 Step 2.1a already says the local sample is READ, not ADDED. **Make it enforceable:**
 local-tagged accounts (the `local` tag from Step 2.5) are counted and reported in the
-`benchmark_breadth` readout — never added to the pattern pool this step's FIT/band judgment
-draws from. If a local account also independently passes the FIT filter AND the derived band on
-its own genuine merits as a NICHE-WIDE candidate, it may be added — but never on the strength of
-being local. The readout says explicitly: "local accounts are market intelligence, not pattern
+`benchmark_breadth` readout — never added to the pattern pool this step's band judgment draws
+from. If a local account also independently reads as a genuine niche match under Step 2.2's
+screening AND the derived band on its own genuine merits as a NICHE-WIDE candidate, it may be
+added — but never on the strength of being local, and confirm the real verdict once it IS added
+(`niche_fit_verdict` on `add_to_watchlist`'s response, FRFRMU-1528/1536 — not decided here, only
+anticipated). The readout says explicitly: "local accounts are market intelligence, not pattern
 sources" whenever a local sample was read this run.
 
 ### FRFRMU-1285 — zero winners is a stop, not a line in a table

@@ -63,7 +63,15 @@ re-run).
 
 - **Inputs:** `plan_id` (`get_content_plans` / `get_draft_plan` /
   `get_calendar`), the Creator Brief (`get_creator_brief`), the skill bundle
-  rules (`get_skill_bundle`).
+  rules (`get_skill_bundle`), and `content_language`
+  (`get_business_profile`, FRFRMU-1575) — the language EVERY piece of copy
+  in this pass gets written in. This is the customer's OWN output language,
+  never a comparison to a competitor's (that check is separate and already
+  shipped, FRFRMU-1306/`account_language.py`) — do not confuse the two. A
+  null `content_language` should not happen once Step 1 intake requires it
+  (`step-01-intake-fields-2.md`); if it is still null on an older plan,
+  default to English, say so once in the handoff, and note the gap rather
+  than silently guessing.
 - **Refuse, with a visible warning, on a GENERIC plan** — a plan with no
   receipts (it failed its own gates). Never draft silent copy on top of it.
 - **Output per reel — the `copy_pack`:**
@@ -84,16 +92,25 @@ re-run).
   version; `creator_brief_reserved_keys.py` reserves only `topic_history`
   and `planning_progress`, so this key is free to use). **Do not invent a
   `save_copy_pack` MCP tool or a `copy_packs` collection — that is v2, a
-  separate ticket.**
+  separate ticket.** 🔴 **FRFRMU-1524:** `copy_pack__*` keys are NOT in
+  `get_creator_brief`'s default read anymore (they broke the tool response at
+  ~100K characters for an active customer). To check or revise a prior pack,
+  fetch it with `get_reel_profile` instead — it returns that one reel's
+  latest pack. Only pass `include_copy_packs=true` to `get_creator_brief` if
+  you specifically need to see the raw keys.
 - Every line in the pack carries a `pattern_ref` (the correlation-table row
   it used) and a `language_source` (the brief key or hook fact it came
   from). A line with neither is a cold draft and fails.
 
 ## Workflow — one pass per approved reel
 
-1. **Load & gate.** Load the plan + brief. Refuse (visibly) on a GENERIC
-   plan. Filter reels to `approval.status == "approved"`; skip the rest with
-   a one-line reason each.
+1. **Load & gate.** Load the plan + brief + `get_business_profile`'s
+   `content_language` (FRFRMU-1575 — read once per pass, not per reel).
+   Refuse (visibly) on a GENERIC plan. Filter reels to
+   `approval.status == "approved"`; skip the rest with a one-line reason
+   each. Write the whole pack — script, on-screen lines, caption, CTA, DM
+   script — in `content_language`, not whatever language the source
+   material (competitor captions, hook facts) happened to be in.
 2. **Read the receipt.** hook_subcategory, structure/beat order, CTA type,
    slot length, delivery mode — these are constraints, not suggestions.
 3. **Pick the framework row.** `correlation-table.md` lookup by
@@ -137,6 +154,10 @@ re-run).
 6. **Save.** Write the copy pack (storage above). Note `used_in` back onto
    the brief items it pulled from — this is a trace, never a rewrite of the
    plan.
+6b. **Disclaimer (FRFRMU-1525).** Print `plan_disclaimer.text` from
+   `get_creator_brief`'s response verbatim, once, at the end of what you hand
+   back — "these are suggestions, please review before you publish". A
+   standing notice, never a per-claim warning; it never blocks delivery.
 7. **Learning loop.** When a test-loop cycle closes (`step-08-hook-recipe.md`
    H.6), write the cycle's `hook_history` ledger entries per
    `${CLAUDE_SKILL_DIR}/hook-variants.md` §E (FRFRMU-1060, shipped) — one

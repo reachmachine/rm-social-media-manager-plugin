@@ -67,13 +67,22 @@ topic_history = [
     "series": "<the series name, or leave it out>",
     "tier": "won" | "held" | "flopped" | "unknown",
     "source": "analysed" | "customer_reported" | "",
-    "checked_at": "<ISO date — set only by §5.1f, when no verdict could be read>" },
+    "checked_at": "<ISO date — set only by §5.1f, when no verdict could be read>",
+    "plan_id": "<the submit_content_plan reply's plan_id — written at save time>",
+    "state": "planned" | "posted" | "archived" },
   … newest first, one entry per TOPIC — never grouped under a cycle
 ]
 ```
 
 `tier` uses only the four words from §5.1c's table below. The server enforces this shape on write
 (`update_creator_brief`, FRFRMU-982) — a malformed value is rejected, naming what was expected.
+
+**`plan_id` and `state` (FRFRMU-1530) — server-maintained, read-only from here.** Step 12 writes
+`plan_id` and `state: "planned"` when it saves an entry; the server changes `state` on its own
+from there — to `"posted"` once a real verdict or a confirmed post link happens, to `"archived"`
+if the plan is archived before that ever happens — you never write `state` yourself except that
+first `"planned"` value. **A missing `state` on an older entry reads as `"planned"`** — this
+shape existed before `state` did, and every entry from before this ticket has none.
 
 **`source` and `checked_at` start blank and stay blank until §5.1f fills them in.** A topic is
 only ever measured once its cycle has had time to show a result — never at the moment it is first
@@ -94,14 +103,23 @@ plan, which is exactly why the ledger and the question exist. Do not claim to ha
 
 ### 5.1b — What the cooldown does
 
-A topic on the cooldown list is **excluded from this cycle's shortlist**, with two exceptions:
+A topic on the cooldown list is **excluded from this cycle's shortlist**, with three exceptions:
 
+- **Its `state` is `"archived"` (FRFRMU-1530).** An archived entry **never blocks, full stop** —
+  the plan that carried it was archived before anything in it was posted, so nobody's audience
+  ever saw the topic. This is not a "bring it back on purpose" case like the two below; it is not
+  on cooldown at all. Say so in one line if a topic-heat pick happens to match one: *"this also
+  appeared in a plan you archived; it was never posted, so it's fair game."* Silence about an
+  archived-plan topic means it is simply fresh — the ledger is a block-list, never an idea source,
+  so reusing an archived plan's ideas on purpose only happens if the creator explicitly asks for
+  it.
 - **It is a named series.** Deliberate repetition is the whole point of a series, so a series topic
   is never on cooldown. Say which series it belongs to.
 - **It performed well for the creator.** Then it comes back **on purpose**, written into the plan as
   a decision — *"we are bringing back the pricing teardown because your version did about three
   times your typical views"* — never as an unnoticed repeat. A returning winner with no sentence
-  explaining why it returned is a failure of this rule, not a pass.
+  explaining why it returned is a failure of this rule, not a pass. This applies only to `state:
+  "posted"` entries — a real result exists to point at. A `"planned"` entry has no result yet.
 
 ### 5.1c — How long the cooldown lasts: two dials, a floor and a ceiling
 

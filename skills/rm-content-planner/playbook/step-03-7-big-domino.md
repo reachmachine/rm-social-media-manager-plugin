@@ -62,7 +62,7 @@ Creator Brief key `big_domino`, Foundation-card shape (FRFRMU-1042):
 ```
 {
   "card": "big_domino", "title": "The Big Domino",
-  "status": "hypothesis",   # or "confirmed" once the creator/data picks one
+  "status": "hypothesis",
   "summary": "<the headline, or 'no candidate passed the validity test yet'>",
   "items": [
     {"item_id": "candidate_1_statement", "label": "Candidate 1 — statement",

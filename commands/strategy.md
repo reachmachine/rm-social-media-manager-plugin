@@ -19,7 +19,7 @@ Focus: $ARGUMENTS
    splits by niche/category.
 4. **This shows what the DATA says, not a plan.** A real plan needs the business context —
    stage, positioning, funnel assets, goal. If the user wants the plan itself, point them at
-   `/rm-social-media-manager:workflow_plan`, which runs the full method including intake.
+   `/rm-social-media-manager:workflow-plan`, which runs the full method including intake.
 5. Apply the skill's PLAYBOOK rigor rules (Step 3, Step 7) and its stage-translation rule
    (Step 4) — load ONLY `playbook/step-03-mcp.md`, `playbook/step-07-strategy.md` and
    `playbook/step-04-stage.md`, never the whole method: tactics that travel for a big account often backfire for a small one. Label

@@ -1,0 +1,34 @@
+{
+  "slot_schedule_keys": [
+    "date",
+    "time",
+    "timezone",
+    "pillar",
+    "series",
+    "moment_tie"
+  ],
+  "plan_schedule_keys": [
+    "pillars",
+    "series",
+    "anchors"
+  ],
+  "slot_content_keys": [
+    "caption",
+    "hashtags",
+    "reasoning",
+    "needs_disclaimer"
+  ],
+  "plan_meta_doc_keys": [
+    "plan_month"
+  ],
+  "plan_meta_input_keys": [
+    "goal",
+    "positioning",
+    "stage"
+  ],
+  "dropped_on_purpose": {
+    "reel_uid": "server-added id for the copywriter hand-off, not plan content the creator wrote.",
+    "pending_edits": "server-added draft-edit queue, not the saved plan's own content.",
+    "superseded_by": "server-added pointer to a newer plan version, not this plan's content."
+  }
+}

@@ -116,7 +116,10 @@ The first draft is **not** the deliverable. Before you hand over the plan:
    **The critic re-runs the same eight gates, so fold its findings back into the SAME `rules_gate`
    object from 1b** — update the affected entries and bump `rounds`; never keep a second, separate
    list.
-3. **Apply every valid recommendation** and re-draft.
+3. **Apply every valid recommendation** and re-draft. **A critic edit that changes a reel's
+   `provenance` tag must recount `receipts_summary.provenance_split` in this same step, not
+   later** (`rigor-rules.md` §I, FRFRMU-1318) — a downgraded tag with a stale split is exactly
+   what `provenance_split_honest` blocks at save time.
 4. **Repeat** until the gate is fully clean and the critic has no material objections left —
    **but cap the loop at 3 rounds.** If a real objection still stands after 3 rounds (the critic
    and the fix keep disagreeing, or a fix isn't possible with the data on hand), **stop looping.**

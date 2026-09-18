@@ -92,8 +92,16 @@ silently skipped:**
    niche-wide, not your tracked set."* A pattern sourced from this scope is real DATA
    (an analysed reel), from a DIFFERENT pool than the creator's own competitors — the
    receipt must say which scope it came from (§G honest labels), never blur the two.
-3. **Adjacent audience slice** (§F) — only after step 2 is also thin.
-4. **Judgment** — the true last resort, only when steps 1-3 are all genuinely exhausted,
+3. **Still thin after BOTH scopes above → file a data request (FRFRMU-1545).** Call
+   `get_data_request_status` for the workspace niche first (a second ask never files a
+   duplicate job), then `request_niche_data` if nothing is open yet. This is free — Reach
+   Machine collects more on its own credits, usually within `sla_business_days` — and it
+   never pauses the plan: keep widening (step 4 below) and building on what already exists,
+   labelled honestly, while the request sits in the queue. Tell the creator plainly, once:
+   "I've asked Reach Machine to collect more data for your niche — that's on us, not your
+   credits. Check back in about `sla_business_days` for a stronger version of this part."
+4. **Adjacent audience slice** (§F) — only after step 2 is also thin.
+5. **Judgment** — the true last resort, only when steps 1-4 are all genuinely exhausted,
    and even then grounded per `rigor-rules.md` §J (FRFRMU-1024).
 
 **Honest limit on step 2, today (verified in code, 2026-09-07):** `scope='niche'` reads

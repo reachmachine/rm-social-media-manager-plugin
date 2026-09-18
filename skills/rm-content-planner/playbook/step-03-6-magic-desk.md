@@ -67,9 +67,43 @@ option with no research citation · quote a poll result as customer language.
 
 ### Save it
 
-Write the result to the Creator Brief as the Foundation card key `magic_desk` (FRFRMU-1042
-shape): the 17 answers + tags, the extracted lines, the emotional greed line, and the drafted
-question batch.
+Write the result to the Creator Brief as the Foundation card key `magic_desk`, Foundation-card
+shape (FRFRMU-1042) — the same envelope `avatar`/`prospect_research`/`big_domino` use. **Every
+item still needs `who` (`you`/`agent`) and `provenance` (one of `DATA-DRIVEN`, `DATA-INFERRED`,
+`JUDGMENT`, `FROM-EXPERT`) — the audit pass's own `grounded`/`inferred` tags (step 3 above) are
+NOT the same vocabulary and do not replace them.** Map audit tags onto provenance like this: a
+`grounded` answer (cites a real `prospect_research`/`avatar` source) is `DATA-INFERRED` — a
+judgment extrapolated from real data — with that citation kept in `source`; an `inferred`
+(uncited) answer is plain `JUDGMENT`:
+
+```
+{
+  "card": "magic_desk", "title": "The magic desk interview",
+  "status": "confirmed",
+  "summary": "<the intention line + the emotional greed line, or its honest absence>",
+  "items": [
+    {"item_id": "q01_scares_you", "label": "Q1 — what scares you most right now",
+     "text": "<in-character, first person>", "who": "agent", "provenance": "DATA-INFERRED",
+     "tag": "grounded", "source": "prospect_research:fear_01"},
+    {"item_id": "q02_what_it_would_mean", "label": "Q2 — if it happened, what would it mean",
+     "text": "<in-character, first person>", "who": "agent", "provenance": "JUDGMENT",
+     "tag": "inferred"},
+    "... one item per question, q03 through q17, same shape as q01/q02 above ...",
+    {"item_id": "extracted_line_01", "label": "Extracted headline/hook/story seed",
+     "text": "<usable line, cites the source item_id>", "who": "agent", "provenance": "JUDGMENT"},
+    {"item_id": "emotional_greed", "label": "The emotional greed",
+     "text": "<the want they're afraid to admit, or an honest 'not surfaced this pass'>",
+     "who": "agent", "provenance": "JUDGMENT"},
+    {"item_id": "question_batch", "label": "Drafted audience-ask batch (Tier 1/Tier 2)",
+     "text": "<the drafted questions/polls, or 'not applicable — no audience yet'>",
+     "who": "agent", "provenance": "JUDGMENT"}
+  ],
+  "updated_at": "<ISO date>"
+}
+```
+
+An untagged answer (step 3's own rule) is also an incomplete item here — `tag` is required on
+every `q0N_*` item, same as `who`/`provenance`.
 
 ## Wire into
 

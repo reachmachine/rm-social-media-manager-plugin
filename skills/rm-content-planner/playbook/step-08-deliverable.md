@@ -75,7 +75,8 @@
    entries, do not draft a reel that repeats a clustered `reason_code` unchanged — that is
    the whole point of reading it before matching patterns.
 
-3. **The calendar** — per reel: format · intent · topic/niche · angle · **pillar** ·
+3. **A `format`/`structure` value must be a `get_taxonomy_definitions` value, never an invented label (FRFRMU-1551, `TEMPLATE.md` D7)** — build the D7 glossary from that tool's own text, verbatim, plus one real example link.
+   **The calendar** — per reel: format · intent · topic/niche · angle · **pillar** ·
    **series** (which recurring series, if any) · **moment-tie** (building toward a Step-7.8
    launch/seasonal moment?) · **funnel role** · audience · emotion · hook **template** · full **4-layer
    hook** (spoken / on-screen / visual / sound) · **retention line** ·
@@ -201,12 +202,14 @@
    never reach** — nobody outside Instagram's own analytics can measure what a hashtag
    contributed, so a plan never claims tags will get the creator discovered.
 7. **Section 04.5 — Distribution: posting time + trending audio.**
-   `get_content_breakdown`'s `day_of_week` / `hour_of_day` dimensions give real
-   medians — use them, but only as a **soft tie-breaker, tagged data-inferred**,
-   never a hard rule, because of two honest caveats you must state to the user:
-   (1) the times are in **UTC**, not localized to the audience's own timezone,
-   and (2) weekday differences in the data are often flat, so don't oversell a
-   small gap. **Sound is now its own recipe — load
+   `distribution.posting_time` is a REQUIRED structured field (§K, `TEMPLATE.md`
+   D2) — call `get_posting_time_performance` and record the honest `status`:
+   `checked_signal` (a usable slot exists — **soft tie-breaker, data-inferred**,
+   never a hard rule), `checked_no_signal` (called it, nothing usable — say so),
+   or `not_checked` (skipped — never claim a finding). Use the tool's own
+   `timezone` field for the caveat: the workspace owner's own zone (FRFRMU-922),
+   UTC only when none is set; weekday gaps are often flat, so don't oversell one.
+   **Sound is now its own recipe — load
    `playbook/step-08-audio-recipe.md`** when you fill in a slot's sound. Two reads exist that
    did not before: `get_trending_audio` bands the sounds RISING across the accounts we track,
    and `get_recurring_audio` shows what this workspace's own analysed reels keep coming back
@@ -287,6 +290,7 @@
       can be copied or clicked.
     - **One short sentence on what is inside it**, e.g. *"your full month — strategy,
       calendar, hooks and receipts."*
+    - **One short sentence on what happens next (FRFRMU-1548).** *"This is the outline and strategy — when you've reviewed the whole plan and you're happy with it, say 'write the copy for this plan' and I'll script it."* Never assume approval on silence.
     - **Then try to open it in their default browser** (`start` / `open` / `xdg-open`, or
       `mcp__playwright__browser_navigate` with a `file://` URL). **If it will not open, say
       "open this file in your browser" and carry on.** Never fail the delivery over the

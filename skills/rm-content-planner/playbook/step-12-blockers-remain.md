@@ -37,10 +37,12 @@ with problems can be saved so it can be QA'd. **What is not fine is describing i
    what a person skims first.
 
 4. **After the save, read the reply's `honesty` block back to the creator.** The reply carries
-   `honesty = {clean, blockers, gate_trace, headline, qa_report_id}`. If `clean` is `false`, you
-   may not summarise the save as "Saved" — say what `headline` says. Read `headline` and
-   `effective_passed`, never `passed`: `passed` is only what you claimed, `effective_passed` is
-   what survived the automatic checks.
+   `honesty = {clean, blockers, gate_trace, headline, qa_report_id}`, plus `data_request` when
+   the niche's data was too thin (FRFRMU-1545, not null-checked by this rule — see
+   `step-12-capture.md` step 3 for that one, since it fires on every save, not only here). If
+   `clean` is `false`, you may not summarise the save as "Saved" — say what `headline` says. Read
+   `headline` and `effective_passed`, never `passed`: `passed` is only what you claimed,
+   `effective_passed` is what survived the automatic checks.
 
 5. **If a validator message makes no sense to you, `report_gap` it.** A message you cannot act on
    is our bug, not your failure — for example *"needs n≥5 and a median; got n=45, median=29464"*,

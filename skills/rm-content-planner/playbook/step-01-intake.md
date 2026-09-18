@@ -13,7 +13,8 @@ creator a single business question, in one short message, not three separate int
 1. **Reach Machine MCP — a real check, not an assumption.** Call `list_workspaces` (it is free
    and read-only). If it errors, times out, or the connection clearly isn't there, **STOP** and say
    plainly: *"I can't reach Reach Machine right now — please connect it in your Claude settings,
-   then let's try again."* Do not improvise a plan from memory instead of real data.
+   then let's try again."* Do not improvise a plan from memory instead of real data. Also relay
+   its `disclosure` line word for word, once (FRFRMU-1514) — "switch" hands off to switch-workspace only.
 2. **Automatic account discovery — say the honest state up front, not deep in Step 2.** RM now
    has a `discover_accounts` tool, but it only returns accounts RM has **already collected data
    for** — it does not search Instagram (Step 2 covers this in full). Tell the creator once,
@@ -102,14 +103,14 @@ Then five rules govern the conversation itself (G100):
      tools that already produced them.** When `get_draft_plan` returns `found: false` (expired,
      never written, or already superseded by a real save), say so honestly and resume from
      `last_completed_step` alone, same as before FRFRMU-980.
-   - **"Stale" is not a feeling — `get_creator_brief` tells you.** Each returned field
-     carries a `stale` flag (G229): true when it's older than 30 days. For `goal` and
-     `offer` specifically, if `stale` is true, **always re-confirm in one line** before
-     building on it — e.g. "Last time your goal was reach — is that still right, or has
-     it shifted?" Other stale fields are a judgment call (re-ask if it plausibly changed,
-     skip if it's the kind of thing that doesn't — e.g. their origin story). Never
-     silently build a new plan on a `goal` or `offer` value the skill knows is 30+ days
-     old without asking.
+   - **Always read back goal, offer and capacity together — one line, one yes/no —
+     before building on them, staleness or not (FRFRMU-1516).** `stale` (G229, 30
+     days) only changes the WORDING — e.g. "On file: goal = reach, capacity = 2
+     reels/week, offer = 5-day $25 intro — still true, or changed?" (stale adds
+     "...over a month old"). Never three separate questions. Changed → save it at
+     once and CONTINUE from here, never restart intake. No brief yet → nothing to
+     reconfirm. Other stale fields stay a judgment call.
+   - **Self-account data — read it EVERY run, not only when the account is first added (FRFRMU-1534).** A returning session where the self account was tracked last time is NOT exempt from Step 1.6's free-before-paid `get_profile_details` read — run it again THIS session before any "no data from your account" claim.
 2. **Ask CONVERSATIONALLY — 1–2 questions at a time**, building on each answer. Never
    dump the whole list at once. React like an expert ("got it — so your edge is X…").
    **Be token-sensitive and plain (G237) — write every message as if the person reading it has
@@ -225,7 +226,7 @@ Then five rules govern the conversation itself (G100):
    tries — rule 7), **derived** (you inferred or recommended it and the human accepted/didn't push
    back), or **missing** (never answered): audience, problems, ownable_angle, bold_stance, proof,
    stage, funnel_assets, goal, capacity, production_capability, niche/seeds, offer, constraints,
-   brand_voice, upcoming_moments, past_attempts, audience_questions, plan_size, personal_story.
+   brand_voice, upcoming_moments, past_attempts, audience_questions, plan_size, personal_story, content_language.
    Compute `score = 100 * confirmed_count / total_fields` (round to the nearest integer — a weak
    answer does NOT count as confirmed) and write it into
    `inputs.business_context.intake_completeness = {confirmed: [<field names>], weak: [<field

@@ -16,7 +16,7 @@ What the user wants analysed: $ARGUMENTS
 **Send `get_workspace_stats`, `search_watchlist` and `get_analysis_coverage` in
 ONE message — they do not depend on each other.** One round-trip, not three, and
 nothing here spends anything. If the watchlist is empty, there is nothing to
-analyse — say so and route to `/rm-social-media-manager:workflow_research` to add
+analyse — say so and route to `/rm-social-media-manager:workflow-research` to add
 competitors first.
 
 ## How to run it
@@ -36,7 +36,10 @@ competitors first.
    FINAL charge is about half the credits of a normal run — a discount, not
    free (G339). The amount held up front is the same either way, and it uses
    their Claude usage and more time. Only fall back to RM's full-price
-   `run_pipeline` if the human explicitly asks for it.
+   `run_pipeline` if the human explicitly asks for it. 🔴 By tag/category
+   (FRFRMU-1517): `run_pipeline_by_category`'s `mode` field already defaults to
+   `"assist"` — leave it unset for this same assist path; only pass
+   `mode="full"` when the human explicitly asked for full price.
 4. **Pin the reel analysis itself to a Sonnet sub-agent (rule 6b)** — a default,
    not a lock. **And keep the assist loop small (rule 6e):** one reel at a time —
    fetch, analyse, `submit_analysis`, then write ONE short line about that reel and
@@ -44,6 +47,14 @@ competitors first.
    about **8 reels per batch, not 25**; each reel drops 8 keyframe images into this
    chat and they never leave, so a long batch can run out of room after the credits
    are already held.
+   - **Pass `have_instructions_version` from your SECOND `get_assist_work` call
+     onward** (FRFRMU-1567) — the first call gives you the token, later calls
+     skip resending ~15K tokens of instructions. Before analysing ANY bundle,
+     confirm it carries an `end_of_bundle` block and one "Frame N of M" label
+     per frame `end_of_bundle` reports as sent. Missing either means your
+     client cut the response — re-request the SAME reel (`get_assist_work`
+     with that `post_url`) before writing anything; do not analyse a reel you
+     cannot confirm arrived whole.
 5. **Confirm-before-spend is a HUMAN gate:** every spend tool call shows its
    un-confirmed cost preview and WAITS for an explicit yes before `confirm=true`.
    This applies to assist mode's dispatch too. State every preview in credits —
@@ -74,5 +85,5 @@ competitors first.
 hold; Apify bills the user's own Apify account, which Reach Machine cannot see or cap.
 Finding new accounts is `/rm-social-media-manager:find-competitors`.
 
-When the run finishes, point the user at `/rm-social-media-manager:workflow_insights` to
+When the run finishes, point the user at `/rm-social-media-manager:workflow-insights` to
 read what the new analysis shows.
