@@ -29,6 +29,15 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/apify-input-shape-guard.sh"
           }
         ]
+      },
+      {
+        "matcher": "mcp__.*__(run_pipeline|run_pipeline_assist|run_pipeline_by_category|pull_data|add_to_watchlist|remove_competitor)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/spend-needs-human-yes.sh"
+          }
+        ]
       }
     ],
     "SubagentStop": [

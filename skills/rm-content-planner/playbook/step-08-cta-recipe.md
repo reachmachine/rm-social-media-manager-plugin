@@ -150,6 +150,11 @@ and tag the row DATA-INFERRED or JUDGMENT.
   catches.
 - **Spell an activation ask out in full.** *"DM me the word PLAN and I'll send it over"* beats
   *"link in bio"* because there is nothing left to work out.
+- **Two fields, two jobs — never merge them.** `cta` is the ask in the creator's own words, written as
+  a plain string (`"Comment PLAN and I'll send it over"`). `cta_type` is the class of ask, one of
+  `get_cta_library`'s 11 values. Never write `cta` as an object like `{type, text}` — one skill
+  version did (FRFRMU-1549) and the reel showed "no CTA" to the customer. `cta_has_words` warns at
+  save time when the words are missing.
 - **The month's asks, side by side (FRFRMU-1544).** Before finishing Step 8, table every reel's
   `cta` and `cta_type`. Any opener used more than twice (e.g. "Comment X for…" repeated with
   only the keyword changed) is rewritten from `get_cta_library.examples` wording (`cta_text`,

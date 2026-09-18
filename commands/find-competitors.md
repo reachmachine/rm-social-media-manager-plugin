@@ -24,9 +24,12 @@ Without them you research the wrong market. If the niche is missing, stop and ro
    order: call `request_niche_data` now (free, company-funded, no spend gate — see `next_steps`
    in the reply) and tell the user it is already filed, **THEN** move to step 2 below as a way
    to get something today.
-2. **Then Apify, for the live Instagram search** — keyword search (`instagram-search-scraper`)
-   to find handles, then `instagram-profile-scraper` to screen each one (PLAYBOOK Step 2.2,
-   `playbook/step-02-2-discovery.md`). Name these tools **bare** — the prefix differs on a
+2. **Then Apify, for the live Instagram search — on EVERY term in `search_terms_used`, not
+   just the customer's one word (FRFRMU-1576).** `discover_accounts` already expanded the niche
+   into 8-15 related terms; keyword search (`instagram-search-scraper`) on all of them, union +
+   dedupe the handles, then `instagram-profile-scraper` to screen each UNIQUE handle exactly
+   once (PLAYBOOK Step 2.2, `playbook/step-02-2-discovery.md` — the cost-control steps are
+   there). Name these tools **bare** — the prefix differs on a
    customer install, so a hardcoded one points at nothing — **and put their input at the ROOT
    of the call, as an object, never inside Reach Machine's `args` box and never as a JSON
    string.** 🔴 **Apify never scrapes a reel or a post here, for any reason (FRFRMU-1315)** —

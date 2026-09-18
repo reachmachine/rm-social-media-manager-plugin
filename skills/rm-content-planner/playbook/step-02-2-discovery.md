@@ -139,7 +139,21 @@ to "just find who posted it".
 - **D · Similar / related accounts** — Instagram's own "related profiles" off each strong seed.
   🔴 **NOT covered by the bundled Apify tools.** Say so if you skip it; do not fake it by
   guessing which accounts are "related".
-- **E · Keyword search** — the niche terms → more accounts + hashtags.
+- **E · Keyword search — run EVERY term in `search_terms_used`, screen each unique handle
+  ONCE (FRFRMU-1576).** `discover_accounts` already expanded the customer's one word into
+  8-15 related terms (`search_terms_used` on its reply, or `next_steps.live_search.search_terms`
+  on an empty result) — "fitness" also became "personal training", "strength coaching", etc.
+  Use that SAME set here, not just the original word:
+  1. **Search is near-free; screening is what costs.** Run `instagram-search-scraper` once per
+     term, collecting HANDLES ONLY — do not screen as you go.
+  2. **Union the handles across every term, then dedupe.** The same strong account often
+     surfaces under several terms.
+  3. **Screen each UNIQUE handle exactly once** (`instagram-profile-scraper`, Stage 1 above) —
+     never re-screen a handle that already came up under an earlier term. This is real money on
+     the customer's own Apify account; a repeat screen is a repeat charge for nothing new.
+  4. **Tell the customer the reason, honestly**: an account found under more terms is stronger
+     evidence of fit — *"found under 6 of the 12 terms we searched"* is a concrete justification,
+     not a guess.
   → `instagram-search-scraper`
 - **F · Trending-audio page** *(optional)* — accounts riding a niche's trending audio now.
   🔴 **NOT covered by the bundled Apify tools.** Same rule as D — skip it and say so.

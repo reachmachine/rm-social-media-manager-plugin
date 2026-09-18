@@ -112,6 +112,7 @@ The books teach great STRUCTURE but often in a hype VOICE. Keep the structure, f
       Thin reach on top of working plumbing is a **caution, not a bar**: it usually gets few
       responses and can cost reach, but it is the creator's call to make. *(funnel)*
 - [ ] **CTA variety = wording AND the ask itself** (2026-09-15, FRFRMU-1544): >= 3 distinct `cta_type`s per plan (`cta_type_variety`, `cta_wording_variety`).
+- [ ] **Every CTA carries readable words** (FRFRMU-1549): an object-shaped `cta` holding no text reads as present to code but says nothing to the customer; only a `no_cta` row may have none. (`cta_has_words`)
 - [ ] The plan moves rented reach toward **owned traffic** (followers → email/DM list) over time.
       *(funnel Secret #5, traffic Secret #5)*
 - [ ] The month maps to a **value ladder** with ONE conversion action worked backwards. *(funnel Secret #2)*
