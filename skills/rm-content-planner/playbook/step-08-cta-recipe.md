@@ -77,6 +77,12 @@ blocker once tuned).
 
 ### CT.2 — The plumbing check: the rule this row exists for
 
+**First-plan mode (FRFRMU-1602): ask `funnel_assets` here, before choosing this slot's ask.**
+Only relevant when `step-01-first-plan-core.md` deferred it. One line, no bar: *"Do you already
+have a lead magnet and a DM automation, built AND tested?"* This decides whether a
+`comment_keyword` ask is even allowed below — a "not sure" defaults to "probably not yet"
+(`question-help.json`'s `funnel_assets` entry, `shape: "fact"`), saved `derived` until confirmed.
+
 Competitor evidence says what WORKS. The creator's own funnel assets, captured at intake, say
 what can actually be FULFILLED. The second one wins every time.
 

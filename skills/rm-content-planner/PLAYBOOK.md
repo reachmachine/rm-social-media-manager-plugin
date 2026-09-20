@@ -10,18 +10,18 @@
 >
 > **Plain English.** RM tells you *what already goes viral for established
 > creators.* It does **not** tell you *what THIS account, at ITS size, in THEIR
-> voice, should post.* This playbook is everything you add on top of RM so the
+> voice, should post.* This playbook is what you add on top of RM so the
 > plan is real, not a pile of copied reels.
 
 ---
 
 ## The one principle
 
-**RM data is an ingredient, not the recipe.** Every RM number describes creators
-who already have reach. Before it becomes a plan you must translate it for (1) the
-account's **stage**, (2) the creator's **own identity/proof**, and (3) the SMM
-fundamentals RM was never built to give (profile, retention, cadence, measurement,
-community). Skip the translation and you ship confident-looking mimicry.
+**RM data is an ingredient, not the recipe.** Every RM number describes creators who
+already have reach. Before it becomes a plan you must translate it for (1) the account's
+**stage**, (2) the creator's **own identity/proof**, and (3) the SMM fundamentals RM was
+never built to give (profile, retention, cadence, measurement, community). Skip the
+translation and you ship confident mimicry.
 
 ---
 
@@ -33,14 +33,14 @@ and one that only *looks* data-informed. Each step below names the §s it must o
 
 - **§A Reel Bet** — every reel = Proven Pattern × First-Party Topic × Audience Tension (never novel × novel).
 - **§B Confidence** — read the **median, not the mean**; label High / Medium / "a bet"; below n ≈ 5 it can never be data-driven.
-- **§C Cross-tabs** — pick winning **combinations** (`group_by`), not single levers read in isolation.
+- **§C Cross-tabs** — pick winning **combinations** (`group_by`), not single levers.
 - **§D Goal-conditioned** — rank levers/topics by the metric that matches the goal (reach vs leads vs authority).
-- **§E Niche** — the data's topics are the candidate set; weight by median, not competitor share; mine the creator's OWN comments/DMs too.
+- **§E Niche** — the data's topics are candidates; weight by median, not competitor share; mine the creator's OWN comments/DMs too.
 - **§F Audience** — model hook/structure/CTA/topic for the creator's ONE target segment, with the sample-size guard.
 - **§G Honest labels** — show the real data niche AND the reframed idea; never dress one up as the other.
 - **§H Experiment** — every reel gets a hypothesis + a **stage-appropriate** kill/scale rule.
-- **§I Provenance** — tag every choice DATA-DRIVEN / DATA-INFERRED / JUDGMENT by the operational rule; the `validate_content_plan` code check (G118) now enforces the countable half.
-- **§J Data first, judgment last** — thin slice → analyse more relevant reels (own, then community/niche) → only then judgment; a judgment reel still names what grounds it.
+- **§I Provenance** — tag every choice DATA-DRIVEN / DATA-INFERRED / JUDGMENT by the operational rule; the `validate_content_plan` check (G118) enforces the countable half.
+- **§J Data first, judgment last** — thin slice → analyse more relevant reels (own, then community/niche) → only then judgment; a judgment reel names what grounds it.
 - **§K Claim names its call** — "checked X" names the tool that ran, or the honest sentence is "not checked" (FRFRMU-1539).
 
 **When the data is thin or degraded**, do not fake confidence and
@@ -92,21 +92,19 @@ mechanics (who sets what, and why): `step-12-capture.md`, `step-12-after-the-sav
 `step-01-intake.md`.
 
 This is a full overwrite of the `planning_progress` key each time (matches how `update_creator_brief`
-already treats existing keys — updated, not merged field-by-field), so it always reflects the
-LATEST completed step, not a growing log. Keep the `summary` short — it exists to remind a human,
-not to re-derive the plan from.
+treats existing keys — updated, not merged), so it always reflects the LATEST completed step, not
+a growing log. Keep `summary` short — it exists to remind a human, not to re-derive the plan from.
 
-Skip this on a **headless** run (`runner.py`) — nobody is coming back to resume a run nobody is
-watching; do not spend the extra tool call there. See Step 1's resume check below for the human-run
-side of this.
+Skip this on a **headless** run (`runner.py`) — nobody is coming back to resume it; do not spend
+the extra tool call there. See Step 1's resume check below for the human-run side of this.
 
 ## Review gates — the two places the method STOPS for the human (FRFRMU-879)
 
 **The agent is not a dictator.** Every output here is a judgement, and the human must get the
-chance to catch a wrong one while catching it is cheap. But a pause on every micro-step makes
-the user stop reading — so the method stops at exactly TWO gates, where a wrong answer is
-expensive, and flows through the cheap mechanical steps. Each gate is marked `🛑 REVIEW GATE`
-in its step file; the guard test (`backend/tests/unit/test_smm_review_gates.py`) pins both.
+chance to catch a wrong one while it's cheap. But a pause on every micro-step makes the user
+stop reading — so the method stops at exactly TWO gates, where a wrong answer is expensive, and
+flows through the cheap steps. Each gate is marked `🛑 REVIEW GATE` in its step file; the guard
+test (`backend/tests/unit/test_smm_review_gates.py`) pins both.
 
 | Gate | Where | Why it earns a pause | Still needed? |
 |---|---|---|---|
@@ -132,17 +130,18 @@ answer — and never reach Gate B (Step 12 is unreachable headless, G208).
 
 The method is split into small files in the `playbook/` folder next to this one. **Load only the
 file for the step you are on — never every file "just in case."** Reading the whole method costs
-the creator a large slice of their own Claude usage before a single number comes back, re-sent on
-every later turn. **This table IS the complete manifest — every step and sub-step, in true run
-order, with what each needs done first (`Requires`) — replacing the old spine and file table,
-which used to disagree (FRFRMU-1311).**
+the creator a large slice of their own Claude usage before a single number comes back. **This
+table IS the complete manifest — every step and sub-step, in true run order, with what each
+needs done first (`Requires`) — replacing the old spine and file table, which used to disagree
+(FRFRMU-1311).**
 
 | Step | File to load | What it covers | Requires |
 |---|---|---|---|
 | 1 | `playbook/step-01-intake.md` | The intake conversation | — |
 | 1 | `playbook/step-01-intake-fields.md` | The fields the intake must end up with | 1 |
 | 1 | `playbook/step-01-intake-fields-2.md` | Rest of the intake fields | 1 |
-| 1.1 | `playbook/step-01-1-website-dossier.md` | Crawl the customer's website against a checklist, and store it (G234, FRFRMU-1149) | 1 |
+| 1 | `playbook/step-01-first-plan-core.md` | First-plan mode (FRFRMU-1602) | 1 |
+| 1.1 | `playbook/step-01-1-website-dossier.md` | Crawl the website against a checklist, and store it (G234, FRFRMU-1149) | 1 |
 | 1.4 | `playbook/step-01-4-persona-questions.md` | Attractive Character — the question half (p09) | 1 |
 | 1.5 | `playbook/step-01-5-market.md` | Validate the market/niche (p01) | 1 |
 | 1.6a | `playbook/step-01-6a-avatar.md` | Define the dream-customer avatar (p02) | 1.5 |
@@ -150,7 +149,7 @@ which used to disagree (FRFRMU-1311).**
 | 1.6 | `playbook/step-01-6-self-account.md` | The creator's own account is the strongest signal | 1.6b |
 | 2 | `playbook/step-02-benchmarks.md` | Find benchmark accounts | 1.6b |
 | 2.2 | `playbook/step-02-2-discovery.md` | Discovery — what Apify is for, and how (FRFRMU-1307/1312/1298) | 2 |
-| 2.3 | `playbook/step-02-3-bands-and-ladder.md` | Which accounts qualify — derived size bands + escalation ladder (FRFRMU-1308/1300/1304/1285) | 2.2 |
+| 2.3 | `playbook/step-02-3-bands-and-ladder.md` | Which accounts qualify — size bands + escalation ladder (FRFRMU-1308/1300/1304/1285) | 2.2 |
 | 2.6 | `playbook/step-02-6-screening.md` | Filter benchmarks on real metrics — the typical-reel-views gate (FRFRMU-1303) | 2.3 |
 | 2.8 | `playbook/step-02-8-dossier.md` | Competitor dossier (p07) — two passes bracketing Step 3's analysis | 2 |
 | 3 | `playbook/step-03-mcp.md` | Use the RM MCP correctly | 2 |
@@ -162,8 +161,8 @@ which used to disagree (FRFRMU-1311).**
 | 3.5 | `playbook/step-03-5-prospect-research.md` | Run prospect research (p04) | 3 |
 | 3.6 | `playbook/step-03-6-magic-desk.md` | The magic desk interview (p05) | 3.5 |
 | 3.7 | `playbook/step-03-7-big-domino.md` | The Big Domino (p08) | 3.6 |
-| 3.8 | `playbook/step-03-8-why-people-buy.md` | Why-people-buy worksheet (p06) — 11 questions, gated on the offer | 3.7 |
-| 3.9 | `playbook/step-03-9-origin-story.md` | Origin/epiphany story (p10) — 8 beats written once, cut for length | 3.8 |
+| 3.8 | `playbook/step-03-8-why-people-buy.md` | Why-people-buy worksheet (p06) — gated on the offer | 3.7 |
+| 3.9 | `playbook/step-03-9-origin-story.md` | Origin/epiphany story (p10) — 8 beats, cut for length | 3.8 |
 | 3.10 | `playbook/step-03-10-false-beliefs-map.md` | False-beliefs map (p11) — >=10 rows, V/I/E, core three | 3.9 |
 | 3.11 | `playbook/step-03-11-proof-bank.md` | Proof bank (p29) — ladder, permission, honest attempts | 3.10 |
 | 4 | `playbook/step-04-stage.md` | Translate for the account's stage | 3.11 |
@@ -179,6 +178,7 @@ which used to disagree (FRFRMU-1311).**
 | 8 | `playbook/step-08-deliverable.md` | What the deliverable must contain — loads `TEMPLATE.md` | 7 |
 | 8 | `playbook/step-08-join-recipe.md` | Idea from the cards, pattern from the tool (p02-p29) | 8 |
 | 8 | `playbook/step-08-hook-recipe.md` | How ONE slot's hook gets chosen | 8 |
+| 8 | `playbook/step-08-just-in-time-asks.md` | bold_stance ask, first-plan mode (FRFRMU-1602) | 8 |
 | 8 | `playbook/step-08-outline-recipe.md` | How ONE slot's script row is built | 8 |
 | 8 | `playbook/step-08-cta-recipe.md` | How ONE slot's ask is chosen | 8 |
 | 8 | `playbook/step-08-caption-recipe.md` | How ONE slot's caption is written | 8 |
@@ -190,10 +190,14 @@ which used to disagree (FRFRMU-1311).**
 | 10 | `playbook/step-10-checklist.md` | Run checklist | 9 |
 | 11 | `playbook/step-11-rules-gate-critic.md` | Rules Gate + Critic loop — loads `RULES_GATE.md` and `rules/` | 10 |
 | 12 | `playbook/step-12-capture.md` | Capture — save the plan to the creator's Content Calendar | 11 |
+| 12 | `playbook/step-12-transcript-consent.md` | A second consent (default NO) to also save the conversation — `save_planning_transcript` (FRFRMU-1596) | 12 |
 | 12 | `playbook/step-12-after-the-save.md` | The two write-backs once the plan is stored | 12 |
-| 12.5 | `playbook/step-12-blockers-remain.md` | What to do when blockers are still open at save time | 12 |
+| 12.5 | `playbook/step-12-blockers-remain.md` | What to do when blockers are open at save time | 12 |
+| 13 | `playbook/step-13-sharpen.md` | Sharpen, first-plan mode (FRFRMU-1602) | 12 |
 | — | `playbook/rigor-rules.md` | The Rigor Rules §A-§K in full | — |
-| — | `playbook/asking-rules.md` | The asking contract — how EVERY question the plugin asks is asked (FRFRMU-1051) | — |
+| — | `playbook/asking-rules.md` | How EVERY question the plugin asks is asked (FRFRMU-1051) | — |
+| — | `playbook/asking-rules-help.md` | One help path for a stuck/thin answer, by question shape (FRFRMU-1603) | — |
+| — | `playbook/held-data-checklist.md` | The field map `asking-rules.md` §11 points at — which tool answers each question (FRFRMU-1609) | — |
 
 **A "Step N" reference inside any step file means that step's file in the table above.**
 

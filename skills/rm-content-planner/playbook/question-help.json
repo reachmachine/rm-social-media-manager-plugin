@@ -1,0 +1,317 @@
+{
+  "_comment": "FRFRMU-1603 question-help companion — one entry per playbook/question-registry.json question_id (all 25), plus subject_type (asked at Rule 0, step-01-intake.md, before the registry's own field list starts). How this is used: playbook/asking-rules-help.md defines the ONE mechanism ('I don't know' and 'that's too thin' take the same path, chosen by shape); this file supplies the per-question tier/step/shape/example/idk_path that mechanism reads. Do NOT edit question-registry.json to add fields here — the FRFRMU-1309 pin compares only question_id + required_by_step. example_shape is written niche-neutral on purpose: asking-rules.md §2 rule 2 rewrites it in the creator's own niche at ask time (the re-render rule, asking-rules-help.md).",
+  "help": [
+    {
+      "question_id": "subject_type",
+      "tier": "sharpen",
+      "asked_at_step": "1",
+      "shape": "fact",
+      "why_now": "This decides whose business the whole plan is built around — get it wrong and every later answer is about the wrong brand.",
+      "example_shape": {
+        "bad": "leaving it implied instead of said out loud.",
+        "good": "one plain word: 'my own business' or 'a client I manage.'"
+      },
+      "idk_path": "fact-propose — this is a plain yes/no-shaped gate, asked once at the very start, before any other question. There is no drafting path: only the creator knows the answer, so the agent simply asks plainly and waits."
+    },
+    {
+      "question_id": "audience",
+      "tier": "core",
+      "asked_at_step": "1",
+      "shape": "memory",
+      "why_now": "This decides who every example, hook and word in your plan speaks to — get this wrong and the plan is for the wrong person.",
+      "example_shape": {
+        "bad": "a broad label with no situation, like 'business owners' or 'people who want to get better.'",
+        "good": "a situation plus a struggle, like 'a first-time manager who has never had to fire someone.'"
+      },
+      "idk_path": "memory-look-first — the agent looks first at the account's own posts/comments and the website dossier for repeat descriptions of who shows up, drafts a candidate, and reads it back. Nothing found: ONE smaller, scene-shaped question ('picture your best client — one sentence about them'). Still nothing: deferred, with an instruction to note the next 5 people who reach out, and one line on what the plan loses meanwhile (a broader, less targeted draft)."
+    },
+    {
+      "question_id": "problems",
+      "tier": "core",
+      "asked_at_step": "1",
+      "shape": "memory",
+      "why_now": "Their audience's real words become your hooks — a vague problem makes vague, forgettable content.",
+      "example_shape": {
+        "bad": "a marketing-speak label, like 'they lack visibility' or 'they need more confidence.'",
+        "good": "the exact words a person would type in a DM at 11pm, like 'I keep starting and stopping and I don't know why.'"
+      },
+      "idk_path": "memory-look-first — the agent looks at DMs, comments and reviews it already holds, drafts 2-3 candidate problems in the audience's own phrasing, and reads them back. Nothing found: one smaller question ('what's the last thing a customer complained about, in their own words?'). Still nothing: deferred, with an instruction to collect the next 10 DMs or comments before the next sitting."
+    },
+    {
+      "question_id": "ownable_angle",
+      "tier": "jit",
+      "asked_at_step": "1",
+      "shape": "belief",
+      "why_now": "This is the ONE thing that makes your content yours instead of a copy of everyone else's — it's what stops people scrolling past.",
+      "example_shape": {
+        "bad": "an adjective with nothing behind it, like 'quality service' or 'a different approach.'",
+        "good": "something tied to what you actually did or lived, naming your own method, for your one audience, that others in your space don't say."
+      },
+      "idk_path": "belief-draft (asking-rules.md §13) — draft from the creator's published sources and reviews, show 2-3 real examples from other businesses in their niche, give a plain-English process to work out their own, then read the draft back for a yes/no. Never saved unconfirmed."
+    },
+    {
+      "question_id": "bold_stance",
+      "tier": "jit",
+      "asked_at_step": "1",
+      "shape": "belief",
+      "why_now": "A stance is what makes people remember you — a brand with no opinion is forgettable.",
+      "example_shape": {
+        "bad": "something nobody would argue with, like 'be consistent' or 'work hard.'",
+        "good": "something a chunk of people in your space would push back on, that you'd defend in a comment."
+      },
+      "idk_path": "belief-draft (asking-rules.md §13, the deepest 'unsure' case) — the same four-move protocol: draft from published sources, show 2-3 niche examples, give the plain-English process, read back for a yes/no. Includes the F3 pretend-counter-comment test once a stance is confirmed."
+    },
+    {
+      "question_id": "proof",
+      "tier": "core",
+      "asked_at_step": "1",
+      "shape": "memory",
+      "why_now": "One real result is worth more than ten adjectives — it's the reason a stranger should believe you.",
+      "example_shape": {
+        "bad": "an adjective with no number, name or date, like 'I've helped a lot of people.'",
+        "good": "a number, a name, or a date, like 'one client went from 0 to 40,000 followers' or 'client X renewed for a third year.'"
+      },
+      "idk_path": "memory-look-first, the worked example (founder, 2026-09-19). Never a dead end. The agent looks first — the creator's own posts, the website dossier, reviews found by WebSearch — and drafts a candidate. If genuinely nothing surfaces, it removes the pressure first ('it does not have to be impressive — one ordinary true thing beats a polished claim'), then asks smaller, concrete questions instead of repeating the ask: think of your oldest client — what were they like when they started, and what's different now? has anyone come back a second time, renewed, or sent a friend — who, and why? is there a message, review or screenshot from someone happy — what does it say? what's the smallest real change you've seen in someone, not the best one, the most ordinary one? Still nothing: deferred with a concrete collection instruction (e.g. 'next time someone says something good, screenshot it') and one plain line on what the plan loses meanwhile — it runs without a proof pillar until one is found."
+    },
+    {
+      "question_id": "funnel_assets",
+      "tier": "jit",
+      "asked_at_step": "1",
+      "shape": "fact",
+      "why_now": "This decides whether a 'comment KEYWORD' call-to-action is even allowed — asking for it without a working funnel sends people nowhere.",
+      "example_shape": {
+        "bad": "a bare yes/no with no detail, like 'yes we have that.'",
+        "good": "e.g. 'someone comments GUIDE under a reel and our tool sends them the link automatically — yes, and I tested it last week' or a plain 'no, we don't have that yet.'"
+      },
+      "idk_path": "fact-propose — if it's unclear what's being asked, the agent explains it in one plain line first (e.g. 'someone comments a word under your post and a tool auto-sends them a link — do you have anything like that, tested?'), then proposes 'probably not yet' as a starting answer to confirm or correct, saved `derived` until confirmed."
+    },
+    {
+      "question_id": "goal",
+      "tier": "core",
+      "asked_at_step": "1",
+      "shape": "fact",
+      "why_now": "Everything after this is built to hit ONE goal — chasing two at once usually gets neither.",
+      "example_shape": {
+        "bad": "no metric and no deadline, like 'grow.'",
+        "good": "a metric with a horizon, like '1,000 followers in 90 days to launch a course.'"
+      },
+      "idk_path": "fact-propose — the agent proposes a goal from what it already holds (follower count, stage, any offer already mentioned) with its reason, e.g. 'I'd guess reach first, since the account is new — sound right?'. 'Don't know' makes the proposal the answer, saved `derived`, read back."
+    },
+    {
+      "question_id": "capacity",
+      "tier": "core",
+      "asked_at_step": "1",
+      "shape": "fact",
+      "why_now": "This sets the real, sustainable pace of the plan — a number bigger than you can keep up with just gets abandoned.",
+      "example_shape": {
+        "bad": "a motivated guess with no routine behind it, like 'daily, if I push myself.'",
+        "good": "a number tied to your actual week, like '2 a week — I film on Sundays.'"
+      },
+      "idk_path": "fact-propose — the agent offers the fixed choices (2/week, 4/week, daily, other) with the honest note on each; 'don't know' defaults to proposing the lower, safer choice and reads it back for a confirm."
+    },
+    {
+      "question_id": "production_capability",
+      "tier": "jit",
+      "asked_at_step": "1",
+      "shape": "fact",
+      "why_now": "This sets the real starting point for what the plan can ask you to make — the market's favourite format still gets a path in, just not as the very first ask.",
+      "example_shape": {
+        "bad": "'I can do anything' with no real detail.",
+        "good": "naming what you're actually comfortable with right now, like 'comfortable talking to camera, can't edit' — and if it's AI-generated, saying exactly what kind."
+      },
+      "idk_path": "fact-propose — the agent lists the concrete options (real people on camera, client footage, talking to camera, screen recording, graphics only, AI-generated), proposes the ones it can already see from the account, and reads them back for a yes/no or a correction."
+    },
+    {
+      "question_id": "niche_seeds",
+      "tier": "sharpen",
+      "asked_at_step": "1",
+      "shape": "fact",
+      "why_now": "Your niche and any seed accounts point Reach Machine at the right competitors to learn from — seeds are optional, and checked either way.",
+      "example_shape": {
+        "bad": "a category so broad it can't be searched, like 'food.'",
+        "good": "a phrase specific enough to search Instagram with, like 'meal prep for people who work night shifts' — seeds and hashtags are a bonus, not required."
+      },
+      "idk_path": "fact-propose — not knowing any seed accounts is a normal outcome: Step 2's own discovery finds accounts from the niche/hashtags without named seeds. Anything the creator DOES name is checked by the agent, never trusted blind."
+    },
+    {
+      "question_id": "offer",
+      "tier": "core",
+      "asked_at_step": "1",
+      "shape": "fact",
+      "why_now": "Reach with nothing to point people at wastes the traffic — even a free next step is a real offer.",
+      "example_shape": {
+        "bad": "a vague label with no price or deliverable, like 'coaching.'",
+        "good": "an outcome, a timeframe and a price, like 'a 6-week program at a set price.'"
+      },
+      "idk_path": "fact-propose — if the website already shows an offer, the agent leads with it and confirms. A reach-first creator with genuinely nothing may say so; the field stays empty and a later step (Step 7's advisory layer) fills it."
+    },
+    {
+      "question_id": "constraints",
+      "tier": "core",
+      "asked_at_step": "1",
+      "shape": "fact",
+      "why_now": "A plan that ignores what you can't say or show is a plan you can't actually use.",
+      "example_shape": {
+        "bad": "silence, or an unprompted 'no constraints' before the categories were even asked.",
+        "good": "a concrete list, or an explicit 'none of these apply' given AFTER hearing the categories."
+      },
+      "idk_path": "fact-propose, walked by category, one at a time (asking-rules.md §4/§14) — face on camera? claims you can't legally make? competitors you won't name? words or topics to avoid? each category gets its own small yes/no instead of one big blank question."
+    },
+    {
+      "question_id": "brand_voice",
+      "tier": "jit",
+      "asked_at_step": "1",
+      "shape": "belief",
+      "why_now": "Your voice drives every hook and caption — 'professional and friendly' with nothing else describes everyone and no one.",
+      "example_shape": {
+        "bad": "two vague adjectives with nothing else, like 'authentic and professional.'",
+        "good": "2-3 concrete descriptors plus a word to avoid or a reel you like, like 'direct, a little blunt, no corporate jargon — avoid the word \"synergy\".'"
+      },
+      "idk_path": "belief-draft — the agent reads the account for tone (professional/casual/funny), drafts 2-3 descriptors from what it sees, and reads them back for a yes/no or a correction."
+    },
+    {
+      "question_id": "upcoming_moments",
+      "tier": "jit",
+      "asked_at_step": "1",
+      "shape": "fact",
+      "why_now": "Content that builds toward something you already have coming (a launch, a promo, a season) works harder than content with nowhere to point.",
+      "example_shape": {
+        "bad": "'maybe something later' with no date.",
+        "good": "a dated event, or an honest 'nothing in the next 8 weeks.'"
+      },
+      "idk_path": "fact-propose — if nothing comes to mind, the agent MAY web-search the niche's seasonal/timely moments and propose 1-2 candidates to confirm."
+    },
+    {
+      "question_id": "past_attempts",
+      "tier": "sharpen",
+      "asked_at_step": "1",
+      "shape": "memory",
+      "why_now": "So the plan doubles down on what already worked for you, and doesn't waste a slot re-trying what already flopped.",
+      "example_shape": {
+        "bad": "'I've tried everything, nothing works.'",
+        "good": "one concrete win or flop with rough numbers, like 'a talking-head tip video died around 200 views, but one story-style post got 20,000.'"
+      },
+      "idk_path": "memory-look-first — the agent looks at the account's own post history first and proposes what looks like a past win/flop from the numbers it can see, reads it back. Nothing found: ask for just one memory ('what's one post you were proud of, and one you wish you hadn't made?'). Still nothing: deferred, noting the plan starts with no track record to build on."
+    },
+    {
+      "question_id": "audience_questions",
+      "tier": "sharpen",
+      "asked_at_step": "1",
+      "shape": "memory",
+      "why_now": "Your audience's own words, verbatim, become tomorrow's hooks — memory and paraphrase lose the exact phrasing that works.",
+      "example_shape": {
+        "bad": "a paraphrase from memory, like 'they ask about pricing.'",
+        "good": "3-5 pasted, word-for-word questions or comments."
+      },
+      "idk_path": "memory-look-first — the agent checks comments/DMs it may already hold. Nothing found: ask for one remembered exact question. Still nothing: deferred, with an instruction to collect the last ~20 DMs or most-asked comments before the next sitting."
+    },
+    {
+      "question_id": "plan_size",
+      "tier": "core",
+      "asked_at_step": "1",
+      "shape": "fact",
+      "why_now": "This is how many reels you'll actually write and check — the number is yours to pick, informed by a real recommendation.",
+      "example_shape": {
+        "bad": "the agent silently picking a number for you.",
+        "good": "a number YOU chose after hearing the trade-off, like 'twelve is fine — that's a longer session, not a bigger bill.'"
+      },
+      "idk_path": "fact-propose — the agent proposes a number from your stage, cadence and horizon, states the honest trade-off (more writing and checking, never more credits), and reads it back for a yes/no."
+    },
+    {
+      "question_id": "personal_story",
+      "tier": "sharpen",
+      "asked_at_step": "1",
+      "shape": "memory",
+      "why_now": "Your real story is your highest-trust content — and it's optional, so nothing here is ever forced.",
+      "example_shape": {
+        "bad": "a summary with no scene, like 'I always loved helping people.'",
+        "good": "one specific, rememberable moment, like the exact day something changed."
+      },
+      "idk_path": "memory-look-first — the agent never invents a scene; it asks one question at a time from the reference ladder (backstory, the wall, the 5-Why drill, the point of no return), reacts to each answer before the next, and reads the assembled story back for a yes/no. Declining is always a complete, respected answer."
+    },
+    {
+      "question_id": "content_language",
+      "tier": "core",
+      "asked_at_step": "1",
+      "shape": "fact",
+      "why_now": "This is the language every caption and script in this plan gets written in — get it wrong and none of the words are usable.",
+      "example_shape": {
+        "bad": "a vague answer like 'whatever's easiest.'",
+        "good": "a named language, like 'English' or 'we post in Hindi.'"
+      },
+      "idk_path": "fact-propose — if still vague after one more ask, the agent proposes the language the creator is talking in right now and records it as `derived`."
+    },
+    {
+      "question_id": "stage",
+      "tier": "sharpen",
+      "asked_at_step": "1.6",
+      "shape": "fact",
+      "why_now": "Your real follower count and posting history set the ceiling for what's realistic this month — guessing it wrong sets the wrong bar.",
+      "example_shape": {
+        "bad": "a vague label, like 'small account.'",
+        "good": "a real follower number plus posting history, like 'about 800 followers, posting on and off for 2 years.'"
+      },
+      "idk_path": "fact-propose — once the account's own data has been pulled, the agent reads it and proposes the stage in one sentence for a yes/no, e.g. 'about 4,300 followers, posting roughly 3 times a week — sound right?'. Never asks for a number it already holds."
+    },
+    {
+      "question_id": "backstory_sentence",
+      "tier": "sharpen",
+      "asked_at_step": "1.4",
+      "shape": "memory",
+      "why_now": "One clean sentence is the fastest way a stranger gets who you are — this just confirms the interview compressed to the right one.",
+      "example_shape": {
+        "bad": "a sentence a hundred other people could also say.",
+        "good": "a sentence with a specific scene in it that only you could say."
+      },
+      "idk_path": "memory-look-first — this compresses the personal-story interview already given. If it doesn't land, the agent proposes its own compression back for a yes or a one-word correction, never a new blank question."
+    },
+    {
+      "question_id": "flaw_1",
+      "tier": "sharpen",
+      "asked_at_step": "1.4",
+      "shape": "belief",
+      "why_now": "The gap between where you were and where you are is what makes people trust you — polished-perfect is forgettable.",
+      "example_shape": {
+        "bad": "the agent proposing a flaw the creator never actually said.",
+        "good": "picking one from what you already told me, or saying 'none' — both are a complete answer."
+      },
+      "idk_path": "belief-draft, narrowed to what was already said — the agent only ever offers flaws the creator said in the interview, never invents one. 'None' is accepted at once and never revisited."
+    },
+    {
+      "question_id": "stance",
+      "tier": "sharpen",
+      "asked_at_step": "1.4",
+      "shape": "belief",
+      "why_now": "This tests whether your bold stance actually holds up when someone pushes back — words are easy, a real reply proves it.",
+      "example_shape": {
+        "bad": "backing down completely the moment someone disagrees.",
+        "good": "a one-sentence reply that holds the position, inside what you're comfortable saying publicly."
+      },
+      "idk_path": "belief-draft — the agent generates the likely counter-comment from the niche itself and asks for a real reply. A retreat softens the stance a notch to one you'll actually defend, never abandons it."
+    },
+    {
+      "question_id": "parable_1",
+      "tier": "sharpen",
+      "asked_at_step": "1.4",
+      "shape": "memory",
+      "why_now": "Small real moments are what make your content feel lived-in instead of generic — the lesson alone isn't a story.",
+      "example_shape": {
+        "bad": "a lesson with no moment behind it, like 'consistency matters.'",
+        "good": "a when/who/what in one line, like 'last week a client texted me at midnight, worried — I called back straight away, and that's the day they trusted me.'"
+      },
+      "idk_path": "memory-look-first — the agent mines the personal-story interview for scenes already told. If none surface, it asks once more for the moment, not the lesson, and accepts fewer than five rather than inventing one."
+    },
+    {
+      "question_id": "voice_descriptors",
+      "tier": "sharpen",
+      "asked_at_step": "1.4",
+      "shape": "belief",
+      "why_now": "Your voice needs a real test, not just a label — this checks a written line actually sounds like you.",
+      "example_shape": {
+        "bad": "agreeing a generic voice sounds right without really checking.",
+        "good": "naming the one word that's off, like 'that sounds too formal for me.'"
+      },
+      "idk_path": "belief-draft — the agent writes one hook in the derived voice and asks whether it sounds right. Any 'off' word becomes a new item on the avoid list."
+    }
+  ]
+}

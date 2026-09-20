@@ -102,6 +102,13 @@ SYSTEM_PROMPT = (
 # product call, made here as an engineering default: headless PRODUCES a
 # plan, it does not PERSIST one.
 #
+# FRFRMU-1596: save_planning_transcript is DELIBERATELY ALSO NOT in this
+# list, for the identical reason as submit_content_plan directly above — its
+# `consent: true` means "a human just said yes" to handing over the
+# conversation, and a headless run has no human to ask. Absent here means
+# dontAsk denies it, same mechanism, same intent. See playbook/step-12-capture.md
+# step 3.5 for the consent wording this protects.
+#
 # FRFRMU-988: search_exemplars and get_topic_heat were missing from this list
 # entirely (not denied on purpose — just absent), so under dontAsk both were
 # DENIED, and the playbook step that instructs each one unconditionally
@@ -350,7 +357,15 @@ def check_and_update_skill(skill_dir: pathlib.Path, call_tool) -> None:
             local_raw = None
         local = _parse_semver(local_raw)
 
-        info = call_tool("get_skill_version", {"skill_id": "rm-content-planner"})
+        # FRFRMU-1611: report our own VERSION file alongside the check, so
+        # the server can see which version this install is actually
+        # running (criterion 4 — "a stale install is visible to us, not
+        # only the customer"). Best-effort on the server's side; sending it
+        # never changes anything about this call's own behaviour here.
+        info = call_tool(
+            "get_skill_version",
+            {"skill_id": "rm-content-planner", "local_version": local_raw},
+        )
         remote_str = info.get("current_version")
         if remote_str is None:
             return  # nothing ever published — not "newer than mine"

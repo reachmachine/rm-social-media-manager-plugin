@@ -19,6 +19,15 @@ more from thirty seconds of watching three winning reels in their own niche than
 "single-frame composition, sparse overlay, 2-3 cuts". Watching is how a person picks up a feel;
 a distribution is not. Work V.1 → V.4 in order.
 
+### V.0 — First-plan mode: ask `production_capability` here (FRFRMU-1602)
+
+Only relevant when `step-01-first-plan-core.md` deferred it. Ask the list (real people on
+camera / client footage / talking to camera / screen recording / graphics only / AI-generated) —
+**AI-generated still gets its ONE mandatory follow-up here, always (FRFRMU-1310, compliance)**:
+*"an AI voiceover over stock, an AI avatar standing in for a real person, AI-generated 'client'
+footage, or something else?"* The rest of this field's full bar (the proof cross-check, the
+regulated-niche safe default) moves to Step 13 — this ask only unblocks THIS slot's shot type.
+
 ### V.1 — Frame the slot
 
 Three things are already decided before this row starts, and none of them get re-opened here:

@@ -212,6 +212,9 @@ its reasoning + provenance (§I):
    **upcoming launches / promos / seasonal moments** (from Step 1; ask if not captured), e.g. two weeks of
    nurture before a launch. The agent MAY **web-search** for relevant seasonal / timely moments in the
    niche to seed this. Never *calendar* breaking news — that's the opportunistic slot (Step 8).
+   **First-plan mode (FRFRMU-1602): ask `upcoming_moments` here if not already captured.** One
+   line, no bar: *"Anything coming up — a launch, a promo, a season — the content should build
+   toward?"* An honest "nothing in the next 8 weeks" is a complete answer.
 
 **Three rules that govern the whole strategy:**
 - **Tie-breaker when inputs conflict:** **constraints/compliance > positioning > goal > raw data.** A viral

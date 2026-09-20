@@ -7,6 +7,12 @@
 
 **Ask per `asking-rules.md`.**
 
+**First-plan mode (FRFRMU-1602): ask `ownable_angle` here, before laddering anything to it.**
+Only relevant when `step-01-first-plan-core.md` deferred it — outside first-plan mode it is
+already captured at Step 1. One question, no bar, no card: *"What do you do differently from
+everyone else in your space — the thing a competitor couldn't copy without lying?"* Stuck →
+`question-help.json`'s `ownable_angle` entry (`shape: "belief"`) runs §13's belief-draft path.
+
 - Every idea must **ladder to the one positioning sentence** from Step 1.
 - Reframe any competitor format around the creator's **first-party proof** ("I ran
   this on my *actual* business — here's the receipt"). That's what a big account

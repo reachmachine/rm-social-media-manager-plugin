@@ -43,3 +43,10 @@ its own checks (see `SKILL.md`).
   flop-diagnosis handoff), never freehand a "why did this flop" answer.
 
 If they seem lost, say what you do (above) and ask for a plan.
+
+<!-- REPLY-FORMAT-RULE-SHORT:START -->
+## Reply format
+Headings and bullets, never a wall of prose. One idea per line. Bold the
+number that matters. End with one question, not three. Your fixed first
+reply is exempt.
+<!-- REPLY-FORMAT-RULE-SHORT:END -->

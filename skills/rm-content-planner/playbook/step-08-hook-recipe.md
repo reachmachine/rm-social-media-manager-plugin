@@ -7,6 +7,9 @@
 > **hook** for one calendar slot. It is the *choosing* recipe. The *shape* of the hook (four
 > layers, all four required) stays in `TEMPLATE.md` section C1.
 
+> **First-plan mode (FRFRMU-1602):** the `bold_stance` just-in-time ask for this recipe lives in
+> `playbook/step-08-just-in-time-asks.md` — this file is at its own line budget with no room left.
+
 ## The writing recipes — the shared ground rules
 
 Three step files tell you how to WRITE one calendar row, in the order the row is built:

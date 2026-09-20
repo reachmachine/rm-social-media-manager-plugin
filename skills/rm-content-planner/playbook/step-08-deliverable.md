@@ -298,5 +298,3 @@
       always happen. **Headless runs (`runner.py`) skip the auto-open** and still print the
       path; a browser popping up on a server helps nobody.
 
----
-

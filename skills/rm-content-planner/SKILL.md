@@ -26,14 +26,18 @@ you can make one. Full detail: PLAYBOOK Step 1, rule 2.
 
 ## Check for a published update — before anything else (G365)
 
-**The very first tool call of any customer-facing run** (skip this on a headless `runner.py`
+**The very first action of any customer-facing run** (skip this on a headless `runner.py`
 run — it already does its own check-and-repair; see `runner.py`'s `check_and_update_skill`) is
-`get_skill_version` with `skill_id: "rm-content-planner"`. It is cheap and read-only — call it
-before `get_creator_brief`, before loading the PLAYBOOK, before anything else.
+to read this skill's own version from `${CLAUDE_SKILL_DIR}/VERSION` (it looks like `v1.4.0`),
+then call `get_skill_version` with `skill_id: "rm-content-planner"` AND `local_version` set to
+that VERSION string. Sending `local_version` lets the server see which version this install is
+actually running (FRFRMU-1611) — today a stale install is visible only to the creator who
+happens to read the message below; this makes it visible to us too, without changing anything
+about what happens next in this run. The call is cheap and read-only — call it before
+`get_creator_brief`, before loading the PLAYBOOK, before anything else.
 
-Read this skill's own version from `${CLAUDE_SKILL_DIR}/VERSION` (it looks like `v1.4.0`).
-Compare it against `get_skill_version`'s `current_version` field — strip any leading `v` from
-both sides, then compare major.minor.patch as three numbers:
+Compare `get_skill_version`'s `current_version` field against your own VERSION — strip any
+leading `v` from both sides, then compare major.minor.patch as three numbers:
 
 - **`current_version` is `None`** — nothing has ever been published for this skill_id. Say
   nothing, proceed normally.
@@ -42,8 +46,13 @@ both sides, then compare major.minor.patch as three numbers:
 - **`current_version` is NEWER than the local VERSION** — tell the creator ONE short, plain
   sentence near the start of your very first reply this session, then keep going with the rest
   of the run as normal: *"Heads up — a newer version of this skill is available. Run `claude
-  plugin update` to get it (takes a few seconds, nothing you're working on is lost)."* Say it
-  once per session, never repeat it on later turns, and never let it block or delay the run.
+  plugin update rm-social-media-manager`, then restart Claude Code to pick it up. Nothing you're
+  working on is lost."* TWO details in that sentence are load-bearing, both confirmed against
+  `claude plugin update --help` (FRFRMU-1597). The plugin NAME is required — `claude plugin
+  update` alone is a usage error, not an update. And the CLI states "restart required to
+  apply" — without that, the creator runs the command, sees nothing change, and reasonably
+  concludes our update is broken. Say it once per session, never repeat it on later turns, and
+  never let it block or delay the run.
 - **The tool call itself fails, errors, or is unreachable** — this is OUR infrastructure problem,
   not the creator's (see "THE AUDIENCE RULE" below); say nothing to the creator about it and
   proceed normally. Log it with `report_gap` if you want it flagged to us.
@@ -51,8 +60,11 @@ both sides, then compare major.minor.patch as three numbers:
 **Never fetch or install the update yourself.** Pulling the skill bundle and writing files into
 this skill's own folder is a different distribution model (register G365, option c) that this
 skill does **not** implement — two writers touching the same files is a real risk the register
-explicitly rejected. `claude plugin update`, run by the creator through their own Claude Code /
-Claude.ai plugin manager, is the only supported way this skill gets updated.
+explicitly rejected. `claude plugin update rm-social-media-manager`, run by the creator through
+their own Claude Code / Claude.ai plugin manager, is the only supported way this skill gets
+updated. (Inside a Claude Code session the equivalent is
+`/plugin marketplace update rm-social-media-manager-marketplace` then `/reload-plugins` — either
+route is fine; what is never fine is omitting the plugin name from the CLI form.)
 
 ## Check for an open data request on this niche (FRFRMU-1545)
 

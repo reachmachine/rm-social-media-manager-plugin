@@ -38,6 +38,7 @@
 - [ ] **`RULES_GATE.md` walked (all 8 gates) — voice/compliance, structure, retention, benchmark-not-copy, CTA/funnel, STRATEGY ADHERENCE (calendar delivers the declared goal/mix/pillars/audience), data integrity, deliverable feasibility & variety (effort ≤ capacity · ≥3 sources · no clones · variety)** (Step 11)
 - [ ] **Rules Gate + critic loop run; only the passed version shipped** (Step 11)
 - [ ] **Offered to save the plan to the Content Calendar; stored ONLY on explicit consent** (Step 12)
+- [ ] **Asked, SEPARATELY, whether to save the planning conversation (`save_planning_transcript`) — a distinct consent from the plan save, defaulting to NO** (Step 12, FRFRMU-1596)
 - [ ] **Every slot carries its Reasoning block — receipts, a base rate (never a forecast), and the goal it serves** (Step 8, `playbook/step-08-reasoning-recipe.md`)
 - [ ] **Cooldown checked against the last plans' topics; every repeat is a named series or a stated sequel** (Step 5.1)
 - [ ] **Last cycle's still-`unknown` topic verdicts settled from real evidence, or honestly left `unknown`** (Step 5.1f)

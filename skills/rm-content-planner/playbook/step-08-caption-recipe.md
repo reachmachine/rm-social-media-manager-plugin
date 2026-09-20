@@ -10,6 +10,12 @@
 
 ## Step 8 (caption) — the caption is a second hook, not an afterthought
 
+**First-plan mode (FRFRMU-1602): ask `brand_voice` here, before writing this caption.** Only
+relevant when `step-01-first-plan-core.md` deferred it — outside first-plan mode it was already
+derived-and-confirmed at Step 1. Read the account's tone (professional/casual/funny), draft 2-3
+descriptors, and read them back for a yes/no or a correction — the normal belief-draft path
+(`question-help.json`'s `brand_voice` entry, `shape: "belief"`).
+
 Until now no step wrote a caption per reel. There was a one-time captions / hashtags / search
 framework (Step 8 item 6, `TEMPLATE.md` D3) and nothing else, so every plan either left the
 caption to the creator or let the agent improvise one with no evidence behind it.

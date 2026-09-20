@@ -36,15 +36,12 @@ in the founder's spirit — the point is to *share the mistake, find the gap, an
 
 Then **END YOUR TURN and wait.**
 
-- **Silence is not approval.** No reply = the plan stays delivered-but-unreviewed and
-  nothing else happens. Never treat "they didn't object" as "they approved".
+- **Silence is not approval.** No reply = the plan stays delivered-but-unreviewed and nothing else happens. Never treat "they didn't object" as "they approved".
 - **Fix the part, keep the plan.** On a correction: change the named reels/decisions and
   their dependents, re-run `validate_content_plan` on the revised plan, and re-check only
   the Rules-Gate items the change touches (update the same `rules_gate` object — Step 11's
   3-round cap does not restart). Never rebuild the plan from scratch over one bad part.
-- **Only after the creator has responded to this review ask** do you move to step 1 below
-  and offer the Content-Calendar save. Their yes to SAVING is storage consent — it is never
-  read as approval of content they did not review.
+- **Only after the creator has responded to this review ask** do you move to step 1 below and offer the Content-Calendar save. Their yes to SAVING is storage consent — it is never read as approval of content they did not review.
 - Exists while plan quality is an unvalidated prediction — re-check after FRFRMU-880.
   (No headless carve-out needed: headless runs never reach Step 12 at all — see above.)
 
@@ -280,6 +277,11 @@ were a brand-new plan the creator has to review from scratch.
    **`submit_analysis` is different and needs no key**: its save is already keyed to the reel, so a
    repeat is safe on its own and it tells you with `already_analyzed: true`.
 
+3.5. **🔴 Load `playbook/step-12-transcript-consent.md` now.** A SECOND, separate consent
+   (defaults to NO, never step 1's plan-save yes) for also saving the planning CONVERSATION via
+   `save_planning_transcript` (FRFRMU-1596) — that file has the exact wording and call shape.
+   Once it is settled (yes, no, or silence), continue to step 4 below.
+
 4. **The plan is saved — now do the two write-backs. Load
    `playbook/step-12-after-the-save.md`.** Both need the save to have happened first:
    **record the run** (`record_content_plan_run`, so the plan carries a record of HOW it was
@@ -292,11 +294,7 @@ explicit yes, scoped to their workspace, used only to review/improve the planner
 data beyond the plan + the inputs above. The `topic_history` ledger holds only the
 topics the creator's own plan already covered — nothing new about them is collected.
 
----
-
 *Companion: `SKILL.md` (invokes this method) and `runner.py` (runs it headless via
 the Claude Agent SDK against the Reach Machine MCP). Product gaps this method works
 around are logged in `marketing/engineering-gaps.md`.*
-
----
 

@@ -165,20 +165,22 @@ that is simply how many the topic has, say so as a count, not a ceiling — the 
 whether hitting the number early ever means skipping a question that would otherwise have been
 asked.
 
-## 11. Lead with what the website already found (FRFRMU-1149)
+## 11. Lead with what we already hold — OUR DATA first, then the website (FRFRMU-1149/1609)
 
-**Before asking any intake question, check `website_dossier.checklist` for that field.** If it
-is `found`, lead with the finding and ask for confirmation; never ask from a blank sheet for
-something the site already states.
+**Before asking any intake question, check every source we already hold, in this fixed order:
+(1) OUR OWN DATA — watchlist, business profile, Creator Brief, pulled posts; (2)
+`website_dossier.checklist`; (3) only then ask.** Our data outranks the website — it is
+measured, not published; a fact the creator paid credits to store is never asked for cold. The
+field-by-field map (`playbook/held-data-checklist.md`) says which tool answers which question,
+the freshness check, and the read-back wording — load it before any question that could be
+something we already hold. **Found + fresh → a read-back, one yes/no** (*"about 1,300 followers —
+right?"*). **Found + stale → read back WITH its age** (*"last time we looked, 1,300 — still
+right?"*). **Not found anywhere → the normal ask**, never a guess presented as fact.
 
-Examples: *"Your site lists a 5-day intro offer and a 3-session bundle — still current, and which
-one do you push first?"* / *"Your results page shows a 60 lb loss and chronic-pain clients — can
-I use those?"*
-
-A `not_found_on_site` field is asked normally, like any other missing answer. A finding counts
-as `derived` in the rule-6 completeness score (`step-01-intake.md`) until the customer confirms
-it — then `confirmed`. **Found ≠ true until the owner says so** — rule 4 in `step-01-intake.md`
-stands unchanged: a website is one more source to cross-check, never a source to trust blindly.
+A `not_found_on_site` field (nothing held either) is asked normally. A finding from either source
+counts as `derived` in the rule-6 completeness score (`step-01-intake.md`) until confirmed — then
+`confirmed`. **Found ≠ true until the owner says so** — rule 4 in `step-01-intake.md` stands
+unchanged: neither source is trusted blindly.
 
 ## 12. Never claim a save that has not happened yet (FRFRMU-1290, FRFRMU-1296)
 

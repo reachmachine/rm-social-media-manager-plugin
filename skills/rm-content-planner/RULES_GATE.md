@@ -260,8 +260,6 @@ that contradicts its own strategy fails.*
       Fix = cut the tags that describe no part of this reel.
       *(`playbook/step-08-hashtag-recipe.md` HT.3)*
 
----
-
 ## The countable-check registry — ONE list, so nothing is checked twice or not at all
 
 > **Why this table exists.** Countable checks are now written across a dozen recipe files. Built
@@ -281,8 +279,6 @@ file.** It was split out 2026-09-07 (FRFRMU-1032) purely to keep this file under
 skill limit; nothing about the checks, their names, or which gate owns them changed. Open that
 file for the actual list — this file only explains what the columns mean and the rule above
 ("a check that exists in a recipe but not in this table is treated as unbuilt").
-
----
 
 ## How to run the gate
 1. Draft the plan in the TEMPLATE shape.
