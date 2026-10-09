@@ -1,12 +1,12 @@
 {
   "name": "rm-social-media-manager-marketplace",
-  "description": "Reach Machine social media manager: content planning agent + skill",
+  "description": "Reach Machine plugin: guided onboarding that researches your business, niche, dream customer and where they hang out",
   "owner": {
     "name": "Reach Machine"
   },
   "plugins": [
     {
-      "name": "rm-social-media-manager",
+      "name": "rm-plugin-v2",
       "source": "."
     }
   ]

@@ -1,0 +1,133 @@
+{
+  "manifest_version": 10,
+  "steps": [
+    {
+      "id": "connection_check",
+      "number": 1,
+      "title": "Connection check",
+      "kind": "session"
+    },
+    {
+      "id": "choose_workspace",
+      "number": 2,
+      "title": "Choose the workspace",
+      "kind": "session",
+      "question": {
+        "text": "Which workspace do you want to work in?",
+        "server_text": true
+      }
+    },
+    {
+      "id": "account_owner_type",
+      "number": 3,
+      "title": "Whose account is this?",
+      "kind": "workspace",
+      "question": {
+        "text": "Who is this workspace for?",
+        "server_text": true,
+        "options": [
+          {"value": "own", "label": "My own business"},
+          {"value": "client", "label": "A client's business"}
+        ]
+      },
+      "brief_key": "account_owner_type"
+    },
+    {
+      "id": "own_instagram_account",
+      "number": 4,
+      "title": "Your Instagram account",
+      "kind": "workspace",
+      "question": {
+        "text": "What is the Instagram handle of the account we're planning for?",
+        "server_text": true,
+        "answer_type": "handle"
+      },
+      "skip": {
+        "question": {
+          "text": "Does this business have an Instagram account?",
+          "server_text": true,
+          "options": [
+            {"value": "no_instagram", "label": "We don't use Instagram"},
+            {"value": "add", "label": "Yes, I'll add it"}
+          ]
+        },
+        "reoffer": {
+          "text": "Do you want to add your Instagram account now?",
+          "options": [
+            {"value": "add", "label": "Yes, add it now"},
+            {"value": "later", "label": "Not now"}
+          ]
+        }
+      }
+    },
+    {
+      "id": "revenue_model",
+      "number": 5,
+      "title": "How you make money",
+      "kind": "workspace",
+      "question": {
+        "text": "How does this business make money?",
+        "server_text": true,
+        "answer_type": "multi_options",
+        "options": [
+          {"value": "product", "label": "Selling a product"},
+          {"value": "service", "label": "Selling a service"},
+          {"value": "brand_collaborations", "label": "Brand collaborations"},
+          {"value": "other_income", "label": "Something else (donations, grants, fees, subscriptions, commission)"},
+          {"value": "not_earning_yet", "label": "Not earning yet"}
+        ]
+      },
+      "brief_key": "revenue_model",
+      "follow_up": {
+        "id": "revenue_description",
+        "text": "In one or two lines: what do you offer, and to whom?",
+        "server_text": true,
+        "answer_type": "free_text",
+        "brief_key": "revenue_description"
+      }
+    },
+    {
+      "id": "website",
+      "number": 6,
+      "title": "Your website",
+      "kind": "workspace",
+      "question": {
+        "text": "Does this business have a website we can read?",
+        "server_text": true,
+        "options": [
+          {"value": "yes", "label": "Yes, read my website"},
+          {"value": "no_website", "label": "No website"},
+          {"value": "later", "label": "Not now"}
+        ]
+      }
+    },
+    {
+      "id": "business_review",
+      "number": 7,
+      "title": "Check your business details",
+      "kind": "workspace",
+      "wait_for": "business_ready"
+    },
+    {
+      "id": "pick_niche",
+      "number": 8,
+      "title": "Pick the niche to grow",
+      "kind": "workspace",
+      "wait_for": "niche_ready"
+    },
+    {
+      "id": "dream_customer",
+      "number": 9,
+      "title": "Know your dream customer",
+      "kind": "workspace",
+      "wait_for": "dream_customer_ready"
+    },
+    {
+      "id": "where_to_find",
+      "number": 10,
+      "title": "Where to find your dream customer",
+      "kind": "workspace",
+      "wait_for": "hangouts_ready"
+    }
+  ]
+}

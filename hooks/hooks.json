@@ -6,7 +6,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-resume-check.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/reset-connections.sh"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-rules.sh"
           }
         ]
       },
@@ -15,38 +19,346 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-resume-check.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/reset-connections.sh"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-rules.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/reset-connections.sh"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-rules.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-rules.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__plugin_rm-plugin-v2_(reachmachine|apify|playwright)__(get_billing_status|get-actor-run|browser_navigate|record_session_start|list_workspaces|create_workspace|set_active_workspace|open_workspace|get_creator_brief|update_creator_brief|record_session_event|get_resume_checklist|record_checklist_step|add_to_watchlist|refresh_competitor|change_own_account|start_website_read|finish_website_read|wait_for_website_read|browser_evaluate|get_website_read_status|save_business_fact|search_business_knowledge|get_next_fact_task|get_fact_tasks|save_business_facts|start_reviews_fetch|finish_reviews_fetch|call-actor|get-dataset-items|get_business_review|answer_business_review|start_niche_pick|save_niche_research|choose_niche|start_dream_customer|get_hangouts_work|save_dream_customer|get_dream_customer|choose_main_persona)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/record-connection-probe.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/record-connection-probe.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__plugin_rm-plugin-v2_reachmachine__(start_customer_upload|send_customer_files|get_customer_upload)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/customer-file-upload.sh",
+            "timeout": 120
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__plugin_rm-plugin-v2_reachmachine__(next_actions|open_workspace|get_resume_checklist|start_niche_pick|save_niche_research|choose_niche)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/plan-recorder.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__plugin_rm-plugin-v2_reachmachine__(get_job|report_job)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/job-tool-cache.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__plugin_rm-plugin-v2_reachmachine__answer_question",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/answer-grant-record.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__plugin_rm-plugin-v2_(reachmachine|apify|playwright)__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/plan-events.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/voice-check-midturn.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ask-dropped-mark.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__plugin_rm-plugin-v2_reachmachine__report_gap",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/report-pending-mark.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "WebSearch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/hangouts-websearch-record.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "mcp__plugin_rm-plugin-v2_(reachmachine|apify|playwright)__(get_billing_status|get-actor-run|browser_navigate|record_session_start)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/record-connection-probe.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "WebSearch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/hangouts-websearch-record.sh"
           }
         ]
       }
     ],
     "PreToolUse": [
       {
-        "matcher": "apify--instagram-.*",
+        "matcher": "mcp__plugin_rm-plugin-v2_(reachmachine|apify|playwright)__.*",
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/apify-input-shape-guard.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/connections-gate.sh"
           }
         ]
       },
       {
-        "matcher": "mcp__.*__(run_pipeline|run_pipeline_assist|run_pipeline_by_category|pull_data|add_to_watchlist|remove_competitor)$",
+        "matcher": "Skill",
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/spend-needs-human-yes.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/connections-gate.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Read|Bash|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/customer-upload-gate.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "WebSearch|mcp__plugin_rm-plugin-v2_(reachmachine|apify|playwright)__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/job-budget-gate.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "WebSearch|WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/niche-search-budget.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "WebSearch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/hangouts-websearch-gate.sh"
           }
         ]
       }
     ],
-    "SubagentStop": [
+    "UserPromptSubmit": [
       {
-        "matcher": "social-media-manager",
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/first-reply-intro-guard.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/connection-reminder.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/capture-last-prompt.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/business-ready-poll.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/plan-status-poll.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ask-dropped-remind.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/report-pending-remind.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/say-dropped-remind.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/voice-check.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/transcript-upload.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ask-dropped-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/say-dropped-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/keep-waiting-stop.sh",
+            "timeout": 100
+          }
+        ]
+      }
+    ],
+    "MessageDisplay": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/step1-silence.sh",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/transcript-upload.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/release-session.sh"
           }
         ]
       }

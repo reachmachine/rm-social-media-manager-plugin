@@ -1,0 +1,112 @@
+[
+  {
+    "name": "email",
+    "input": "mail me at test.person@example.com today",
+    "expected": "mail me at [email hidden] today"
+  },
+  {
+    "name": "phone_uk",
+    "input": "call +44 7700 900123",
+    "expected": "call [phone number hidden]"
+  },
+  {
+    "name": "phone_in_bare",
+    "input": "my number 9876543210",
+    "expected": "my number [phone number hidden]"
+  },
+  {
+    "name": "phone_us_parens",
+    "input": "(415) 555-0132 ext",
+    "expected": "[phone number hidden] ext"
+  },
+  {
+    "name": "card_spaced",
+    "input": "card 4111 1111 1111 1111 ok",
+    "expected": "card [card number hidden] ok"
+  },
+  {
+    "name": "card_not_luhn_is_phone_or_kept",
+    "input": "ref 4111 1111 1111 1112",
+    "expected": "ref 4111 1111 1111 1112"
+  },
+  {
+    "name": "iban",
+    "input": "IBAN GB82WEST12345698765432",
+    "expected": "IBAN [bank number hidden]"
+  },
+  {
+    "name": "ssn",
+    "input": "ssn 123-45-6789",
+    "expected": "ssn [ID number hidden]"
+  },
+  {
+    "name": "pan",
+    "input": "PAN ABCDE1234F",
+    "expected": "PAN [ID number hidden]"
+  },
+  {
+    "name": "bearer",
+    "input": "Authorization: Bearer abc.def.ghi",
+    "expected_absent": "abc.def.ghi"
+  },
+  {
+    "name": "sk_key",
+    "input": "key sk-live-ABCDEFGH12345",
+    "expected_absent": "ABCDEFGH12345"
+  },
+  {
+    "name": "date_kept",
+    "input": "posted 2026-09-24 at 10:15",
+    "expected": "posted 2026-09-24 at 10:15"
+  },
+  {
+    "name": "date_space_time_kept",
+    "input": "posted 2026-09-24 10:15:00",
+    "expected": "posted 2026-09-24 10:15:00"
+  },
+  {
+    "name": "date_short_time_kept",
+    "input": "at 2026-09-24 10:15 today",
+    "expected": "at 2026-09-24 10:15 today"
+  },
+  {
+    "name": "ig_id_kept",
+    "input": "media 17841400000000000123",
+    "expected": "media 17841400000000000123"
+  },
+  {
+    "name": "follower_count_kept",
+    "input": "12,345,678 followers",
+    "expected": "12,345,678 followers"
+  },
+  {
+    "name": "short_number_kept",
+    "input": "8 of your 20 reels",
+    "expected": "8 of your 20 reels"
+  },
+  {
+    "name": "handle_kept",
+    "input": "@natgeotravel posts daily",
+    "expected": "@natgeotravel posts daily"
+  },
+  {
+    "name": "upload_key_json",
+    "input": "{\"recorded\": true, \"upload_key\": \"Zx9_abc-DEF123\"}",
+    "expected": "{\"recorded\": true, \"upload_key\": \"[secret hidden]\"}"
+  },
+  {
+    "name": "phone_wrapping_paren_kept",
+    "input": "Book by phone (+44 7700 900123) or email (x@example.com).",
+    "expected": "Book by phone ([phone number hidden]) or email ([email hidden])."
+  },
+  {
+    "name": "phone_trailing_period_kept",
+    "input": "call 555-010-4477.",
+    "expected": "call [phone number hidden]."
+  },
+  {
+    "name": "phone_trailing_comma_kept",
+    "input": "+1 (555) 010-4477, thanks",
+    "expected": "[phone number hidden], thanks"
+  }
+]
