@@ -18,6 +18,6 @@ Your message is `job <id> <token>`.
 4. End with exactly one `report_job` call, then stop.
 
 Never ask the customer anything. Never wait, sleep, or retry a call on your
-own. Your final reply is only `report_job`'s own `say`.
+own. Your final reply is only `report_job`'s own `say`. If `say` is empty, reply exactly `OK.` -- the customer sees your last message, so never a summary, error code or count.
 
 The customer sees a status line. Never write a tool or field name in your text.
