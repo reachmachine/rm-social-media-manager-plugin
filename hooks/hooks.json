@@ -6,11 +6,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/reset-connections.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/reset-connections.sh\""
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-rules.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/session-rules.sh\""
           }
         ]
       },
@@ -19,11 +19,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/reset-connections.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/reset-connections.sh\""
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-rules.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/session-rules.sh\""
           }
         ]
       },
@@ -32,11 +32,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/reset-connections.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/reset-connections.sh\""
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-rules.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/session-rules.sh\""
           }
         ]
       },
@@ -45,7 +45,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-rules.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/session-rules.sh\""
           }
         ]
       }
@@ -56,7 +56,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/record-connection-probe.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/record-connection-probe.sh\""
           }
         ]
       },
@@ -65,7 +65,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/record-connection-probe.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/record-connection-probe.sh\""
           }
         ]
       },
@@ -74,7 +74,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/customer-file-upload.sh",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/customer-file-upload.sh\"",
             "timeout": 120
           }
         ]
@@ -84,7 +84,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/plan-recorder.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/plan-recorder.sh\""
           }
         ]
       },
@@ -93,7 +93,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/job-tool-cache.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/job-tool-cache.sh\""
           }
         ]
       },
@@ -102,7 +102,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/answer-grant-record.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/answer-grant-record.sh\""
           }
         ]
       },
@@ -111,7 +111,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/plan-events.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/plan-events.sh\""
           }
         ]
       },
@@ -120,7 +120,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/voice-check-midturn.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/voice-check-midturn.sh\""
           }
         ]
       },
@@ -129,7 +129,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ask-dropped-mark.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/ask-dropped-mark.sh\""
           }
         ]
       },
@@ -138,7 +138,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/report-pending-mark.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/report-pending-mark.sh\""
           }
         ]
       },
@@ -147,7 +147,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/hangouts-websearch-record.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/hangouts-websearch-record.sh\""
           }
         ]
       }
@@ -158,7 +158,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/record-connection-probe.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/record-connection-probe.sh\""
           }
         ]
       },
@@ -167,7 +167,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/hangouts-websearch-record.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/hangouts-websearch-record.sh\""
           }
         ]
       }
@@ -178,7 +178,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/connections-gate.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/connections-gate.sh\""
           }
         ]
       },
@@ -187,7 +187,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/connections-gate.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/connections-gate.sh\""
           }
         ]
       },
@@ -196,7 +196,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/customer-upload-gate.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/customer-upload-gate.sh\""
           }
         ]
       },
@@ -205,7 +205,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/job-budget-gate.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/job-budget-gate.sh\""
           }
         ]
       },
@@ -214,7 +214,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/niche-search-budget.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/niche-search-budget.sh\""
           }
         ]
       },
@@ -223,7 +223,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/hangouts-websearch-gate.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/hangouts-websearch-gate.sh\""
           }
         ]
       }
@@ -233,7 +233,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/connection-reminder.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/connection-reminder.sh\""
           }
         ]
       },
@@ -241,7 +241,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/capture-last-prompt.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/capture-last-prompt.sh\""
           }
         ]
       },
@@ -249,7 +249,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/business-ready-poll.sh",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/business-ready-poll.sh\"",
             "timeout": 5
           }
         ]
@@ -258,7 +258,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/plan-status-poll.sh",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/plan-status-poll.sh\"",
             "timeout": 5
           }
         ]
@@ -267,7 +267,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ask-dropped-remind.sh",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/ask-dropped-remind.sh\"",
             "timeout": 5
           }
         ]
@@ -276,7 +276,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/report-pending-remind.sh",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/report-pending-remind.sh\"",
             "timeout": 5
           }
         ]
@@ -285,7 +285,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/say-dropped-remind.sh",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/say-dropped-remind.sh\"",
             "timeout": 5
           }
         ]
@@ -296,7 +296,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/voice-check.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/voice-check.sh\""
           }
         ]
       },
@@ -304,7 +304,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/transcript-upload.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/transcript-upload.sh\""
           }
         ]
       },
@@ -312,7 +312,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ask-dropped-stop.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/ask-dropped-stop.sh\""
           }
         ]
       },
@@ -320,7 +320,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/say-dropped-stop.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/say-dropped-stop.sh\""
           }
         ]
       },
@@ -328,7 +328,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/keep-waiting-stop.sh",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/keep-waiting-stop.sh\"",
             "timeout": 100
           }
         ]
@@ -339,7 +339,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/step1-silence.sh",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/step1-silence.sh\"",
             "timeout": 3
           }
         ]
@@ -350,7 +350,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/transcript-upload.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/transcript-upload.sh\""
           }
         ]
       },
@@ -358,7 +358,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/release-session.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/release-session.sh\""
           }
         ]
       }

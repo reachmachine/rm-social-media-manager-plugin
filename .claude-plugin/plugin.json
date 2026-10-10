@@ -1,7 +1,7 @@
 {
   "name": "rm-plugin-v2",
   "description": "Reach Machine plugin v2 (in development). Steps 1-5: connection check, choose workspace, whose account, your Instagram account, how you make money.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": {
     "name": "Reach Machine"
   },
