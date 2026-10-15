@@ -47,7 +47,19 @@ _SECRET_PATTERNS = (
     (re.compile(r"\b(?:sk|pk|rk)-[A-Za-z0-9_-]{8,}"), "[REDACTED]"),
 )
 
-_EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+# Linear-time form of the old pattern `LOCAL+@DOMAIN\.TLD`. The old one restarted
+# at every letter of a long run (time grew with the square of the length).
+# Branch 2 swallows a whole local-part run that is not an e-mail in one step, so
+# the search never restarts inside it. A match without "@" is left unchanged.
+# The frozen-copy differential test (RPH-234) proves the output is identical.
+_EMAIL_RE = re.compile(
+    r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}|[A-Za-z0-9._%+-]+"
+)
+
+
+def _redact_email(m: "re.Match[str]") -> str:
+    return MARKERS["email"] if "@" in m.group(0) else m.group(0)
+
 
 # 13-19 digits total, single space/dash allowed between any two digits,
 # boundary-checked so it never matches inside a longer digit/letter run.
@@ -169,7 +181,7 @@ def redact_text(text: str, *, home: str | None = None, extra_secrets: tuple[str,
     try:
         out = _UPLOAD_KEY_RE.sub('"upload_key": "' + MARKERS["secret"] + '"', text)
         out = _redact_secrets(out).replace("[REDACTED]", MARKERS["secret"])
-        out = _EMAIL_RE.sub(MARKERS["email"], out)
+        out = _EMAIL_RE.sub(_redact_email, out)
         out = _CARD_CANDIDATE_RE.sub(_redact_card, out)
         out = _IBAN_RE.sub(MARKERS["bank"], out)
         out = _SSN_RE.sub(MARKERS["id_number"], out)

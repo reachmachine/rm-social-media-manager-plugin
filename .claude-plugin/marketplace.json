@@ -1,6 +1,6 @@
 {
-  "name": "rm-social-media-manager-marketplace",
-  "description": "Reach Machine plugin: guided onboarding that researches your business, niche, dream customer and where they hang out",
+  "name": "rm-plugin-v2-marketplace",
+  "description": "Reach Machine social media manager plugin",
   "owner": {
     "name": "Reach Machine"
   },
